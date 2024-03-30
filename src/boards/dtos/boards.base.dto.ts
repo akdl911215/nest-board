@@ -20,6 +20,14 @@ export class BoardsBaseDto {
   public readonly title!: Boards['title'];
 
   @IsString()
+  @ApiProperty({
+    type: String,
+    default: '',
+    required: true,
+  })
+  public readonly nickname!: Boards['nickname'];
+
+  @IsString()
   @IsOptional()
   @ApiProperty({
     type: String,
@@ -34,7 +42,7 @@ export class BoardsBaseDto {
     default: '',
     required: true,
   })
-  public readonly category!: Boards['category'];
+  public readonly category?: Boards['category'];
 
   @IsDate()
   public readonly createdAt!: Boards['created_at'];

@@ -37,6 +37,14 @@ export class UsersBaseDto {
   public readonly phone!: Users['phone'];
 
   @IsString()
+  @ApiProperty({
+    type: String,
+    required: true,
+    default: '',
+  })
+  public readonly nickname!: Users['nickname'];
+
+  @IsString()
   @IsOptional()
   @ApiProperty({
     type: String,
