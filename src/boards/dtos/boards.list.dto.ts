@@ -1,9 +1,9 @@
 import {
-  BaseOffsetPaginationInputDto,
-  BaseOffsetPaginationOutputDto,
+  BaseCursorPaginationInputDto,
+  BaseCursorPaginationOutputDto,
 } from '../../_common/abstract/base.pagination.dto';
 import { Boards } from '@prisma/client';
 
-export class BoardsListInputDto extends BaseOffsetPaginationInputDto {}
+export class BoardsListInputDto extends BaseCursorPaginationInputDto {}
 
-export type BoardsListOutputDto = BaseOffsetPaginationOutputDto<Boards>;
+export type BoardsListOutputDto = BaseCursorPaginationOutputDto<Boards>;

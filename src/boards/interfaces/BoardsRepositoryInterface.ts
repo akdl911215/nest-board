@@ -1,7 +1,7 @@
 import { Boards } from '@prisma/client';
 import {
-  BaseOffsetPaginationInputDto,
-  BaseOffsetPaginationOutputDto,
+  BaseCursorPaginationInputDto,
+  BaseCursorPaginationOutputDto,
 } from '../../_common/abstract/base.pagination.dto';
 
 export interface BoardsRepositoryInterface {
@@ -14,13 +14,11 @@ export interface BoardsRepositoryInterface {
 
   readonly list: (entity: {
     readonly category: Boards['category'];
-    readonly page: BaseOffsetPaginationInputDto['page'];
-    readonly take: BaseOffsetPaginationInputDto['take'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+    readonly last_id: Boards['id'];
   }) => Promise<{
-    readonly current_page: BaseOffsetPaginationOutputDto<Boards>['current_page'];
-    readonly total_pages: BaseOffsetPaginationOutputDto<Boards>['total_pages'];
-    readonly total_take: BaseOffsetPaginationOutputDto<Boards>['total_take'];
-    readonly current_list: Boards;
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
   }>;
 
   readonly register: (entity: {
@@ -34,7 +32,6 @@ export interface BoardsRepositoryInterface {
     readonly id: Boards['id'];
     readonly category: Boards['category'];
     readonly title: Boards['title'];
-    readonly password: Boards['password'];
     readonly nickname: Boards['nickname'];
   }) => Promise<Boards>;
 }

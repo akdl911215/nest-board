@@ -1,15 +1,10 @@
-import {
-  BadRequestException,
-  Dependencies,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Dependencies, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import { BoardsRepositoryInterface } from './interfaces/BoardsRepositoryInterface';
-import { Boards } from '@prisma/client';
+import { Boards, Categories } from '@prisma/client';
 import {
-  BaseOffsetPaginationInputDto,
-  BaseOffsetPaginationOutputDto,
+  BaseCursorPaginationInputDto,
+  BaseCursorPaginationOutputDto,
 } from '../_common/abstract/base.pagination.dto';
 import { NOTFOUND_BOARD } from '../_common/constant/errors/404';
 import { errorHandling } from '../_common/abstract/error.handling';
@@ -49,25 +44,50 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       where: entity,
     });
     if (!boardFindById) throw new NotFoundException(NOTFOUND_BOARD);
+
     return boardFindById;
   }
 
   public async list(entity: {
     readonly category: Boards['category'];
-    readonly page: BaseOffsetPaginationInputDto['page'];
-    readonly take: BaseOffsetPaginationInputDto['take'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+    readonly last_id: Boards['id'];
   }): Promise<{
-    readonly current_page: BaseOffsetPaginationOutputDto<Boards>['current_page'];
-    readonly total_pages: BaseOffsetPaginationOutputDto<Boards>['total_pages'];
-    readonly total_take: BaseOffsetPaginationOutputDto<Boards>['total_take'];
-    readonly current_list: Boards;
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
   }> {
-    return Promise.resolve({
-      current_list: undefined,
-      current_page: undefined,
-      total_pages: undefined,
-      total_take: undefined,
+    const { category, take, last_id } = entity;
+
+    const whereSql = { deleted_at: null };
+    const countSql = { deleted_at: null };
+    if (category) {
+      whereSql['category'] = category;
+      countSql['category'] = category;
+    }
+
+    const sql = {
+      take,
+      where: whereSql,
+      orderBy: {
+        created_at: 'des',
+      },
+    };
+    if (last_id) {
+      sql['skip'] = 1;
+      sql['cursor'] = {
+        id: last_id,
+      };
+    }
+
+    const currentList: Boards[] = await this.prisma.boards.findMany(sql);
+    const totalCount: number = await this.prisma.boards.count({
+      where: countSql,
     });
+
+    return {
+      total_count: totalCount,
+      current_list: currentList,
+    };
   }
 
   public async register(entity: {
@@ -76,16 +96,77 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     readonly password: Boards['password'];
     readonly nickname: Boards['nickname'];
   }): Promise<Boards> {
-    return Promise.resolve(undefined);
+    const { category, title, password, nickname } = entity;
+
+    let passwordCheck = null;
+    if (password) passwordCheck = passwordCheck;
+
+    try {
+      const registerBoard: Boards = await this.prisma.$transaction(async () => {
+        const categorySearch: Categories =
+          await this.prisma.categories.findUnique({
+            where: { name: category },
+          });
+        if (!categorySearch) {
+          await this.prisma.categorites.create({
+            data: { name: category },
+          });
+        }
+
+        return await this.prisma.boards.create({
+          data: {
+            category,
+            title,
+            password: passwordCheck,
+            nickname,
+          },
+        });
+      });
+
+      return registerBoard;
+    } catch (e: any) {
+      errorHandling(e);
+    }
   }
 
   public async update(entity: {
     readonly id: Boards['id'];
     readonly category: Boards['category'];
     readonly title: Boards['title'];
-    readonly password: Boards['password'];
     readonly nickname: Boards['nickname'];
   }): Promise<Boards> {
-    return Promise.resolve(undefined);
+    const { id, category, title, nickname } = entity;
+
+    const boardFindByIdAndNickname = await this.prisma.boards.findFirst({
+      where: { AND: [{ id }, { nickname }] },
+    });
+    if (!boardFindByIdAndNickname) throw new NotFoundException(NOTFOUND_BOARD);
+
+    try {
+      const updateBoard: Boards = await this.prisma.$transaction(async () => {
+        const categorySearch: Categories =
+          await this.prisma.categories.findUnique({
+            where: { name: category },
+          });
+        if (!categorySearch) {
+          await this.prisma.categorites.create({
+            data: { name: category },
+          });
+        }
+
+        return await this.prisma.boards.update({
+          where: { id },
+          data: {
+            category,
+            title,
+            nickname,
+          },
+        });
+      });
+
+      return updateBoard;
+    } catch (e: any) {
+      errorHandling(e);
+    }
   }
 }
