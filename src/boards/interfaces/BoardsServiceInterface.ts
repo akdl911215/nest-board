@@ -6,7 +6,10 @@ import {
   BoardsInquiryInputDto,
   BoardsInquiryOutputDto,
 } from '../dtos/boards.inquiry.dto';
-import { BoardsListInputDto } from '../dtos/boards.list.dto';
+import {
+  BoardsListInputDto,
+  BoardsListOutputDto,
+} from '../dtos/boards.list.dto';
 import {
   BoardsRegisterInputDto,
   BoardsRegisterOutputDto,
@@ -25,7 +28,7 @@ export interface BoardsServiceInterface {
     dto: BoardsInquiryInputDto,
   ) => Promise<BoardsInquiryOutputDto>;
 
-  readonly list: (dto: BoardsListInputDto) => Promise<BoardsListInputDto>;
+  readonly list: (dto: BoardsListInputDto) => Promise<BoardsListOutputDto>;
 
   readonly register: (
     dto: BoardsRegisterInputDto,
