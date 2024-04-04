@@ -1,7 +1,7 @@
 import { Dependencies, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import { BoardsRepositoryInterface } from './interfaces/BoardsRepositoryInterface';
-import { Boards, Categories } from '@prisma/client';
+import { Boards, Categories, Prisma } from '@prisma/client';
 import {
   BaseCursorPaginationInputDto,
   BaseCursorPaginationOutputDto,
@@ -25,7 +25,7 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     if (!boardFindByIdAndNickname) throw new NotFoundException(NOTFOUND_BOARD);
 
     try {
-      const deletedBoard: Boards = await this.prisma.boards.$transaction(
+      const deletedBoard: Boards = await this.prisma.$transaction(
         async () =>
           await this.prisma.boards.update({
             where: { id },
@@ -58,24 +58,33 @@ export class BoardsRepository implements BoardsRepositoryInterface {
   }> {
     const { category, take, last_id } = entity;
 
+    let categoryCheck = category;
+    if (category == 'null') categoryCheck = null;
+
+    let idCheck = last_id;
+    if (last_id == 'null') idCheck = null;
+
     const whereSql = { deleted_at: null };
     const countSql = { deleted_at: null };
-    if (category) {
-      whereSql['category'] = category;
-      countSql['category'] = category;
+    if (categoryCheck) {
+      whereSql['category'] = categoryCheck;
+      countSql['category'] = categoryCheck;
     }
 
+    const orderBy: Prisma.BoardsOrderByWithAggregationInput[] = [
+      {
+        created_at: 'desc',
+      },
+    ];
     const sql = {
       take,
       where: whereSql,
-      orderBy: {
-        created_at: 'des',
-      },
+      orderBy,
     };
-    if (last_id) {
+    if (idCheck) {
       sql['skip'] = 1;
       sql['cursor'] = {
-        id: last_id,
+        id: idCheck,
       };
     }
 
@@ -108,12 +117,12 @@ export class BoardsRepository implements BoardsRepositoryInterface {
             where: { name: category },
           });
         if (!categorySearch) {
-          await this.prisma.categorites.create({
+          await this.prisma.categories.create({
             data: { name: category },
           });
         }
 
-        return await this.prisma.boards.create({
+        return this.prisma.boards.create({
           data: {
             category,
             title,
@@ -149,12 +158,12 @@ export class BoardsRepository implements BoardsRepositoryInterface {
             where: { name: category },
           });
         if (!categorySearch) {
-          await this.prisma.categorites.create({
+          await this.prisma.categories.create({
             data: { name: category },
           });
         }
 
-        return await this.prisma.boards.update({
+        return this.prisma.boards.update({
           where: { id },
           data: {
             category,

@@ -40,7 +40,7 @@ export class BoardsBaseDto {
   @ApiProperty({
     type: String,
     default: '',
-    required: true,
+    required: false,
   })
   public readonly category?: Boards['category'];
 
