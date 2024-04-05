@@ -15,7 +15,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { BoardsServiceInterface } from './interfaces/BoardsServiceInterface';
+import { BoardsServiceInterface } from './interfaces/boards.service.interface';
 import { TWO_HUNDRED_OK } from '../_common/constant/successes/200';
 import { INTERNAL_SERVER_ERROR } from '../_common/constant/errors/500';
 import {

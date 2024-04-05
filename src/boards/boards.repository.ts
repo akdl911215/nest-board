@@ -1,6 +1,6 @@
 import { Dependencies, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
-import { BoardsRepositoryInterface } from './interfaces/BoardsRepositoryInterface';
+import { BoardsRepositoryInterface } from './interfaces/boards.repository.interface';
 import { Boards, Categories, Prisma } from '@prisma/client';
 import {
   BaseCursorPaginationInputDto,

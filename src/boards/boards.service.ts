@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { BoardsServiceInterface } from './interfaces/BoardsServiceInterface';
+import { BoardsServiceInterface } from './interfaces/boards.service.interface';
 import {
   BoardsDeleteInputDto,
   BoardsDeleteOutputDto,
@@ -20,7 +20,7 @@ import {
   BoardsUpdateInputDto,
   BoardsUpdateOutputDto,
 } from './dtos/boards.update.dto';
-import { BoardsRepositoryInterface } from './interfaces/BoardsRepositoryInterface';
+import { BoardsRepositoryInterface } from './interfaces/boards.repository.interface';
 
 @Injectable()
 export class BoardsService implements BoardsServiceInterface {
