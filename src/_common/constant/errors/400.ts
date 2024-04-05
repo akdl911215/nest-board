@@ -7,3 +7,4 @@ export const UNIQUE_ID_REQUIRED = 'uniqueIdRequired';
 export const CATEGORY_REQUIRED = 'categoryRequired';
 export const TITLE_REQUIRED = 'titleRequired';
 export const NICKNAME_REQUIRED = 'nicknameRequired';
+export const NO_MATCH_EMAIL = 'noMatchEmail';

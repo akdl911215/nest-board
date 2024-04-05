@@ -7,4 +7,4 @@ export class UsersLoginInputDto extends PickType(UsersBaseDto, [
   'password',
 ] as const) {}
 
-export type UsersLoginOutputDto = Users;
+export type UsersLoginOutputDto = Users & { readonly access_token: string };

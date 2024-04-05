@@ -17,7 +17,7 @@ export interface UsersRepositoryInterface {
   readonly login: (entity: {
     readonly email: Users['email'];
     readonly password: Users['password'];
-  }) => Promise<Users>;
+  }) => Promise<Users & { readonly access_token: string }>;
 
   readonly register: (entity: {
     readonly nickname: Users['nickname'];

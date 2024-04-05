@@ -1,4 +1,10 @@
-import { Dependencies, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Dependencies,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import { UsersRepositoryInterface } from './interfaces/users.repository.interface';
 import { Users } from '@prisma/client';
@@ -12,11 +18,18 @@ import {
   getListOffsetPagination,
   PageReturnType,
 } from '../_common/abstract/get.list.page.nation';
+import { NO_MATCH_EMAIL } from '../_common/constant/errors/400';
+import { TokenService } from './infrastructure/token/token.service';
 
 @Injectable()
 @Dependencies([PrismaService])
 export class UsersRepository implements UsersRepositoryInterface {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    // @Inject('HASH_ENCODED') private readonly hash: HashEncodedService,
+    // @Inject('HASH_DECODED') private readonly compare: HashDecodedService,
+    @Inject('TOKEN_SERVICE') private readonly jwtToken: TokenService,
+  ) {}
 
   public async delete(entity: { readonly id: Users['id'] }): Promise<Users> {
     const { id } = entity;
@@ -90,7 +103,14 @@ export class UsersRepository implements UsersRepositoryInterface {
   public async login(entity: {
     readonly email: Users['email'];
     readonly password: Users['password'];
-  }): Promise<Users> {
+  }): Promise<Users & { readonly access_token: string }> {
+    const { email, password } = entity;
+
+    const userFineByEmail: Users = await this.prisma.users.findUnique({
+      where: { email },
+    });
+    if (!userFineByEmail) throw new BadRequestException(NO_MATCH_EMAIL);
+
     return Promise.resolve(undefined);
   }
   public async register(entity: {

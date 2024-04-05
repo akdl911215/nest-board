@@ -1,6 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import * as diagnostics_channel from 'diagnostics_channel';
 
 export class GenerateTokenInputDto {
   @IsString()
