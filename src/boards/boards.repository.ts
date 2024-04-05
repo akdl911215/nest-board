@@ -104,8 +104,9 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     readonly title: Boards['title'];
     readonly password: Boards['password'];
     readonly nickname: Boards['nickname'];
+    readonly content: Boards['content'];
   }): Promise<Boards> {
-    const { category, title, password, nickname } = entity;
+    const { category, title, password, nickname, content } = entity;
 
     let passwordCheck = null;
     if (password) passwordCheck = passwordCheck;
@@ -128,6 +129,7 @@ export class BoardsRepository implements BoardsRepositoryInterface {
             title,
             password: passwordCheck,
             nickname,
+            content,
           },
         });
       });
@@ -143,8 +145,9 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     readonly category: Boards['category'];
     readonly title: Boards['title'];
     readonly nickname: Boards['nickname'];
+    readonly content: Boards['content'];
   }): Promise<Boards> {
-    const { id, category, title, nickname } = entity;
+    const { id, category, title, nickname, content } = entity;
 
     const boardFindByIdAndNickname = await this.prisma.boards.findFirst({
       where: { AND: [{ id }, { nickname }] },
@@ -169,6 +172,7 @@ export class BoardsRepository implements BoardsRepositoryInterface {
             category,
             title,
             nickname,
+            content,
           },
         });
       });

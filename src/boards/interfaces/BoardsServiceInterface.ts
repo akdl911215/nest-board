@@ -15,9 +15,9 @@ import {
   BoardsRegisterOutputDto,
 } from '../dtos/boards.register.dto';
 import {
-  BoardsUpdatedInputDto,
+  BoardsUpdateInputDto,
   BoardsUpdateOutputDto,
-} from '../dtos/boards.updated.dto';
+} from '../dtos/boards.update.dto';
 
 export interface BoardsServiceInterface {
   readonly delete: (
@@ -35,6 +35,6 @@ export interface BoardsServiceInterface {
   ) => Promise<BoardsRegisterOutputDto>;
 
   readonly update: (
-    dto: BoardsUpdatedInputDto,
+    dto: BoardsUpdateInputDto,
   ) => Promise<BoardsUpdateOutputDto>;
 }

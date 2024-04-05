@@ -17,9 +17,9 @@ import {
   BoardsRegisterOutputDto,
 } from './dtos/boards.register.dto';
 import {
-  BoardsUpdatedInputDto,
+  BoardsUpdateInputDto,
   BoardsUpdateOutputDto,
-} from './dtos/boards.updated.dto';
+} from './dtos/boards.update.dto';
 import { BoardsRepositoryInterface } from './interfaces/BoardsRepositoryInterface';
 
 @Injectable()
@@ -57,17 +57,19 @@ export class BoardsService implements BoardsServiceInterface {
       title: dto.title,
       nickname: dto.nickname,
       password: dto.password,
+      content: dto.content,
     });
   }
 
   public async update(
-    dto: BoardsUpdatedInputDto,
+    dto: BoardsUpdateInputDto,
   ): Promise<BoardsUpdateOutputDto> {
     return await this.repository.update({
       id: dto.id,
       nickname: dto.nickname,
       title: dto.title,
       category: dto.category,
+      content: dto.content,
     });
   }
 }

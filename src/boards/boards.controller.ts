@@ -43,9 +43,9 @@ import {
   BoardsInquiryOutputDto,
 } from './dtos/boards.inquiry.dto';
 import {
-  BoardsUpdatedInputDto,
+  BoardsUpdateInputDto,
   BoardsUpdateOutputDto,
-} from './dtos/boards.updated.dto';
+} from './dtos/boards.update.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -73,6 +73,7 @@ export class BoardsController {
   }
 
   @Post('/')
+  @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'BOARDS REGISTER API',
     description: '게시판 등록 절차',
@@ -120,6 +121,7 @@ export class BoardsController {
   }
 
   @Patch('/')
+  @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'BOARD MODIFY API',
     description: '게시판 수정 절차',
@@ -131,7 +133,7 @@ export class BoardsController {
   })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async update(
-    @Body() dto: BoardsUpdatedInputDto,
+    @Body() dto: BoardsUpdateInputDto,
   ): Promise<BoardsUpdateOutputDto> {
     if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
     if (!dto?.category) throw new BadRequestException(CATEGORY_REQUIRED);

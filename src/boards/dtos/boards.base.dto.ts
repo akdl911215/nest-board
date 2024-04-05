@@ -28,6 +28,14 @@ export class BoardsBaseDto {
   public readonly nickname!: Boards['nickname'];
 
   @IsString()
+  @ApiProperty({
+    type: String,
+    default: '',
+    required: false,
+  })
+  public readonly content?: Boards['content'];
+
+  @IsString()
   @IsOptional()
   @ApiProperty({
     type: String,

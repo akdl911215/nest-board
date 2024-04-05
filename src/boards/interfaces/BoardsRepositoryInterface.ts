@@ -26,6 +26,7 @@ export interface BoardsRepositoryInterface {
     readonly title: Boards['title'];
     readonly password: Boards['password'];
     readonly nickname: Boards['nickname'];
+    readonly content: Boards['content'];
   }) => Promise<Boards>;
 
   readonly update: (entity: {
@@ -33,5 +34,6 @@ export interface BoardsRepositoryInterface {
     readonly category: Boards['category'];
     readonly title: Boards['title'];
     readonly nickname: Boards['nickname'];
+    readonly content: Boards['content'];
   }) => Promise<Boards>;
 }

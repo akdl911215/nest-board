@@ -7,6 +7,7 @@ export class BoardsRegisterInputDto extends PickType(BoardsBaseDto, [
   'title',
   'password',
   'nickname',
+  'content',
 ] as const) {}
 
 export type BoardsRegisterOutputDto = Boards;
