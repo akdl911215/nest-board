@@ -1,7 +1,6 @@
 import { IsDate, IsOptional, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Users } from '@prisma/client';
-import { fromAsyncIterable } from 'rxjs/internal/observable/innerFrom';
 
 export class UsersBaseDto {
   @IsUUID()

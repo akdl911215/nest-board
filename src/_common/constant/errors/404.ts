@@ -4,3 +4,4 @@
 // link rot 대상 일 수도 있다.
 
 export const NOTFOUND_BOARD = 'notfoundBoard';
+export const NOTFOUND_USER = 'notfoundUser';
