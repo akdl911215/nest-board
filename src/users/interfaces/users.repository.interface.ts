@@ -30,7 +30,6 @@ export interface UsersRepositoryInterface {
     readonly id: Users['id'];
     readonly nickname: Users['nickname'];
     readonly email: Users['email'];
-    readonly password: Users['password'];
     readonly phone: Users['phone'];
   }) => Promise<Users>;
 }

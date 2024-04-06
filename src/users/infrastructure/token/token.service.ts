@@ -5,6 +5,11 @@ import { GenerateTokenOutputDto } from './dtos/generate.token.dto';
 import { AccessTokenPayloadType } from './type/access.token.payload.type';
 import { RefreshTokenPayloadType } from './type/refresh.token.payload.type';
 
+export type tokensType = {
+  readonly accessPayload: AccessTokenPayloadType;
+  readonly refreshPayload: RefreshTokenPayloadType;
+};
+
 @Injectable()
 export class TokenService {
   constructor(
@@ -12,10 +17,9 @@ export class TokenService {
     private readonly configService: ConfigService,
   ) {}
 
-  public async generateTokens(tokens: {
-    readonly accessPayload: AccessTokenPayloadType;
-    readonly refreshPayload: RefreshTokenPayloadType;
-  }): Promise<GenerateTokenOutputDto> {
+  public async generateTokens(
+    tokens: tokensType,
+  ): Promise<GenerateTokenOutputDto> {
     const { accessPayload, refreshPayload } = tokens;
 
     const [accessToken, refreshToken] = await Promise.all([

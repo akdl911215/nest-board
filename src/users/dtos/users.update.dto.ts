@@ -6,7 +6,6 @@ export class UsersUpdateInputDto extends PickType(UsersBaseDto, [
   'id',
   'nickname',
   'email',
-  'password',
   'phone',
 ] as const) {}
 

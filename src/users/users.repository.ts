@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Dependencies,
   Inject,
   Injectable,
@@ -18,16 +19,22 @@ import {
   getListOffsetPagination,
   PageReturnType,
 } from '../_common/abstract/get.list.page.nation';
-import { NO_MATCH_EMAIL } from '../_common/constant/errors/400';
-import { TokenService } from './infrastructure/token/token.service';
+import {
+  NO_MATCH_EMAIL,
+  NO_MATCH_PASSWORD,
+} from '../_common/constant/errors/400';
+import { TokenService, tokensType } from './infrastructure/token/token.service';
+import { BcryptService } from './infrastructure/bcrypt/bcrypt.service';
+import { AccessTokenPayloadType } from './infrastructure/token/type/access.token.payload.type';
+import { RefreshTokenPayloadType } from './infrastructure/token/type/refresh.token.payload.type';
+import { EXISTING_MEMBER } from '../_common/constant/errors/409';
 
 @Injectable()
 @Dependencies([PrismaService])
 export class UsersRepository implements UsersRepositoryInterface {
   constructor(
     private readonly prisma: PrismaService,
-    // @Inject('HASH_ENCODED') private readonly hash: HashEncodedService,
-    // @Inject('HASH_DECODED') private readonly compare: HashDecodedService,
+    @Inject('BCRYPT_SERVICE') private readonly bcrypt: BcryptService,
     @Inject('TOKEN_SERVICE') private readonly jwtToken: TokenService,
   ) {}
 
@@ -111,7 +118,49 @@ export class UsersRepository implements UsersRepositoryInterface {
     });
     if (!userFineByEmail) throw new BadRequestException(NO_MATCH_EMAIL);
 
-    return Promise.resolve(undefined);
+    const { decoded } = await this.bcrypt.decoded({
+      password,
+      hashPassword: userFineByEmail.password,
+    });
+    const comparePassword: boolean = decoded;
+    if (!comparePassword) throw new BadRequestException(NO_MATCH_PASSWORD);
+
+    const accessPayload: AccessTokenPayloadType = {
+      id: userFineByEmail.id,
+      email: userFineByEmail.email,
+    };
+
+    const refreshPayload: RefreshTokenPayloadType = {
+      id: userFineByEmail.id,
+      email: userFineByEmail.email,
+      nickname: userFineByEmail.nickname,
+    };
+
+    const tokens: tokensType = {
+      accessPayload,
+      refreshPayload,
+    };
+
+    const { accessToken, refreshToken } =
+      await this.jwtToken.generateTokens(tokens);
+
+    try {
+      const loginSuccess: Users = await this.prisma.$transaction(
+        async () =>
+          await this.prisma.users.update({
+            where: { id: userFineByEmail.id },
+            data: { refresh_token: refreshToken },
+          }),
+      );
+
+      return {
+        ...loginSuccess,
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      };
+    } catch (e: any) {
+      errorHandling(e);
+    }
   }
   public async register(entity: {
     readonly nickname: Users['nickname'];
@@ -119,16 +168,82 @@ export class UsersRepository implements UsersRepositoryInterface {
     readonly password: Users['password'];
     readonly phone: Users['phone'];
   }): Promise<Users> {
-    return Promise.resolve(undefined);
+    const { email, nickname, password, phone } = entity;
+
+    const userFindByEntity: Users = await this.prisma.users.findFirst({
+      where: { AND: [{ email }, { nickname }, { phone }] },
+    });
+    if (userFindByEntity) throw new ConflictException(EXISTING_MEMBER);
+
+    const { encoded: hashPassword } = await this.bcrypt.encoded({ password });
+
+    try {
+      const registerUser: Users = await this.prisma.$transaction(
+        async () =>
+          await this.prisma.users.create({
+            data: {
+              email,
+              nickname,
+              password: hashPassword,
+              phone,
+            },
+          }),
+      );
+
+      return registerUser;
+    } catch (e: any) {
+      errorHandling(e);
+    }
   }
 
   public async update(entity: {
     readonly id: Users['id'];
     readonly nickname: Users['nickname'];
     readonly email: Users['email'];
-    readonly password: Users['password'];
     readonly phone: Users['phone'];
   }): Promise<Users> {
-    return Promise.resolve(undefined);
+    const { id, nickname, email, phone } = entity;
+
+    const userFindById: Users = await this.prisma.users.findUnique({
+      where: { id },
+    });
+    if (!userFindById) throw new NotFoundException(NOTFOUND_USER);
+
+    if (userFindById.nickname !== nickname) {
+      const userFindByNickname: Users = await this.prisma.users.findUnique({
+        where: { nickname },
+      });
+      if (userFindByNickname) throw new ConflictException(EXISTING_MEMBER);
+    }
+
+    if (userFindById.email !== email) {
+      const userFindByEmail: Users = await this.prisma.users.findUnique({
+        where: { email },
+      });
+      if (userFindByEmail) throw new ConflictException(EXISTING_MEMBER);
+    }
+
+    if (userFindById.phone !== phone) {
+      const userFindByPhone: Users = await this.prisma.users.findUnique({
+        where: { phone },
+      });
+      if (userFindByPhone) throw new ConflictException(EXISTING_MEMBER);
+    }
+
+    try {
+      const updateUser: Users = await this.prisma.users.update({
+        where: { id },
+        data: {
+          nickname,
+          email,
+          phone,
+          updated_at: new Date(),
+        },
+      });
+
+      return updateUser;
+    } catch (e: any) {
+      errorHandling(e);
+    }
   }
 }
