@@ -32,7 +32,7 @@ import { RefreshTokenPayloadType } from './infrastructure/token/type/refresh.tok
 import { EXISTING_MEMBER } from '../_common/constant/errors/409';
 
 @Injectable()
-@Dependencies([PrismaService])
+@Dependencies([PrismaService, BcryptService, TokenService])
 export class UsersRepository implements UsersRepositoryInterface {
   constructor(
     private readonly prisma: PrismaService,
@@ -102,7 +102,7 @@ export class UsersRepository implements UsersRepositoryInterface {
 
     const currentList: Boards[] = await this.prisma.boards.findMany(sql);
 
-    const countSql = { deleted_at: null };
+    const countSql = { deleted_at: null, nickname };
     const totalCount: number = await this.prisma.boards.count({
       where: countSql,
     });

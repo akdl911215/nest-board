@@ -4,8 +4,11 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Patch,
   Post,
+  Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersServiceInterface } from './interfaces/users.service.interface';
 import {
@@ -51,13 +54,34 @@ import {
   UsersProfileInputDto,
   UsersProfileOutputDto,
 } from './dtos/users.profile.dto';
+import { PasswordCheckingInterceptor } from './infrastructure/interceptor/password.checking.interceptor';
+import { RegisterRefreshTokenDeleteInterceptor } from './infrastructure/interceptor/register.refresh.token.delete.interceptor';
 
 @ApiTags('users')
 @Controller('users')
+@UseInterceptors(PasswordCheckingInterceptor)
+@UseInterceptors(RegisterRefreshTokenDeleteInterceptor)
 export class UsersController {
   constructor(
     @Inject('SERVICE') private readonly service: UsersServiceInterface,
   ) {}
+
+  @Get('/profile/:id')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'USER PROFILE API',
+    description: '유저 프로필 조회 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${UNIQUE_ID_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async profile(
+    @Param() dto: UsersProfileInputDto,
+  ): Promise<UsersProfileOutputDto> {
+    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+
+    return await this.service.profile(dto);
+  }
 
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')
@@ -93,24 +117,7 @@ export class UsersController {
     return await this.service.login(dto);
   }
 
-  @Get('/')
-  @ApiConsumes('application/x-www-form-urlencoded')
-  @ApiOperation({
-    summary: 'USER PROFILE API',
-    description: '유저 프로필 조회 절차',
-  })
-  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
-  @ApiResponse({ status: 400, description: `${UNIQUE_ID_REQUIRED}` })
-  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
-  private async profile(
-    @Body() dto: UsersProfileInputDto,
-  ): Promise<UsersProfileOutputDto> {
-    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
-
-    return await this.service.profile(dto);
-  }
-
-  @Get('/:nickname')
+  @Get('/inquiry')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'USER INQUIRY API',
@@ -120,7 +127,7 @@ export class UsersController {
   @ApiResponse({ status: 400, description: `${NICKNAME_REQUIRED}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async inquiry(
-    @Body() dto: UsersInquiryInputDto,
+    @Query() dto: UsersInquiryInputDto,
   ): Promise<UsersInquiryOutputDto> {
     if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
 

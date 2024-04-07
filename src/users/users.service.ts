@@ -3,7 +3,7 @@ import { UsersServiceInterface } from './interfaces/users.service.interface';
 import { UsersRepositoryInterface } from './interfaces/users.repository.interface';
 import {
   UsersDeleteInputDto,
-  UsersDeleteOutput,
+  UsersDeleteOutputDto,
 } from './dtos/users.delete.dto';
 import {
   UsersInquiryInputDto,
@@ -33,14 +33,17 @@ export class UsersService implements UsersServiceInterface {
     @Inject('REPOSITORY') private readonly repository: UsersRepositoryInterface,
   ) {}
 
-  public async delete(dto: UsersDeleteInputDto): Promise<UsersDeleteOutput> {
+  public async delete(dto: UsersDeleteInputDto): Promise<UsersDeleteOutputDto> {
     return await this.repository.delete(dto);
   }
 
   public async inquiry(
     dto: UsersInquiryInputDto,
   ): Promise<UsersInquiryOutputDto> {
-    return await this.repository.inquiry(dto);
+    return await this.repository.inquiry({
+      ...dto,
+      last_id: dto.lastId,
+    });
   }
 
   public async list(dto: UsersListInputDto): Promise<UsersListOutputDto> {
