@@ -6,4 +6,4 @@ export class UsersDeleteInputDto extends PickType(UsersBaseDto, [
   'id',
 ] as const) {}
 
-export type UsersDeleteOutput = Users;
+export type UsersDeleteOutputDto = Users;

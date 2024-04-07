@@ -1,5 +1,7 @@
-import { Users } from '@prisma/client';
+import { Boards, Users } from '@prisma/client';
 import {
+  BaseCursorPaginationInputDto,
+  BaseCursorPaginationOutputDto,
   BaseOffsetPaginationInputDto,
   BaseOffsetPaginationOutputDto,
 } from '../../_common/abstract/base.pagination.dto';
@@ -7,7 +9,14 @@ import {
 export interface UsersRepositoryInterface {
   readonly delete: (entity: { readonly id: Users['id'] }) => Promise<Users>;
 
-  readonly inquiry: (entity: { readonly id: Users['id'] }) => Promise<Users>;
+  readonly inquiry: (entity: {
+    readonly nickname: Users['nickname'];
+    readonly last_id: Boards['id'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+  }) => Promise<{
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
+  }>;
 
   readonly list: (entity: {
     readonly page: BaseOffsetPaginationInputDto['page'];

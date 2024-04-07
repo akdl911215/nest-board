@@ -8,8 +8,10 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import { UsersRepositoryInterface } from './interfaces/users.repository.interface';
-import { Users } from '@prisma/client';
+import { Boards, Prisma, Users } from '@prisma/client';
 import {
+  BaseCursorPaginationInputDto,
+  BaseCursorPaginationOutputDto,
   BaseOffsetPaginationInputDto,
   BaseOffsetPaginationOutputDto,
 } from '../_common/abstract/base.pagination.dto';
@@ -61,15 +63,54 @@ export class UsersRepository implements UsersRepositoryInterface {
     }
   }
 
-  public async inquiry(entity: { readonly id: Users['id'] }): Promise<Users> {
-    const { id } = entity;
+  public async inquiry(entity: {
+    readonly nickname: Users['nickname'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+    readonly last_id: Boards['id'];
+  }): Promise<{
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
+  }> {
+    const { nickname, take, last_id } = entity;
 
-    const userFindById: Users = await this.prisma.users.findUnique({
-      where: { id },
+    const userFindByNickname: Users = await this.prisma.users.findUnique({
+      where: { nickname },
     });
-    if (!userFindById) throw new NotFoundException(NOTFOUND_USER);
+    if (!userFindByNickname) throw new NotFoundException(NOTFOUND_USER);
 
-    return userFindById;
+    let idCheck = last_id;
+    if (last_id === 'null') idCheck = null;
+
+    const orderBy: Prisma.BoardsOrderByWithAggregationInput[] = [
+      {
+        created_at: 'desc',
+      },
+    ];
+
+    const sql = {
+      take,
+      where: { deleted_at: null, nickname },
+      orderBy,
+    };
+
+    if (idCheck) {
+      sql['skip'] = 1;
+      sql['cursor'] = {
+        id: idCheck,
+      };
+    }
+
+    const currentList: Boards[] = await this.prisma.boards.findMany(sql);
+
+    const countSql = { deleted_at: null };
+    const totalCount: number = await this.prisma.boards.count({
+      where: countSql,
+    });
+
+    return {
+      total_count: totalCount,
+      current_list: currentList,
+    };
   }
 
   public async list(entity: {

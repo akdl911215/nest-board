@@ -59,10 +59,10 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     const { category, take, last_id } = entity;
 
     let categoryCheck = category;
-    if (category == 'null') categoryCheck = null;
+    if (category === 'null') categoryCheck = null;
 
     let idCheck = last_id;
-    if (last_id == 'null') idCheck = null;
+    if (last_id === 'null') idCheck = null;
 
     const whereSql = { deleted_at: null };
     const countSql = { deleted_at: null };
