@@ -47,6 +47,10 @@ import {
   UsersUpdateInputDto,
   UsersUpdateOutputDto,
 } from './dtos/users.update.dto';
+import {
+  UsersProfileInputDto,
+  UsersProfileOutputDto,
+} from './dtos/users.profile.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -89,15 +93,22 @@ export class UsersController {
     return await this.service.login(dto);
   }
 
-  // @Get('/')
-  // @ApiConsumes('application/x-www-form-urlencoded')
-  // @ApiOperation({
-  //   summary: 'USER PROFILE API',
-  //   description: '유저 프로필 조회 절차'
-  // })
-  // @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}`})
-  // @ApiResponse({status: 500, description: `${INTERNAL_SERVER_ERROR}`})
-  // private async profile(@Body() dto: UsersInquiryInputDto):
+  @Get('/')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'USER PROFILE API',
+    description: '유저 프로필 조회 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${UNIQUE_ID_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async profile(
+    @Body() dto: UsersProfileInputDto,
+  ): Promise<UsersProfileOutputDto> {
+    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+
+    return await this.service.profile(dto);
+  }
 
   @Get('/:nickname')
   @ApiConsumes('application/x-www-form-urlencoded')
@@ -106,13 +117,12 @@ export class UsersController {
     description: '유저 관련 정보 조회 절차',
   })
   @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
-  @ApiResponse({ status: 400, description: `${UNIQUE_ID_REQUIRED}` })
-  @ApiResponse({ status: 400, description: `${UNIQUE_ID_REQUIRED}` })
+  @ApiResponse({ status: 400, description: `${NICKNAME_REQUIRED}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async inquiry(
     @Body() dto: UsersInquiryInputDto,
   ): Promise<UsersInquiryOutputDto> {
-    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+    if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
 
     return await this.service.inquiry(dto);
   }

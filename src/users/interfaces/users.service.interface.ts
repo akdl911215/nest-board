@@ -13,15 +13,19 @@ import {
 } from '../dtos/users.update.dto';
 import {
   UsersDeleteInputDto,
-  UsersDeleteOutput,
+  UsersDeleteOutputDto,
 } from '../dtos/users.delete.dto';
 import {
   UsersLoginInputDto,
   UsersLoginOutputDto,
 } from '../dtos/users.login.dto';
+import {
+  UsersProfileInputDto,
+  UsersProfileOutputDto,
+} from '../dtos/users.profile.dto';
 
 export interface UsersServiceInterface {
-  readonly delete: (dto: UsersDeleteInputDto) => Promise<UsersDeleteOutput>;
+  readonly delete: (dto: UsersDeleteInputDto) => Promise<UsersDeleteOutputDto>;
 
   readonly inquiry: (
     dto: UsersInquiryInputDto,
@@ -36,4 +40,8 @@ export interface UsersServiceInterface {
   ) => Promise<UsersRegisterOutputDto>;
 
   readonly update: (dto: UsersUpdateInputDto) => Promise<UsersUpdateOutputDto>;
+
+  readonly profile: (
+    dto: UsersProfileInputDto,
+  ) => Promise<UsersProfileOutputDto>;
 }

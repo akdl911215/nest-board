@@ -41,4 +41,6 @@ export interface UsersRepositoryInterface {
     readonly email: Users['email'];
     readonly phone: Users['phone'];
   }) => Promise<Users>;
+
+  readonly profile: (entity: { readonly id: Users['id'] }) => Promise<Users>;
 }

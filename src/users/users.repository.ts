@@ -287,4 +287,15 @@ export class UsersRepository implements UsersRepositoryInterface {
       errorHandling(e);
     }
   }
+
+  public async profile(entity: { readonly id: Users['id'] }): Promise<Users> {
+    const { id } = entity;
+
+    const userFindById: Users = await this.prisma.users.findUnique({
+      where: { id },
+    });
+    if (!userFindById) throw new NotFoundException(NOTFOUND_USER);
+
+    return userFindById;
+  }
 }

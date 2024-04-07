@@ -22,6 +22,10 @@ import {
   UsersUpdateInputDto,
   UsersUpdateOutputDto,
 } from './dtos/users.update.dto';
+import {
+  UsersProfileInputDto,
+  UsersProfileOutputDto,
+} from './dtos/users.profile.dto';
 
 @Injectable()
 export class UsersService implements UsersServiceInterface {
@@ -55,5 +59,11 @@ export class UsersService implements UsersServiceInterface {
 
   public async update(dto: UsersUpdateInputDto): Promise<UsersUpdateOutputDto> {
     return await this.repository.update(dto);
+  }
+
+  public async profile(
+    dto: UsersProfileInputDto,
+  ): Promise<UsersProfileOutputDto> {
+    return await this.repository.profile(dto);
   }
 }
