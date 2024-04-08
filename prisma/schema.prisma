@@ -23,18 +23,11 @@ model Users {
   deleted_at DateTime?
 }
 
-enum ContentType {
-  TEXT
-  IMAGES_AND_VIDEO
-  LINK
-}
-
-model BoardsT {
-    @@map(name: "boards_t")
+model Boards {
+    @@map(name: "boards")
 
     id String @id @default(uuid()) @db.Uuid
     title String
-    content_types ContentType @default(TEXT)
     content String @db.Text
     category String
     nickname String
@@ -42,36 +35,6 @@ model BoardsT {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
     deleted_at DateTime?
-}
-
-model BoardsIAV {
-  @@map(name: "boards_iav")
-
-  id String @id @default(uuid()) @db.Uuid
-  title String
-  content_types ContentType @default(IMAGES_AND_VIDEO)
-  upload_url String
-  category String
-  nickname String
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted_at DateTime?
-}
-
-model BoardsL {
-  @@map(name: "boards_l")
-
-  id String @id @default(uuid()) @db.Uuid
-  title String
-  content_types ContentType @default(LINK)
-  link_url String
-  category String
-  nickname String
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted_at DateTime?
 }
 
 model Categories {
