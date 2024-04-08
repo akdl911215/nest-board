@@ -1,14 +1,7 @@
 import { Dependencies, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import { BoardsRepositoryInterface } from './interfaces/boards.repository.interface';
-import {
-  Boards,
-  BoardsIAV,
-  BoardsL,
-  BoardsT,
-  Categories,
-  Prisma,
-} from '@prisma/client';
+import { Boards, Categories, Prisma } from '@prisma/client';
 import {
   BaseCursorPaginationInputDto,
   BaseCursorPaginationOutputDto,
@@ -78,11 +71,7 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       countSql['category'] = categoryCheck;
     }
 
-    // BoardsOrderByWithAggregationInput
-    const orderBy:
-      | Prisma.BoardsTOrderByWithAggregationInput[]
-      | Prisma.BoardsIAVOrderByWithAggregationInput[]
-      | Prisma.BoardsLOrderByWithAggregationInput[] = [
+    const orderBy: Prisma.BoardsOrderByWithAggregationInput[] = [
       {
         created_at: 'desc',
       },
@@ -99,53 +88,10 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       };
     }
 
-    const currentTextList: BoardsT[] = await this.prisma.boardsT.findMany(sql);
-    const textTotalCount: number = await this.prisma.boardsT.count({
+    const currentList: Boards[] = await this.prisma.boards.findMany(sql);
+    const totalCount: number = await this.prisma.boards.count({
       where: countSql,
     });
-
-    const currentIAVList: BoardsIAV[] =
-      await this.prisma.boardsIAV.findMany(sql);
-    const imageAndVideoTotalCount: number = await this.prisma.boardsIAV.count({
-      where: countSql,
-    });
-
-    const currentLinkList: BoardsL[] = await this.prisma.boardsL.findMany(sql);
-    const linkTotalCount: number = await this.prisma.boardsL.count({
-      where: countSql,
-    });
-
-    const totalCount: number =
-      textTotalCount + imageAndVideoTotalCount + linkTotalCount;
-
-    let tPivot: number = 0;
-    let iavPivot: number = 0;
-    let lPivot: number = 0;
-    const currentList: BoardsT[] & BoardsIAV[] & BoardsL[] = [];
-    while (tPivot + iavPivot + lPivot < totalCount) {
-      const ct: Date = currentTextList[tPivot].created_at;
-      const ciav: Date = currentIAVList[iavPivot].created_at;
-      const cl: Date = currentLinkList[lPivot].created_at;
-
-      const min: Date = mathMin(ct, ciav, cl);
-
-      if (min === ct) currentList.push(currentTextList[tPivot++]);
-
-      if (min === ciav) currentList.push(currentIAVList[iavPivot++]);
-      if (min === cl) currentList.push(currentLinkList[lPivot++]);
-    }
-
-    function mathMin(...parameters: Date[]): Date {
-      let min: Date = new Date();
-
-      for (let i = 0; i < parameters.length; ++i) {
-        if (parameters[i] < min) {
-          min = parameters[i];
-        }
-      }
-
-      return min;
-    }
 
     return {
       total_count: totalCount,
