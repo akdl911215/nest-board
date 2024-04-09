@@ -57,6 +57,7 @@ export class BoardsService implements BoardsServiceInterface {
       title: dto.title,
       nickname: dto.nickname,
       content: dto.content,
+      identifier_id: dto.identifierId,
     });
   }
 

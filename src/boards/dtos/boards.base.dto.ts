@@ -11,6 +11,14 @@ export class BoardsBaseDto {
   })
   public readonly id!: Boards['id'];
 
+  @IsUUID()
+  @ApiProperty({
+    type: String,
+    default: '',
+    required: true,
+  })
+  public readonly identifierId!: Boards['identifier_id'];
+
   @IsString()
   @ApiProperty({
     type: String,
@@ -26,14 +34,6 @@ export class BoardsBaseDto {
     required: true,
   })
   public readonly nickname!: Boards['nickname'];
-
-  @IsUUID()
-  @ApiProperty({
-    type: String,
-    default: '',
-    required: true,
-  })
-  public readonly identifierId!: Boards['identifier_id'];
 
   @IsString()
   @ApiProperty({
