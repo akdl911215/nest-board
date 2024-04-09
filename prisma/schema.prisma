@@ -27,6 +27,7 @@ model Boards {
     @@map(name: "boards")
 
     id String @id @default(uuid()) @db.Uuid
+    identifier_id String
     title String
     content String @db.Text
     category String

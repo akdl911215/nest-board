@@ -5,8 +5,8 @@ import { Boards } from '@prisma/client';
 export class BoardsRegisterInputDto extends PickType(BoardsBaseDto, [
   'category',
   'title',
-  'password',
   'nickname',
+  'identifierId',
   'content',
 ] as const) {}
 

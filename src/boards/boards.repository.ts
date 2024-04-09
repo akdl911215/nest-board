@@ -102,14 +102,11 @@ export class BoardsRepository implements BoardsRepositoryInterface {
   public async register(entity: {
     readonly category: Boards['category'];
     readonly title: Boards['title'];
-    readonly password: Boards['password'];
     readonly nickname: Boards['nickname'];
+    readonly identifier_id: Boards['identifier_id'];
     readonly content: Boards['content'];
   }): Promise<Boards> {
-    const { category, title, password, nickname, content } = entity;
-
-    let passwordCheck = null;
-    if (password) passwordCheck = passwordCheck;
+    const { category, title, nickname, content, identifier_id } = entity;
 
     try {
       const registerBoard: Boards = await this.prisma.$transaction(async () => {
@@ -124,13 +121,7 @@ export class BoardsRepository implements BoardsRepositoryInterface {
         }
 
         return this.prisma.boards.create({
-          data: {
-            category,
-            title,
-            password: passwordCheck,
-            nickname,
-            content,
-          },
+          data: { identifier_id, category, title, nickname, content },
         });
       });
 

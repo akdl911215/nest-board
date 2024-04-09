@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsDate, IsString, IsUUID } from 'class-validator';
 import { Boards } from '@prisma/client';
 
 export class BoardsBaseDto {
@@ -27,6 +27,14 @@ export class BoardsBaseDto {
   })
   public readonly nickname!: Boards['nickname'];
 
+  @IsUUID()
+  @ApiProperty({
+    type: String,
+    default: '',
+    required: true,
+  })
+  public readonly identifierId!: Boards['identifier_id'];
+
   @IsString()
   @ApiProperty({
     type: String,
@@ -34,15 +42,6 @@ export class BoardsBaseDto {
     required: false,
   })
   public readonly content?: Boards['content'];
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    type: String,
-    default: '',
-    required: false,
-  })
-  public readonly password?: Boards['password'];
 
   @IsString()
   @ApiProperty({

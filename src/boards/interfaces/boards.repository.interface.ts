@@ -24,8 +24,8 @@ export interface BoardsRepositoryInterface {
   readonly register: (entity: {
     readonly category: Boards['category'];
     readonly title: Boards['title'];
-    readonly password: Boards['password'];
     readonly nickname: Boards['nickname'];
+    readonly identifier_id: Boards['identifier_id'];
     readonly content: Boards['content'];
   }) => Promise<Boards>;
 
