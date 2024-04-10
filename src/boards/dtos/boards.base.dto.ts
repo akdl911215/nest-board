@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsString, IsUUID } from 'class-validator';
+import { IsDate, IsOptional, IsString, IsUUID } from 'class-validator';
 import { Boards } from '@prisma/client';
 
 export class BoardsBaseDto {
@@ -44,9 +44,10 @@ export class BoardsBaseDto {
   public readonly content?: Boards['content'];
 
   @IsString()
+  @IsOptional()
   @ApiProperty({
     type: String,
-    default: '',
+    default: null,
     required: false,
   })
   public readonly category?: Boards['category'];

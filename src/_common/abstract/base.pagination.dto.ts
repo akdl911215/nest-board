@@ -33,12 +33,12 @@ export class BaseCursorPaginationInputDto {
   })
   public readonly take!: number;
 
-  @Type(() => String)
   @IsString()
   @IsOptional()
   @ApiProperty({
     type: String,
     required: false,
+    default: null,
   })
   public readonly lastId?: string;
 }
