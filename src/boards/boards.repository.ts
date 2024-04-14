@@ -13,6 +13,7 @@ import { errorHandling } from '../_common/abstract/error.handling';
 @Dependencies([PrismaService])
 export class BoardsRepository implements BoardsRepositoryInterface {
   constructor(private readonly prisma: PrismaService) {}
+
   public async delete(entity: {
     readonly id: Boards['id'];
     readonly nickname: Boards['nickname'];
@@ -172,5 +173,19 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     } catch (e: any) {
       errorHandling(e);
     }
+  }
+
+  public async read(entity: {
+    readonly id: Boards['id'];
+    readonly title: Boards['title'];
+  }): Promise<Boards> {
+    const { id, title } = entity;
+
+    const boardFindByIdAndTitle: Boards = await this.prisma.boards.findFirst({
+      where: { AND: [{ id }, { title }] },
+    });
+    if (!boardFindByIdAndTitle) throw new NotFoundException(NOTFOUND_BOARD);
+
+    return boardFindByIdAndTitle;
   }
 }

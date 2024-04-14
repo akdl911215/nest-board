@@ -46,6 +46,11 @@ import {
   BoardsUpdateInputDto,
   BoardsUpdateOutputDto,
 } from './dtos/boards.update.dto';
+import {
+  BoardsReadInputDto,
+  BoardsReadOutputDto,
+} from './dtos/boards.read.dto';
+import { NOTFOUND_BOARD } from '../_common/constant/errors/404';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -72,6 +77,21 @@ export class BoardsController {
     return await this.service.list(dto);
   }
 
+  @Get('/read')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'BOARDS READ API',
+    description: '게시판 글 조회 절차',
+  })
+  @ApiResponse({ status: 200, description: `${CREATE_SUCCESS}` })
+  @ApiResponse({ status: 404, description: `${NOTFOUND_BOARD}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async read(
+    @Query() dto: BoardsReadInputDto,
+  ): Promise<BoardsReadOutputDto> {
+    return await this.service.read(dto);
+  }
+
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -85,6 +105,7 @@ export class BoardsController {
   ): Promise<BoardsRegisterOutputDto> {
     return await this.service.register(dto);
   }
+
   @Patch('/delete')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({

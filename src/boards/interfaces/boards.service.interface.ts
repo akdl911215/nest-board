@@ -18,6 +18,10 @@ import {
   BoardsUpdateInputDto,
   BoardsUpdateOutputDto,
 } from '../dtos/boards.update.dto';
+import {
+  BoardsReadInputDto,
+  BoardsReadOutputDto,
+} from '../dtos/boards.read.dto';
 
 export interface BoardsServiceInterface {
   readonly delete: (
@@ -37,4 +41,6 @@ export interface BoardsServiceInterface {
   readonly update: (
     dto: BoardsUpdateInputDto,
   ) => Promise<BoardsUpdateOutputDto>;
+
+  readonly read: (dto: BoardsReadInputDto) => Promise<BoardsReadOutputDto>;
 }

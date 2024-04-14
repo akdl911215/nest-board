@@ -21,6 +21,10 @@ import {
   BoardsUpdateOutputDto,
 } from './dtos/boards.update.dto';
 import { BoardsRepositoryInterface } from './interfaces/boards.repository.interface';
+import {
+  BoardsReadInputDto,
+  BoardsReadOutputDto,
+} from './dtos/boards.read.dto';
 
 @Injectable()
 export class BoardsService implements BoardsServiceInterface {
@@ -71,5 +75,9 @@ export class BoardsService implements BoardsServiceInterface {
       category: dto.category,
       content: dto.content,
     });
+  }
+
+  public async read(dto: BoardsReadInputDto): Promise<BoardsReadOutputDto> {
+    return await this.repository.read(dto);
   }
 }

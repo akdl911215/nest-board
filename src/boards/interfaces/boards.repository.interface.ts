@@ -36,4 +36,9 @@ export interface BoardsRepositoryInterface {
     readonly nickname: Boards['nickname'];
     readonly content: Boards['content'];
   }) => Promise<Boards>;
+
+  readonly read: (entity: {
+    readonly id: Boards['id'];
+    readonly title: Boards['title'];
+  }) => Promise<Boards>;
 }
