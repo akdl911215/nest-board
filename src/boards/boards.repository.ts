@@ -41,8 +41,11 @@ export class BoardsRepository implements BoardsRepositoryInterface {
   }
 
   public async inquiry(entity: { readonly id: Boards['id'] }): Promise<Boards> {
-    const boardFindById: Boards = await this.prisma.boards.findUnique({
+    const boardFindById: Boards = await this.prisma.boards.findFirst({
       where: entity,
+      include: {
+        comments: true,
+      },
     });
     if (!boardFindById) throw new NotFoundException(NOTFOUND_BOARD);
 

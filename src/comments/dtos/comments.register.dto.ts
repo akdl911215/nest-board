@@ -3,8 +3,9 @@ import { CommentsBaseDto } from './comments.base.dto';
 import { Comments } from '@prisma/client';
 
 export class CommentsRegisterInputDto extends PickType(CommentsBaseDto, [
-  'authorId',
+  'boardId',
   'content',
+  'nickname',
 ] as const) {}
 
 export type CommentsRegisterOutputDto = Comments;

@@ -17,7 +17,7 @@ export class CommentsBaseDto {
     default: '',
     required: true,
   })
-  public readonly authorId!: Comments['author_id'];
+  public readonly boardId!: Comments['board_id'];
 
   @IsString()
   @ApiProperty({
@@ -26,4 +26,12 @@ export class CommentsBaseDto {
     required: true,
   })
   public readonly content!: Comments['content'];
+
+  @IsString()
+  @ApiProperty({
+    type: String,
+    default: '',
+    required: true,
+  })
+  public readonly nickname!: Comments['nickname'];
 }

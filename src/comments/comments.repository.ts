@@ -12,18 +12,32 @@ export class CommentsRepository implements CommentsRepositoryInterface {
 
   public async delete(entity: {
     readonly id: Comments['id'];
+    readonly board_id: Comments['board_id'];
   }): Promise<Comments> {
-    const commentFindById: Comments = await this.prisma.comments.findUnique({
-      where: { id: entity.id },
-    });
-    if (!commentFindById) throw new NotFoundException(NOTFOUND_COMMENT);
+    const { id, board_id } = entity;
+    const commentFindByIdAndBoardId: Comments =
+      await this.prisma.comments.findFirst({
+        where: { AND: [{ id }, { board_id }] },
+      });
+    if (!commentFindByIdAndBoardId)
+      throw new NotFoundException(NOTFOUND_COMMENT);
 
-    return commentFindById;
+    try {
+      const deleteComment: Comments = await this.prisma.comments.update({
+        where: { id },
+        data: { deleted_at: new Date() },
+      });
+
+      return deleteComment;
+    } catch (e: any) {
+      errorHandling(e);
+    }
   }
 
   public async register(entity: {
-    readonly author_id: Comments['author_id'];
+    readonly board_id: Comments['board_id'];
     readonly content: Comments['content'];
+    readonly nickname: Comments['nickname'];
   }): Promise<Comments> {
     try {
       const registerComment: Comments = await this.prisma.comments.create({
@@ -38,14 +52,14 @@ export class CommentsRepository implements CommentsRepositoryInterface {
 
   public async update(entity: {
     readonly id: Comments['id'];
-    readonly author_id: Comments['author_id'];
+    readonly board_id: Comments['board_id'];
     readonly content: Comments['content'];
   }): Promise<Comments> {
-    const { id, author_id, content } = entity;
+    const { id, board_id, content } = entity;
 
     const commentFindByIdAndAuthor_id: Comments =
       await this.prisma.comments.findFirst({
-        where: { AND: [{ id }, { author_id }] },
+        where: { AND: [{ id }, { board_id }] },
       });
     if (!commentFindByIdAndAuthor_id)
       throw new NotFoundException(NOTFOUND_COMMENT);

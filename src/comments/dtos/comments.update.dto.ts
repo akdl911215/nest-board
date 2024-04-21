@@ -4,7 +4,7 @@ import { Comments } from '@prisma/client';
 
 export class CommentsUpdateInputDto extends PickType(CommentsBaseDto, [
   'id',
-  'authorId',
+  'boardId',
   'content',
 ] as const) {}
 

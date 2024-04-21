@@ -21,22 +21,6 @@ model Users {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   deleted_at DateTime?
-
-  comments Comments[]
-}
-
-model Comments {
-  @@map(name: "comments")
-
-  id String @id @default(uuid()) @db.Uuid
-  author Users @relation(fields: [author_id], references: [id])
-  author_id String @db.Uuid
-
-  content String @db.Text
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  deleted_at DateTime?
 }
 
 model Boards {
@@ -52,6 +36,23 @@ model Boards {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
     deleted_at DateTime?
+
+    comments Comments[]
+}
+
+model Comments {
+  @@map(name: "comments")
+
+  id String @id @default(uuid()) @db.Uuid
+  nickname String
+  content String @db.Text
+
+  board Boards @relation(fields: [board_id], references: [id])
+  board_id String @db.Uuid
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime?
 }
 
 model Categories {
