@@ -13,3 +13,4 @@ export const EMAIL_REQUIRED = 'emailRequired';
 export const PASSWORD_REQUIRED = 'passwordRequired';
 export const PHONE_REQUIRED = 'phoneRequired';
 export const BOARD_ID_REQUIRED = 'boardIdRequired';
+export const COMMENT_ID_REQUIRED = 'commentIdRequired';

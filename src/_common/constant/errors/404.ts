@@ -6,3 +6,4 @@
 export const NOTFOUND_BOARD = 'notfoundBoard';
 export const NOTFOUND_USER = 'notfoundUser';
 export const NOTFOUND_COMMENT = 'notFoundComment';
+export const NOTFOUND_REPLY = 'notFoundReply';

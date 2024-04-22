@@ -53,6 +53,23 @@ model Comments {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   deleted_at DateTime?
+
+  replies Replies[]
+}
+
+model Replies {
+  @@map(name: "repolies")
+
+  id String @id @default(uuid()) @db.Uuid
+  nickname String
+  content String @db.Text
+
+  comment Comments @relation(fields: [comment_id], references: [id])
+  comment_id String @db.Uuid
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime?
 }
 
 model Categories {
