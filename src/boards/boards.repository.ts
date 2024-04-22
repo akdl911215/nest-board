@@ -41,15 +41,60 @@ export class BoardsRepository implements BoardsRepositoryInterface {
   }
 
   public async inquiry(entity: { readonly id: Boards['id'] }): Promise<Boards> {
-    const boardFindById: Boards = await this.prisma.boards.findFirst({
-      where: entity,
+    const { id } = entity;
+    // const boardFindById: Boards = await this.prisma.boards.findUnique({
+    //   where: { AND: [{ id }, { deleted_at: null }] },
+    //   include: {
+    //     comments: {
+    //       include: {
+    //         replies: true,
+    //       },
+    //     },
+    //   },
+    // });
+
+    console.log('id : ', id);
+    const boardFindById: Boards[] = await this.prisma.boards.findMany({
+      where: {
+        id,
+        deleted_at: null,
+        comments: {
+          every: {
+            deleted_at: null,
+          },
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
       include: {
-        comments: true,
+        comments: {
+          where: {
+            deleted_at: null,
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+          include: {
+            replies: {
+              where: {
+                deleted_at: null,
+              },
+              orderBy: {
+                created_at: 'desc',
+              },
+            },
+          },
+        },
       },
     });
+    console.log('boardFindById : ', boardFindById);
     if (!boardFindById) throw new NotFoundException(NOTFOUND_BOARD);
 
-    return boardFindById;
+    const returnBoard: Boards = boardFindById[0];
+    console.log('returnBoard : ', returnBoard);
+
+    return returnBoard;
   }
 
   public async list(entity: {
