@@ -298,4 +298,46 @@ export class UsersRepository implements UsersRepositoryInterface {
 
     return userFindById;
   }
+
+  public async refresh(entity: {
+    readonly id: Users['id'];
+    readonly email: Users['email'];
+    readonly nickname: Users['nickname'];
+  }): Promise<{
+    readonly id: Users['id'];
+    readonly email: Users['email'];
+    readonly nickname: Users['nickname'];
+    readonly access_token: string | null;
+    readonly refresh_token: Users['refresh_token'];
+  }> {
+    const { id, email, nickname } = entity;
+
+    const accessPayload: AccessTokenPayloadType = { id, email };
+    const refreshPayload: RefreshTokenPayloadType = { id, email, nickname };
+
+    try {
+      const { accessToken, refreshToken } = await this.jwtToken.generateTokens({
+        accessPayload,
+        refreshPayload,
+      });
+
+      const refreshUpdateUser: Users = await this.prisma.$transaction(
+        async () =>
+          await this.prisma.users.update({
+            where: { id },
+            data: { refresh_token: refreshToken },
+          }),
+      );
+
+      return {
+        id: refreshUpdateUser.id,
+        email: refreshUpdateUser.email,
+        nickname: refreshUpdateUser.email,
+        access_token: accessToken,
+        refresh_token: refreshUpdateUser.refresh_token,
+      };
+    } catch (e: any) {
+      errorHandling(e);
+    }
+  }
 }

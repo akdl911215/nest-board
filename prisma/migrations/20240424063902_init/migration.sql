@@ -16,9 +16,9 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "boards" (
     "id" UUID NOT NULL,
+    "identifier_id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "password" TEXT,
-    "content" TEXT,
+    "content" TEXT NOT NULL,
     "category" TEXT NOT NULL,
     "nickname" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -26,6 +26,32 @@ CREATE TABLE "boards" (
     "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "boards_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "comments" (
+    "id" UUID NOT NULL,
+    "nickname" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "board_id" UUID NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
+
+    CONSTRAINT "comments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "repolies" (
+    "id" UUID NOT NULL,
+    "nickname" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "comment_id" UUID NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
+
+    CONSTRAINT "repolies_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -47,3 +73,9 @@ CREATE UNIQUE INDEX "users_nickname_key" ON "users"("nickname");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
+
+-- AddForeignKey
+ALTER TABLE "comments" ADD CONSTRAINT "comments_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "repolies" ADD CONSTRAINT "repolies_comment_id_fkey" FOREIGN KEY ("comment_id") REFERENCES "comments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

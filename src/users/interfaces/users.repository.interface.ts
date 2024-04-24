@@ -43,4 +43,16 @@ export interface UsersRepositoryInterface {
   }) => Promise<Users>;
 
   readonly profile: (entity: { readonly id: Users['id'] }) => Promise<Users>;
+
+  readonly refresh: (entity: {
+    readonly id: Users['id'];
+    readonly email: Users['email'];
+    readonly nickname: Users['nickname'];
+  }) => Promise<{
+    readonly id: Users['id'];
+    readonly email: Users['email'];
+    readonly nickname: Users['nickname'];
+    readonly access_token: string | null;
+    readonly refresh_token: Users['refresh_token'];
+  }>;
 }

@@ -23,6 +23,10 @@ import {
   UsersProfileInputDto,
   UsersProfileOutputDto,
 } from '../dtos/users.profile.dto';
+import {
+  UsersRefreshTokenReIssuanceInputDto,
+  UsersRefreshTokenReIssuanceOutputDto,
+} from '../dtos/users.refresh.token.re.issuance.dto';
 
 export interface UsersServiceInterface {
   readonly delete: (dto: UsersDeleteInputDto) => Promise<UsersDeleteOutputDto>;
@@ -44,4 +48,8 @@ export interface UsersServiceInterface {
   readonly profile: (
     dto: UsersProfileInputDto,
   ) => Promise<UsersProfileOutputDto>;
+
+  readonly refresh: (
+    dto: UsersRefreshTokenReIssuanceInputDto,
+  ) => Promise<UsersRefreshTokenReIssuanceOutputDto>;
 }
