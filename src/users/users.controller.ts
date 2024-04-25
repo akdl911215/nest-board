@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsersServiceInterface } from './interfaces/users.service.interface';
@@ -56,16 +57,23 @@ import {
 } from './dtos/users.profile.dto';
 import { PasswordCheckingInterceptor } from './infrastructure/interceptor/password.checking.interceptor';
 import { RegisterRefreshTokenDeleteInterceptor } from './infrastructure/interceptor/register.refresh.token.delete.interceptor';
+import {
+  UsersRefreshTokenReIssuanceInputDto,
+  UsersRefreshTokenReIssuanceOutputDto,
+} from './dtos/users.refresh.token.re.issuance.dto';
+import { JwtRefreshGuard } from './infrastructure/token/guards/jwt.refresh.guard';
+import { JwtAccessGuard } from './infrastructure/token/guards/jwt.access.guard';
 
 @ApiTags('users')
 @Controller('users')
 @UseInterceptors(PasswordCheckingInterceptor)
-@UseInterceptors(RegisterRefreshTokenDeleteInterceptor)
 export class UsersController {
   constructor(
     @Inject('SERVICE') private readonly service: UsersServiceInterface,
   ) {}
 
+  @UseGuards(JwtAccessGuard)
+  @UseInterceptors(RegisterRefreshTokenDeleteInterceptor)
   @Get('/profile/:id')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -117,6 +125,7 @@ export class UsersController {
     return await this.service.login(dto);
   }
 
+  @UseInterceptors(RegisterRefreshTokenDeleteInterceptor)
   @Get('/inquiry')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -134,6 +143,7 @@ export class UsersController {
     return await this.service.inquiry(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
   @Patch('/delete')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -151,6 +161,8 @@ export class UsersController {
     return await this.service.delete(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
+  @UseInterceptors(RegisterRefreshTokenDeleteInterceptor)
   @Patch('/')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -172,5 +184,28 @@ export class UsersController {
     if (!dto?.phone) throw new BadRequestException(PHONE_REQUIRED);
 
     return await this.service.update(dto);
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Patch('/refresh/token')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'USER REFRESH TOKEN RE ISSUANCE API',
+    description: '유저 리프레쉬 토큰 재발급 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({
+    status: 400,
+    description: `${NICKNAME_REQUIRED}, ${EMAIL_REQUIRED}, ${NICKNAME_REQUIRED}`,
+  })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async refresh(
+    @Body() dto: UsersRefreshTokenReIssuanceInputDto,
+  ): Promise<UsersRefreshTokenReIssuanceOutputDto> {
+    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+    if (!dto?.email) throw new BadRequestException(EMAIL_REQUIRED);
+    if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
+
+    return await this.service.refresh(dto);
   }
 }

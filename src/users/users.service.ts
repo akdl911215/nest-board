@@ -26,6 +26,10 @@ import {
   UsersProfileInputDto,
   UsersProfileOutputDto,
 } from './dtos/users.profile.dto';
+import {
+  UsersRefreshTokenReIssuanceInputDto,
+  UsersRefreshTokenReIssuanceOutputDto,
+} from './dtos/users.refresh.token.re.issuance.dto';
 
 @Injectable()
 export class UsersService implements UsersServiceInterface {
@@ -68,5 +72,11 @@ export class UsersService implements UsersServiceInterface {
     dto: UsersProfileInputDto,
   ): Promise<UsersProfileOutputDto> {
     return await this.repository.profile(dto);
+  }
+
+  public async refresh(
+    dto: UsersRefreshTokenReIssuanceInputDto,
+  ): Promise<UsersRefreshTokenReIssuanceOutputDto> {
+    return await this.repository.refresh(dto);
   }
 }
