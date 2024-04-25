@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { UsersServiceInterface } from './interfaces/users.service.interface';
 import {
+  ApiBearerAuth,
   ApiConsumes,
   ApiOperation,
   ApiResponse,
@@ -73,6 +74,7 @@ export class UsersController {
   ) {}
 
   @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @UseInterceptors(RegisterRefreshTokenDeleteInterceptor)
   @Get('/profile/:id')
   @ApiConsumes('application/x-www-form-urlencoded')
@@ -144,6 +146,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @Patch('/delete')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -162,6 +165,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @UseInterceptors(RegisterRefreshTokenDeleteInterceptor)
   @Patch('/')
   @ApiConsumes('application/x-www-form-urlencoded')
@@ -187,6 +191,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtRefreshGuard)
+  @ApiBearerAuth('refresh_token')
   @Patch('/refresh/token')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
