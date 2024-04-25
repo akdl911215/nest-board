@@ -211,6 +211,7 @@ export class UsersRepository implements UsersRepositoryInterface {
   }): Promise<Users> {
     const { email, nickname, password, phone } = entity;
 
+    // 자동 체크 기능 넣으면 제거해도 되는 부분
     const userFindByEntity: Users = await this.prisma.users.findFirst({
       where: { AND: [{ email }, { nickname }, { phone }] },
     });
@@ -245,6 +246,7 @@ export class UsersRepository implements UsersRepositoryInterface {
   }): Promise<Users> {
     const { id, nickname, email, phone } = entity;
 
+    // 자동 체크 기능 넣으면 제거해도 되는 부분
     const userFindById: Users = await this.prisma.users.findUnique({
       where: { id },
     });

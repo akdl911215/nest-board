@@ -7,6 +7,8 @@ import { BcryptService } from './infrastructure/bcrypt/bcrypt.service';
 import { ConfigService } from '@nestjs/config';
 import { TokenService } from './infrastructure/token/token.service';
 import { JwtService } from '@nestjs/jwt';
+import { JwtAccessTokenStrategy } from './infrastructure/token/strategys/jwt.access.token.strategy';
+import { JwtRefreshTokenStrategy } from './infrastructure/token/strategys/jwt.refresh.token.strategy';
 
 @Module({
   controllers: [UsersController],
@@ -16,6 +18,8 @@ import { JwtService } from '@nestjs/jwt';
     PrismaService,
     ConfigService,
     JwtService,
+    JwtAccessTokenStrategy,
+    JwtRefreshTokenStrategy,
 
     // service
     { provide: 'SERVICE', useClass: UsersService },

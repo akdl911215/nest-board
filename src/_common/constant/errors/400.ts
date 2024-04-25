@@ -14,3 +14,4 @@ export const PASSWORD_REQUIRED = 'passwordRequired';
 export const PHONE_REQUIRED = 'phoneRequired';
 export const BOARD_ID_REQUIRED = 'boardIdRequired';
 export const COMMENT_ID_REQUIRED = 'commentIdRequired';
+export const NOT_MATCH_REFRESH_TOKEN = 'notMatchRefreshToken';
