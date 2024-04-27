@@ -350,7 +350,7 @@ export class UsersRepository implements UsersRepositoryInterface {
       where: { email: entity.email },
     });
 
-    return { existing_email: !!userFindByEmail };
+    return { existing_email: !userFindByEmail };
   }
 
   public async existingNickname(entity: {
@@ -360,7 +360,7 @@ export class UsersRepository implements UsersRepositoryInterface {
       where: { nickname: entity.nickname },
     });
 
-    return { existing_nickname: !!userFindByNickname };
+    return { existing_nickname: !userFindByNickname };
   }
 
   public async existingPhone(entity: {
@@ -370,6 +370,6 @@ export class UsersRepository implements UsersRepositoryInterface {
       where: { phone: entity.phone },
     });
 
-    return { existing_phone: !!userFindByPhone };
+    return { existing_phone: !userFindByPhone };
   }
 }
