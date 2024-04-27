@@ -55,4 +55,16 @@ export interface UsersRepositoryInterface {
     readonly access_token: string | null;
     readonly refresh_token: Users['refresh_token'];
   }>;
+
+  readonly existingEmail: (entity: {
+    readonly email: Users['email'];
+  }) => Promise<{ readonly existing_email: boolean }>;
+
+  readonly existingNickname: (entity: {
+    readonly nickname: Users['nickname'];
+  }) => Promise<{ readonly existing_nickname: boolean }>;
+
+  readonly existingPhone: (entity: {
+    readonly phone: Users['phone'];
+  }) => Promise<{ readonly existing_phone: boolean }>;
 }

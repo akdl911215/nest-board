@@ -27,6 +27,18 @@ import {
   UsersRefreshTokenReIssuanceInputDto,
   UsersRefreshTokenReIssuanceOutputDto,
 } from '../dtos/users.refresh.token.re.issuance.dto';
+import {
+  UsersExistingEmailInputDto,
+  UsersExistingEmailOutputDto,
+} from '../dtos/users.existing.email.dto';
+import {
+  UsersExistingNicknameInputDto,
+  UsersExistingNicknameOutputDto,
+} from '../dtos/users.existing.nickname.dto';
+import {
+  UsersExistingPhoneInputDto,
+  UsersExistingPhoneOutputDto,
+} from '../dtos/users.existing.phone.dto';
 
 export interface UsersServiceInterface {
   readonly delete: (dto: UsersDeleteInputDto) => Promise<UsersDeleteOutputDto>;
@@ -52,4 +64,16 @@ export interface UsersServiceInterface {
   readonly refresh: (
     dto: UsersRefreshTokenReIssuanceInputDto,
   ) => Promise<UsersRefreshTokenReIssuanceOutputDto>;
+
+  readonly existingEmail: (
+    dto: UsersExistingEmailInputDto,
+  ) => Promise<UsersExistingEmailOutputDto>;
+
+  readonly existingNickname: (
+    dto: UsersExistingNicknameInputDto,
+  ) => Promise<UsersExistingNicknameOutputDto>;
+
+  readonly existingPhone: (
+    dto: UsersExistingPhoneInputDto,
+  ) => Promise<UsersExistingPhoneOutputDto>;
 }
