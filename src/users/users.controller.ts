@@ -64,6 +64,18 @@ import {
 } from './dtos/users.refresh.token.re.issuance.dto';
 import { JwtRefreshGuard } from './infrastructure/token/guards/jwt.refresh.guard';
 import { JwtAccessGuard } from './infrastructure/token/guards/jwt.access.guard';
+import {
+  UsersExistingNicknameInputDto,
+  UsersExistingNicknameOutputDto,
+} from './dtos/users.existing.nickname.dto';
+import {
+  UsersExistingEmailInputDto,
+  UsersExistingEmailOutputDto,
+} from './dtos/users.existing.email.dto';
+import {
+  UsersExistingPhoneInputDto,
+  UsersExistingPhoneOutputDto,
+} from './dtos/users.existing.phone.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -72,6 +84,57 @@ export class UsersController {
   constructor(
     @Inject('SERVICE') private readonly service: UsersServiceInterface,
   ) {}
+
+  @Get('/existing/nickname/:nickname')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'USER EXISTING NICKNAME INQUIRY API',
+    description: '유저 닉네임 존재 여부 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${NICKNAME_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async existingNickname(
+    @Param() dto: UsersExistingNicknameInputDto,
+  ): Promise<UsersExistingNicknameOutputDto> {
+    if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
+
+    return await this.service.existingNickname(dto);
+  }
+
+  @Get('/existing/email/:email')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'USER EXISTING EMAIL INQUIRY API',
+    description: `유저 E-MAIL 존재 여부 절차`,
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${EMAIL_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async existingEmail(
+    @Param() dto: UsersExistingEmailInputDto,
+  ): Promise<UsersExistingEmailOutputDto> {
+    if (!dto?.email) throw new BadRequestException(EMAIL_REQUIRED);
+
+    return await this.service.existingEmail(dto);
+  }
+
+  @Get('/existing/phone/:phone')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'USER EXISTING PHONE INQUIRY API',
+    description: `유저  핸드폰 존재 여부 절차`,
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${EMAIL_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async existingPhone(
+    @Param() dto: UsersExistingPhoneInputDto,
+  ): Promise<UsersExistingPhoneOutputDto> {
+    if (!dto?.phone) throw new BadRequestException(PHONE_REQUIRED);
+
+    return await this.service.existingPhone(dto);
+  }
 
   @UseGuards(JwtAccessGuard)
   @ApiBearerAuth('access_token')

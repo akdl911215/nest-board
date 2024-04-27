@@ -346,20 +346,30 @@ export class UsersRepository implements UsersRepositoryInterface {
   public async existingEmail(entity: {
     readonly email: Users['email'];
   }): Promise<{ readonly existing_email: boolean }> {
-    const userFindByEmail = await this.prisma.users.findUnique({
+    const userFindByEmail: Users = await this.prisma.users.findUnique({
       where: { email: entity.email },
     });
+
+    return { existing_email: !!userFindByEmail };
   }
 
   public async existingNickname(entity: {
     readonly nickname: Users['nickname'];
   }): Promise<{ readonly existing_nickname: boolean }> {
-    //
+    const userFindByNickname: Users = await this.prisma.users.findUnique({
+      where: { nickname: entity.nickname },
+    });
+
+    return { existing_nickname: !!userFindByNickname };
   }
 
   public async existingPhone(entity: {
     readonly phone: Users['phone'];
   }): Promise<{ readonly existing_phone: boolean }> {
-    //
+    const userFindByPhone: Users = await this.prisma.users.findUnique({
+      where: { phone: entity.phone },
+    });
+
+    return { existing_phone: !!userFindByPhone };
   }
 }

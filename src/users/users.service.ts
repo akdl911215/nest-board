@@ -30,6 +30,18 @@ import {
   UsersRefreshTokenReIssuanceInputDto,
   UsersRefreshTokenReIssuanceOutputDto,
 } from './dtos/users.refresh.token.re.issuance.dto';
+import {
+  UsersExistingEmailInputDto,
+  UsersExistingEmailOutputDto,
+} from './dtos/users.existing.email.dto';
+import {
+  UsersExistingNicknameInputDto,
+  UsersExistingNicknameOutputDto,
+} from './dtos/users.existing.nickname.dto';
+import {
+  UsersExistingPhoneInputDto,
+  UsersExistingPhoneOutputDto,
+} from './dtos/users.existing.phone.dto';
 
 @Injectable()
 export class UsersService implements UsersServiceInterface {
@@ -78,5 +90,23 @@ export class UsersService implements UsersServiceInterface {
     dto: UsersRefreshTokenReIssuanceInputDto,
   ): Promise<UsersRefreshTokenReIssuanceOutputDto> {
     return await this.repository.refresh(dto);
+  }
+
+  public async existingEmail(
+    dto: UsersExistingEmailInputDto,
+  ): Promise<UsersExistingEmailOutputDto> {
+    return await this.repository.existingEmail(dto);
+  }
+
+  public async existingNickname(
+    dto: UsersExistingNicknameInputDto,
+  ): Promise<UsersExistingNicknameOutputDto> {
+    return await this.repository.existingNickname(dto);
+  }
+
+  public async existingPhone(
+    dto: UsersExistingPhoneInputDto,
+  ): Promise<UsersExistingPhoneOutputDto> {
+    return await this.repository.existingPhone(dto);
   }
 }
