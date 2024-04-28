@@ -74,7 +74,7 @@ export class UsersRepository implements UsersRepositoryInterface {
     const { nickname, take, last_id } = entity;
 
     const userFindByNickname: Users = await this.prisma.users.findUnique({
-      where: { nickname },
+      where: { nickname, deleted_at: null },
     });
     if (!userFindByNickname) throw new NotFoundException(NOTFOUND_USER);
 
@@ -89,8 +89,32 @@ export class UsersRepository implements UsersRepositoryInterface {
 
     const sql = {
       take,
-      where: { deleted_at: null, nickname },
+      where: {
+        nickname,
+        deleted_at: null,
+        comments: {
+          every: {
+            deleted_at: null,
+          },
+        },
+      },
       orderBy,
+      include: {
+        comments: {
+          where: {
+            deleted_at: null,
+          },
+          orderBy,
+          include: {
+            replies: {
+              where: {
+                deleted_at: null,
+              },
+              orderBy,
+            },
+          },
+        },
+      },
     };
 
     if (idCheck) {
