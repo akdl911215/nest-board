@@ -84,11 +84,18 @@ export class BoardsController {
     description: '게시판 글 조회 절차',
   })
   @ApiResponse({ status: 200, description: `${CREATE_SUCCESS}` })
+  @ApiResponse({
+    status: 400,
+    description: `${UNIQUE_ID_REQUIRED}, ${TITLE_REQUIRED}`,
+  })
   @ApiResponse({ status: 404, description: `${NOTFOUND_BOARD}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async read(
     @Query() dto: BoardsReadInputDto,
   ): Promise<BoardsReadOutputDto> {
+    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+    if (!dto?.title) throw new BadRequestException(TITLE_REQUIRED);
+
     return await this.service.read(dto);
   }
 

@@ -53,7 +53,6 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     //   },
     // });
 
-    console.log('id : ', id);
     const boardFindById: Boards[] = await this.prisma.boards.findMany({
       where: {
         id,
@@ -88,11 +87,9 @@ export class BoardsRepository implements BoardsRepositoryInterface {
         },
       },
     });
-    console.log('boardFindById : ', boardFindById);
-    if (!boardFindById) throw new NotFoundException(NOTFOUND_BOARD);
 
+    if (!boardFindById) throw new NotFoundException(NOTFOUND_BOARD);
     const returnBoard: Boards = boardFindById[0];
-    console.log('returnBoard : ', returnBoard);
 
     return returnBoard;
   }
@@ -229,11 +226,44 @@ export class BoardsRepository implements BoardsRepositoryInterface {
   }): Promise<Boards> {
     const { id, title } = entity;
 
-    const boardFindByIdAndTitle: Boards = await this.prisma.boards.findFirst({
-      where: { AND: [{ id }, { title }] },
+    const boardFindById: Boards[] = await this.prisma.boards.findMany({
+      where: {
+        AND: [{ id }, { title }],
+        deleted_at: null,
+        comments: {
+          every: {
+            deleted_at: null,
+          },
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+      include: {
+        comments: {
+          where: {
+            deleted_at: null,
+          },
+          orderBy: {
+            created_at: 'desc',
+          },
+          include: {
+            replies: {
+              where: {
+                deleted_at: null,
+              },
+              orderBy: {
+                created_at: 'desc',
+              },
+            },
+          },
+        },
+      },
     });
-    if (!boardFindByIdAndTitle) throw new NotFoundException(NOTFOUND_BOARD);
 
-    return boardFindByIdAndTitle;
+    if (!boardFindById) throw new NotFoundException(NOTFOUND_BOARD);
+    const returnBoard: Boards = boardFindById[0];
+
+    return returnBoard;
   }
 }
