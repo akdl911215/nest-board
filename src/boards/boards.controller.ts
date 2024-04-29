@@ -8,8 +8,10 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiConsumes,
   ApiOperation,
   ApiResponse,
@@ -51,6 +53,7 @@ import {
   BoardsReadOutputDto,
 } from './dtos/boards.read.dto';
 import { NOTFOUND_BOARD } from '../_common/constant/errors/404';
+import { JwtAccessGuard } from 'src/users/infrastructure/token/guards/jwt.access.guard';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -99,6 +102,8 @@ export class BoardsController {
     return await this.service.read(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -113,6 +118,8 @@ export class BoardsController {
     return await this.service.register(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @Patch('/delete')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -148,6 +155,8 @@ export class BoardsController {
     return await this.service.inquiry(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @Patch('/')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({

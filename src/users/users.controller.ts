@@ -255,7 +255,7 @@ export class UsersController {
 
   @UseGuards(JwtRefreshGuard)
   @ApiBearerAuth('refresh_token')
-  @Patch('/refresh/token')
+  @Get('/refresh/token')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'USER REFRESH TOKEN RE ISSUANCE API',
