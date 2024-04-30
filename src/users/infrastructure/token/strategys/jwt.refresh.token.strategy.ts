@@ -38,6 +38,8 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     const userFindById: Users = await this.prisma.users.findUnique({
       where: { id: payload?.id },
     });
+    console.log('JwtRefreshTokenStrategy token : ', token);
+    console.log('userFindById : ', userFindById);
 
     if (!userFindById) throw new NotFoundException(NOTFOUND_USER);
 

@@ -18,6 +18,8 @@ export class JwtRefreshGuard extends AuthGuard('JWT-REFRESH-TOKEN') {
     if (err || !user) {
       throw err || new UnauthorizedException();
     }
+    console.log('JwtRefreshGuard user : ', user);
+
     return user;
   }
 }
