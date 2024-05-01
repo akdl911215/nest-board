@@ -22,6 +22,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {
+    console.log('JwtRefreshTokenStrategy');
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -35,6 +36,10 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     payload: RefreshTokenPayloadType,
   ): Promise<Users> {
     const token: string = request?.headers?.authorization?.split('Bearer ')[1];
+    console.log('token : ', token);
+    console.log('payload : ', payload);
+    console.log('request : ', request);
+
     const userFindById: Users = await this.prisma.users.findUnique({
       where: { id: payload?.id },
     });

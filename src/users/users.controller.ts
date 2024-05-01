@@ -77,6 +77,7 @@ import {
   UsersExistingPhoneOutputDto,
 } from './dtos/users.existing.phone.dto';
 import { User } from '../_common/decorators/user.decorator';
+import { UsersDto } from '../_common/inbound/users.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -269,13 +270,13 @@ export class UsersController {
   })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async refresh(
-    @User() dto: UsersRefreshTokenReIssuanceInputDto,
+    @User() user: UsersDto,
   ): Promise<UsersRefreshTokenReIssuanceOutputDto> {
-    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
-    if (!dto?.email) throw new BadRequestException(EMAIL_REQUIRED);
-    if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
-    console.log('dto : ', dto);
+    console.log('user : ', user);
+    if (!user?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+    if (!user?.email) throw new BadRequestException(EMAIL_REQUIRED);
+    if (!user?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
 
-    return await this.service.refresh(dto);
+    return await this.service.refresh(user);
   }
 }

@@ -8,14 +8,14 @@ import { TokenService } from './token.service';
 const PASSPORT_MODULE = PassportModule.register({ session: false });
 const JWT_MODULE = JwtModule.registerAsync({
   imports: [ConfigModule],
-  inject: [ConfigModule],
+  inject: [ConfigService],
   useFactory: async (configService: ConfigService) => ({
     secret: configService.get<string>('JWT_SECRET'),
   }),
 });
 
 @Module({
-  imports: [JWT_MODULE, PASSPORT_MODULE],
+  imports: [JWT_MODULE, PASSPORT_MODULE, ConfigModule],
   providers: [
     PrismaService,
     { provide: 'TOKEN_SERVICE', useClass: TokenService },
