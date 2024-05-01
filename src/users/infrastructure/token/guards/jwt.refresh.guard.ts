@@ -19,7 +19,7 @@ export class JwtRefreshGuard extends AuthGuard('JWT-REFRESH-TOKEN') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // const request = context.switchToHttp().getRequest();
     // console.log('jwtRefreshGuard request : ', request);
-    console.log('JwtRefreshGuard context : ', context);
+    // console.log('JwtRefreshGuard context : ', context);
 
     const request = await context.switchToHttp().getRequest();
     const token: string =
@@ -28,8 +28,9 @@ export class JwtRefreshGuard extends AuthGuard('JWT-REFRESH-TOKEN') {
     const userFindById: Users = await this.prisma.users.findFirst({
       where: { refresh_token: token },
     });
-
     if (!userFindById) throw new NotFoundException(NOTFOUND_USER);
+
+    request.user = userFindById;
 
     return true;
     // return super.canActivate(context);

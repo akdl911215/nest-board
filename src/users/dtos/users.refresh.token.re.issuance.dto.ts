@@ -1,11 +1,7 @@
-import { PickType } from '@nestjs/swagger';
-import { UsersBaseDto } from './users.base.dto';
 import { Users } from '@prisma/client';
+import { UsersDto } from '../../_common/inbound/users.dto';
 
-export class UsersRefreshTokenReIssuanceInputDto extends PickType(
-  UsersBaseDto,
-  ['id', 'email', 'nickname'] as const,
-) {}
+export class UsersRefreshTokenReIssuanceInputDto extends UsersDto {}
 
 export type UsersRefreshTokenReIssuanceOutputDto = {
   readonly id: Users['id'];

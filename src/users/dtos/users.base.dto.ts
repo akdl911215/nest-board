@@ -12,9 +12,6 @@ export class UsersBaseDto {
   public readonly id!: Users['id'];
 
   @IsString()
-  @Matches(/^[A-za-z0-9ㄱ-ㅎㅏ-ㅣ가-힣]{2,20}$/, {
-    message: 'E-MAIL은 2자리 이상 12자리 이하입니다.',
-  })
   @ApiProperty({
     type: String,
     required: true,
