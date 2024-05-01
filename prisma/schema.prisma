@@ -38,6 +38,24 @@ model Boards {
     deleted_at DateTime?
 
     comments Comments[]
+    reactions Reactions[]
+
+}
+
+enum ReactionType {
+  ZERO
+  LIKE
+  DISLIKE
+}
+
+model Reactions {
+  @@map(name: "reactions")
+
+  id String @id @default(uuid()) @db.Uuid
+  type ReactionType @default(ZERO)
+
+  board Boards @relation(fields: [board_id], references: [id])
+  board_id String @db.Uuid
 }
 
 model Comments {

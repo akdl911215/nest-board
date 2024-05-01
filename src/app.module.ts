@@ -5,6 +5,7 @@ import { PrismaService } from './_common/infrastructure/prisma.service';
 import { UsersModule } from './users/users.module';
 import { RepliesModule } from './replies/replies.module';
 import { CommentsModule } from './comments/comments.module';
+import { ReactionsModule } from './reactions/reactions.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CommentsModule } from './comments/comments.module';
     UsersModule,
     CommentsModule,
     RepliesModule,
+    ReactionsModule,
   ],
   controllers: [],
   providers: [PrismaService],
