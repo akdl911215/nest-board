@@ -1,14 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ReactionsServiceInterface } from './interfaces/reactions.service.interface';
 import { ReactionsRepositoryInterface } from './interfaces/reactions.repository.interface';
+
 import {
-  ReactionsDeleteOutputDto,
-  ReactionsDeleteInputDto,
-} from './dtos/reactions.delete.dto';
-import {
-  ReactionsUpdateInputDto,
-  ReactionsUpdateOutputDto,
-} from './dtos/reactions.update.dto';
+  ReactionsRegisterInputDto,
+  ReactionsRegisterOutputDto,
+} from './dtos/reactions.register.dto';
+import { Reactions } from '@prisma/client';
 
 @Injectable()
 export class ReactionsService implements ReactionsServiceInterface {
@@ -17,22 +15,38 @@ export class ReactionsService implements ReactionsServiceInterface {
     private readonly repository: ReactionsRepositoryInterface,
   ) {}
 
-  public async delete(
-    dto: ReactionsDeleteInputDto,
-  ): Promise<ReactionsDeleteOutputDto> {
-    return await this.repository.delete({
-      id: dto.id,
-      board_id: dto.boardId,
-    });
-  }
+  public async reaction(
+    dto: ReactionsRegisterInputDto,
+  ): Promise<ReactionsRegisterOutputDto> {
+    const reaction: Reactions =
+      await this.repository.reactionFindByUserIdAndBoardId({
+        user_id: dto.userId,
+        board_id: dto.boardId,
+      });
 
-  public async update(
-    dto: ReactionsUpdateInputDto,
-  ): Promise<ReactionsUpdateOutputDto> {
-    return await this.repository.update({
-      id: dto.id,
-      type: dto.type,
-      board_id: dto.boardId,
-    });
+    if (reaction) {
+      const { reactionDelete } = await this.repository.delete({
+        id: reaction.id,
+        board_id: reaction.board_id,
+      });
+      if (dto.type !== reaction.type) {
+        if (reactionDelete) {
+          return await this.repository.update({
+            id: reaction.id,
+            type: dto.type,
+            user_id: dto.userId,
+            board_id: dto.boardId,
+          });
+        }
+      }
+
+      return null;
+    } else {
+      return await this.repository.register({
+        user_id: dto.userId,
+        board_id: dto.boardId,
+        type: dto.type,
+      });
+    }
   }
 }

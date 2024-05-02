@@ -2,11 +2,10 @@ import { PickType } from '@nestjs/swagger';
 import { ReactionsBaseDto } from './reactions.base.dto';
 import { Reactions } from '@prisma/client';
 
-export class ReactionsUpdateInputDto extends PickType(ReactionsBaseDto, [
-  'id',
+export class ReactionsRegisterInputDto extends PickType(ReactionsBaseDto, [
   'type',
-  'userId',
   'boardId',
+  'userId',
 ] as const) {}
 
-export type ReactionsUpdateOutputDto = Reactions;
+export type ReactionsRegisterOutputDto = Reactions;

@@ -9,6 +9,18 @@ export interface ReactionsRepositoryInterface {
   readonly update: (entity: {
     readonly id: Reactions['id'];
     readonly type: Reactions['type'];
+    readonly user_id: Reactions['user_id'];
+    readonly board_id: Reactions['board_id'];
+  }) => Promise<Reactions>;
+
+  readonly register: (entity: {
+    readonly type: Reactions['type'];
+    readonly user_id: Reactions['user_id'];
+    readonly board_id: Reactions['board_id'];
+  }) => Promise<Reactions>;
+
+  readonly reactionFindByUserIdAndBoardId: (entity: {
+    readonly user_id: Reactions['user_id'];
     readonly board_id: Reactions['board_id'];
   }) => Promise<Reactions>;
 }

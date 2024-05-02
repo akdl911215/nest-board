@@ -1,9 +1,15 @@
-import { Dependencies, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Dependencies,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import { ReactionsRepositoryInterface } from './interfaces/reactions.repository.interface';
 import { Reactions } from '@prisma/client';
 import { errorHandling } from '../_common/abstract/error.handling';
 import { NOTFOUND_REACTION } from '../_common/constant/errors/404';
+import { EXISTING_REACTION } from '../_common/constant/errors/409';
 
 @Injectable()
 @Dependencies([PrismaService])
@@ -39,9 +45,10 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
   public async update(entity: {
     readonly id: Reactions['id'];
     readonly type: Reactions['type'];
+    readonly user_id: Reactions['user_id'];
     readonly board_id: Reactions['board_id'];
   }): Promise<Reactions> {
-    const { id, type, board_id } = entity;
+    const { id, type, board_id, user_id } = entity;
 
     try {
       const updateReaction: Reactions = await this.prisma.$transaction(
@@ -49,7 +56,7 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
           await this.prisma.reactions.upsert({
             where: { id },
             update: { type },
-            create: { type, board_id },
+            create: { type, board_id, user_id },
           }),
       );
 
@@ -57,5 +64,46 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
     } catch (e: any) {
       errorHandling(e);
     }
+  }
+
+  public async register(entity: {
+    readonly type: Reactions['type'];
+    readonly user_id: Reactions['user_id'];
+    readonly board_id: Reactions['board_id'];
+  }): Promise<Reactions> {
+    const { type, user_id, board_id } = entity;
+    const reactionFindByUserIdAndBoardId: Reactions =
+      await this.prisma.reactions.findFirst({
+        where: { AND: [{ user_id }, { board_id }] },
+      });
+    if (reactionFindByUserIdAndBoardId)
+      throw new ConflictException(EXISTING_REACTION);
+
+    try {
+      const registerReaction: Reactions = await this.prisma.$transaction(
+        async () =>
+          await this.prisma.reactions.create({
+            data: { type, board_id, user_id },
+          }),
+      );
+
+      return registerReaction;
+    } catch (e: any) {
+      errorHandling(e);
+    }
+  }
+
+  public async reactionFindByUserIdAndBoardId(entity: {
+    readonly user_id: Reactions['user_id'];
+    readonly board_id: Reactions['board_id'];
+  }): Promise<Reactions> {
+    const { user_id, board_id } = entity;
+
+    const reactionFindByUserIdAndBoardId: Reactions =
+      await this.prisma.reactions.findFirst({
+        where: { AND: [{ user_id }, { board_id }] },
+      });
+
+    return reactionFindByUserIdAndBoardId;
   }
 }

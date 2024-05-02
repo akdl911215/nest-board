@@ -1,18 +1,10 @@
 import {
-  ReactionsDeleteOutputDto,
-  ReactionsDeleteInputDto,
-} from '../dtos/reactions.delete.dto';
-import {
-  ReactionsUpdateInputDto,
-  ReactionsUpdateOutputDto,
-} from '../dtos/reactions.update.dto';
+  ReactionsRegisterInputDto,
+  ReactionsRegisterOutputDto,
+} from '../dtos/reactions.register.dto';
 
 export interface ReactionsServiceInterface {
-  readonly delete: (
-    dto: ReactionsDeleteInputDto,
-  ) => Promise<ReactionsDeleteOutputDto>;
-
-  readonly update: (
-    dto: ReactionsUpdateInputDto,
-  ) => Promise<ReactionsUpdateOutputDto>;
+  readonly reaction: (
+    dto: ReactionsRegisterInputDto,
+  ) => Promise<ReactionsRegisterOutputDto | null>;
 }

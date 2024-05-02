@@ -43,7 +43,6 @@ model Boards {
 }
 
 enum ReactionType {
-  ZERO
   LIKE
   DISLIKE
 }
@@ -52,7 +51,8 @@ model Reactions {
   @@map(name: "reactions")
 
   id String @id @default(uuid()) @db.Uuid
-  type ReactionType @default(ZERO)
+  type ReactionType @default(LIKE)
+  user_id String @db.Uuid
 
   board Boards @relation(fields: [board_id], references: [id])
   board_id String @db.Uuid
