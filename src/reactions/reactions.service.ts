@@ -7,6 +7,10 @@ import {
   ReactionsRegisterOutputDto,
 } from './dtos/reactions.register.dto';
 import { Reactions } from '@prisma/client';
+import {
+  ReactionsCountInputDto,
+  ReactionsCountOutputDto,
+} from './dtos/reactions.count.dto';
 
 @Injectable()
 export class ReactionsService implements ReactionsServiceInterface {
@@ -48,5 +52,14 @@ export class ReactionsService implements ReactionsServiceInterface {
         type: dto.type,
       });
     }
+  }
+
+  public async count(
+    dto: ReactionsCountInputDto,
+  ): Promise<ReactionsCountOutputDto> {
+    return await this.repository.count({
+      board_id: dto.boardId,
+      user_id: dto.userId,
+    });
   }
 }
