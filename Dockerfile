@@ -11,9 +11,9 @@ RUN npm ci
 
 COPY ./ ./
 
-ENV DATABASE_URL=postgresql://postgres:123456@13.125.217.15:5432/postgres
+ENV DATABASE_URL=postgresql://postgres:123456@43.201.95.160:5432/postgres
 ENV PORT=9898
-ENV HOST=13.125.217.15
+ENV HOST=43.201.95.160
 
 RUN rm -rf ./dist || true
 RUN prisma generate
