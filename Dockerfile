@@ -7,7 +7,7 @@ COPY prisma ./prisma/
 
 RUN npm install -g dotenv-cli
 RUN npm i -g prisma
-RUN npm install
+RUN npm ci
 
 COPY ./ ./
 
