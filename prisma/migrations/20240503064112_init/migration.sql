@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "ReactionType" AS ENUM ('LIKE', 'DISLIKE');
+
 -- CreateTable
 CREATE TABLE "users" (
     "id" UUID NOT NULL,
@@ -26,6 +29,16 @@ CREATE TABLE "boards" (
     "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "boards_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "reactions" (
+    "id" UUID NOT NULL,
+    "type" "ReactionType" NOT NULL DEFAULT 'LIKE',
+    "user_id" UUID NOT NULL,
+    "board_id" UUID NOT NULL,
+
+    CONSTRAINT "reactions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -73,6 +86,9 @@ CREATE UNIQUE INDEX "users_nickname_key" ON "users"("nickname");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
+
+-- AddForeignKey
+ALTER TABLE "reactions" ADD CONSTRAINT "reactions_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "comments" ADD CONSTRAINT "comments_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
