@@ -7,7 +7,7 @@ COPY package*.json ./
 
 RUN npm cache clean --force
 RUN npm install -g dotenv-cli
-RUN npm i -g prisma
+RUN npm install npm@latest -g prisma
 RUN npm install npm@latest -g --verbose
 
 COPY ./ ./
