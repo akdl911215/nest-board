@@ -2,8 +2,8 @@ FROM node
 
 WORKDIR /app/server
 
-COPY package.json ./
-COPY prisma ./prisma/
+COPY package*.json ./
+#COPY prisma ./prisma/
 
 RUN npm cache clean --force
 RUN npm install -g dotenv-cli
