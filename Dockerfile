@@ -1,4 +1,4 @@
-FROM node:16.15.1
+FROM node
 
 WORKDIR /app/server
 
@@ -8,7 +8,7 @@ COPY prisma ./prisma/
 RUN npm cache clean --force
 RUN npm install -g dotenv-cli
 RUN npm i -g prisma
-RUN npm install --verbose
+RUN npm install npm@latest -g --verbose
 
 COPY ./ ./
 
