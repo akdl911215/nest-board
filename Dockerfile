@@ -21,4 +21,4 @@ RUN rm -rf ./dist || true
 #RUN prisma generate
 RUN npm run build
 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "startprod"]
