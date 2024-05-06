@@ -6,8 +6,11 @@ import { HttpExceptionFilter } from './_common/exceptions/http.exception.filter'
 import { GlobalReturnResponseInterceptor } from './_common/outbound/interceptors/global.return.response.interceptor';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as process from 'process';
 
 async function bootstrap() {
+  console.log('process.env.NODE_ENV : ', process.env.NODE_ENV);
+  console.log('process.env.OS : ', process.env.OS);
   const logger = new Logger();
   const app = await NestFactory.create(AppModule, WINSTON_MODULE);
   app.enableCors();
