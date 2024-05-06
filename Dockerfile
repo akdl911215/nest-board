@@ -19,6 +19,6 @@ ENV HOST=43.201.95.160
 RUN rm -rf ./dist || true
 #RUN npm install npm@latest -g @prisma/client
 #RUN prisma generate
-RUN npm run build
+RUN npm run build npm@latest
 
 CMD ["npm", "run", "startprod"]
