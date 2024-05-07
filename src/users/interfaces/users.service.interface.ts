@@ -39,6 +39,10 @@ import {
   UsersExistingPhoneInputDto,
   UsersExistingPhoneOutputDto,
 } from '../dtos/users.existing.phone.dto';
+import {
+  UsersLogoutInputDto,
+  UsersLogoutOutputDto,
+} from '../dtos/users.logout.dto';
 
 export interface UsersServiceInterface {
   readonly delete: (dto: UsersDeleteInputDto) => Promise<UsersDeleteOutputDto>;
@@ -76,4 +80,6 @@ export interface UsersServiceInterface {
   readonly existingPhone: (
     dto: UsersExistingPhoneInputDto,
   ) => Promise<UsersExistingPhoneOutputDto>;
+
+  readonly logout: (dto: UsersLogoutInputDto) => Promise<UsersLogoutOutputDto>;
 }

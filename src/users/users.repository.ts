@@ -396,4 +396,29 @@ export class UsersRepository implements UsersRepositoryInterface {
 
     return { existing_phone: !userFindByPhone };
   }
+
+  public async logout(entity: {
+    readonly refresh_token: Users['refresh_token'];
+  }): Promise<{ readonly logout: boolean }> {
+    const { refresh_token } = entity;
+    const userFindByRefreshToken: Users = await this.prisma.users.findFirst({
+      where: { refresh_token },
+    });
+
+    if (!userFindByRefreshToken) throw new NotFoundException(NOTFOUND_USER);
+
+    try {
+      const logoutUser: Users = await this.prisma.$transaction(
+        async () =>
+          await this.prisma.users.update({
+            where: { id: userFindByRefreshToken.id },
+            data: { refresh_token: null },
+          }),
+      );
+
+      return { logout: !!logoutUser };
+    } catch (e: any) {
+      errorHandling(e);
+    }
+  }
 }
