@@ -33,8 +33,8 @@ import {
   ReactionsCountOutputDto,
 } from './dtos/reactions.count.dto';
 
-@ApiTags('reactions')
-@Controller('reactions')
+@ApiTags('/reactions')
+@Controller('/reactions')
 export class ReactionsController {
   constructor(
     @Inject('SERVICE') private readonly service: ReactionsServiceInterface,
