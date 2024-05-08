@@ -69,6 +69,7 @@ export interface UsersRepositoryInterface {
   }) => Promise<{ readonly existing_phone: boolean }>;
 
   readonly logout: (entity: {
+    readonly id: Users['id'];
     readonly refresh_token: Users['refresh_token'];
   }) => Promise<{ readonly logout: boolean }>;
 }

@@ -34,11 +34,13 @@ export class BcryptService implements BcryptInterface {
     dto: BcryptEncodedInputDto,
   ): Promise<BcryptEncodedOutputDto> {
     const { password } = dto;
+    console.log('password : ', password);
 
     const encodedPassword: string = await bcrypt.hash(
       password,
       Number(this.configService.get<number>('BCRYPT_SOLT_NUMBER')),
     );
+    console.log('encodedPassword : ', encodedPassword);
 
     return { encoded: encodedPassword };
   }

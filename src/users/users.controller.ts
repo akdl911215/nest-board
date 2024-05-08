@@ -33,6 +33,7 @@ import {
   NICKNAME_REQUIRED,
   PASSWORD_REQUIRED,
   PHONE_REQUIRED,
+  REFRESH_TOKEN_REQUIRED,
   UNIQUE_ID_REQUIRED,
 } from '../_common/constant/errors/400';
 import {
@@ -77,6 +78,11 @@ import {
   UsersExistingPhoneOutputDto,
 } from './dtos/users.existing.phone.dto';
 import { User } from '../_common/decorators/user.decorator';
+import {
+  UsersLogoutInputDto,
+  UsersLogoutOutputDto,
+} from './dtos/users.logout.dto';
+import { NOTFOUND_USER } from '../_common/constant/errors/404';
 
 @ApiTags('users')
 @Controller('users')
@@ -174,7 +180,12 @@ export class UsersController {
     if (!dto?.password) throw new BadRequestException(PASSWORD_REQUIRED);
     if (!dto?.phone) throw new BadRequestException(PHONE_REQUIRED);
 
-    return await this.service.register(dto);
+    console.log('register dto: ', dto);
+
+    const response = await this.service.register(dto);
+    console.log('response : ', response);
+
+    return response;
   }
 
   @Post('/login')
@@ -276,5 +287,26 @@ export class UsersController {
     if (!user?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
 
     return await this.service.refresh(user);
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @ApiBearerAuth('refresh_token')
+  @Patch('/logout')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'USER LOGOUT API',
+    description: '유저 로그아웃 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 404, description: `${NOTFOUND_USER}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async logout(
+    @User() user: UsersLogoutInputDto,
+  ): Promise<UsersLogoutOutputDto> {
+    if (!user.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+    if (!user.refreshToken)
+      throw new BadRequestException(REFRESH_TOKEN_REQUIRED);
+
+    return await this.service.logout(user);
   }
 }
