@@ -239,14 +239,11 @@ export class UsersRepository implements UsersRepositoryInterface {
     const userFindByEntity: Users = await this.prisma.users.findFirst({
       where: { AND: [{ email }, { nickname }, { phone }] },
     });
-    console.log('userFindByEntity : ', userFindByEntity);
-    // if (userFindByEntity) throw new ConflictException(EXISTING_MEMBER);
+    if (userFindByEntity) throw new ConflictException(EXISTING_MEMBER);
 
     const { encoded: hashPassword } = await this.bcrypt.encoded({ password });
-    console.log('hashPassword : ', hashPassword);
 
     try {
-      console.log('register check');
       const registerUser: Users = await this.prisma.$transaction(
         async () =>
           await this.prisma.users.create({
@@ -259,11 +256,8 @@ export class UsersRepository implements UsersRepositoryInterface {
           }),
       );
 
-      console.log('registerUser : ', registerUser);
-
       return registerUser;
     } catch (e: any) {
-      console.log('error check');
       errorHandling(e);
     }
   }
@@ -405,20 +399,19 @@ export class UsersRepository implements UsersRepositoryInterface {
 
   public async logout(entity: {
     readonly id: Users['id'];
-    readonly refresh_token: Users['refresh_token'];
   }): Promise<{ readonly logout: boolean }> {
-    const { id, refresh_token } = entity;
-    const userFindByRefreshToken: Users = await this.prisma.users.findFirst({
-      where: { AND: [{ refresh_token }, { id }] },
+    const { id } = entity;
+    const userFindById: Users = await this.prisma.users.findUnique({
+      where: { id },
     });
 
-    if (!userFindByRefreshToken) throw new NotFoundException(NOTFOUND_USER);
+    if (!userFindById) throw new NotFoundException(NOTFOUND_USER);
 
     try {
       const logoutUser: Users = await this.prisma.$transaction(
         async () =>
           await this.prisma.users.update({
-            where: { id: userFindByRefreshToken.id },
+            where: { id: userFindById.id },
             data: { refresh_token: null },
           }),
       );

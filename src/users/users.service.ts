@@ -115,9 +115,6 @@ export class UsersService implements UsersServiceInterface {
   }
 
   public async logout(dto: UsersLogoutInputDto): Promise<UsersLogoutOutputDto> {
-    return await this.repository.logout({
-      id: dto.id,
-      refresh_token: dto.refreshToken,
-    });
+    return await this.repository.logout(dto);
   }
 }
