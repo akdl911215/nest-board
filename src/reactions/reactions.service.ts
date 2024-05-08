@@ -53,7 +53,6 @@ export class ReactionsService implements ReactionsServiceInterface {
       });
     }
   }
-
   public async count(
     dto: ReactionsCountInputDto,
   ): Promise<ReactionsCountOutputDto> {
