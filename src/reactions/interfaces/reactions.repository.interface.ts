@@ -23,4 +23,9 @@ export interface ReactionsRepositoryInterface {
     readonly user_id: Reactions['user_id'];
     readonly board_id: Reactions['board_id'];
   }) => Promise<Reactions>;
+
+  readonly count: (entity: {
+    readonly user_id: Reactions['user_id'];
+    readonly board_id: Reactions['board_id'];
+  }) => Promise<number>;
 }

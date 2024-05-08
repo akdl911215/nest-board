@@ -2,8 +2,10 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Inject,
   Post,
+  Query,
 } from '@nestjs/common';
 import {
   ApiConsumes,
@@ -25,13 +27,32 @@ import {
   TYPE_REQUIRED,
   USER_ID_REQUIRED,
 } from '../_common/constant/errors/400';
+import { TWO_HUNDRED_OK } from '../_common/constant/successes/200';
+import {
+  ReactionsCountInputDto,
+  ReactionsCountOutputDto,
+} from './dtos/reactions.count.dto';
 
-@ApiTags('reactions')
-@Controller('reactions')
+@ApiTags('/reactions')
+@Controller('/reactions')
 export class ReactionsController {
   constructor(
     @Inject('SERVICE') private readonly service: ReactionsServiceInterface,
   ) {}
+
+  @Get('/')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'REACTIONS COUNT API',
+    description: '리액션 숫자',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async count(
+    @Query() dto: ReactionsCountInputDto,
+  ): Promise<ReactionsCountOutputDto> {
+    return await this.service.count(dto);
+  }
 
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')

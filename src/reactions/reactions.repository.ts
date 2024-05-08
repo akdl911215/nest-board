@@ -106,4 +106,16 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
 
     return reactionFindByUserIdAndBoardId;
   }
+
+  public async count(entity: {
+    readonly user_id: Reactions['user_id'];
+    readonly board_id: Reactions['board_id'];
+  }): Promise<number> {
+    const { user_id, board_id } = entity;
+    const count: number = await this.prisma.reactions.count({
+      where: { AND: [{ user_id }, { board_id }] },
+    });
+
+    return count;
+  }
 }
