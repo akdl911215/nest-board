@@ -42,6 +42,10 @@ import {
   UsersExistingPhoneInputDto,
   UsersExistingPhoneOutputDto,
 } from './dtos/users.existing.phone.dto';
+import {
+  UsersLogoutInputDto,
+  UsersLogoutOutputDto,
+} from './dtos/users.logout.dto';
 
 @Injectable()
 export class UsersService implements UsersServiceInterface {
@@ -108,5 +112,9 @@ export class UsersService implements UsersServiceInterface {
     dto: UsersExistingPhoneInputDto,
   ): Promise<UsersExistingPhoneOutputDto> {
     return await this.repository.existingPhone(dto);
+  }
+
+  public async logout(dto: UsersLogoutInputDto): Promise<UsersLogoutOutputDto> {
+    return await this.repository.logout(dto);
   }
 }
