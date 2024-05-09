@@ -58,7 +58,6 @@ export class ReactionsService implements ReactionsServiceInterface {
   ): Promise<ReactionsCountOutputDto> {
     return await this.repository.count({
       board_id: dto.boardId,
-      user_id: dto.userId,
     });
   }
 }
