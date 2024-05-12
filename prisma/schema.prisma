@@ -32,6 +32,7 @@ model Boards {
     content String @db.Text
     category String
     nickname String
+    board_score Int @default(0)
 
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
@@ -56,6 +57,9 @@ model Reactions {
 
   board Boards @relation(fields: [board_id], references: [id])
   board_id String @db.Uuid
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Comments {

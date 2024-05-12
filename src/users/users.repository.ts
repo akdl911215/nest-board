@@ -100,6 +100,7 @@ export class UsersRepository implements UsersRepositoryInterface {
       },
       orderBy,
       include: {
+        reactions: true,
         comments: {
           where: {
             deleted_at: null,

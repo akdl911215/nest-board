@@ -119,13 +119,15 @@ export class BoardsRepository implements BoardsRepositoryInterface {
 
     const orderBy: Prisma.BoardsOrderByWithAggregationInput[] = [
       {
-        created_at: 'desc',
+        board_score: 'desc',
+        // created_at: 'desc',
       },
     ];
     const sql = {
       take,
       where: whereSql,
       orderBy,
+      include: { reactions: true },
     };
     if (idCheck) {
       sql['skip'] = 1;

@@ -5,4 +5,7 @@ export class ReactionsCountInputDto extends PickType(ReactionsBaseDto, [
   'boardId',
 ] as const) {}
 
-export type ReactionsCountOutputDto = number;
+export type ReactionsCountOutputDto = {
+  readonly count: number;
+  readonly board_score: number;
+};
