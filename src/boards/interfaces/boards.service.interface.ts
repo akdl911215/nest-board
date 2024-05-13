@@ -22,6 +22,14 @@ import {
   BoardsReadInputDto,
   BoardsReadOutputDto,
 } from '../dtos/boards.read.dto';
+import {
+  BoardsAllListInputDto,
+  BoardsAllListOutputDto,
+} from '../dtos/boards.all.list.dto';
+import {
+  BoardsPopularListInputDto,
+  BoardsPopularListOutputDto,
+} from '../dtos/boards.popular.list.dto';
 
 export interface BoardsServiceInterface {
   readonly delete: (
@@ -33,6 +41,14 @@ export interface BoardsServiceInterface {
   ) => Promise<BoardsInquiryOutputDto>;
 
   readonly list: (dto: BoardsListInputDto) => Promise<BoardsListOutputDto>;
+
+  readonly allList: (
+    dto: BoardsAllListInputDto,
+  ) => Promise<BoardsAllListOutputDto>;
+
+  readonly popularList: (
+    dto: BoardsPopularListInputDto,
+  ) => Promise<BoardsPopularListOutputDto>;
 
   readonly register: (
     dto: BoardsRegisterInputDto,

@@ -8,6 +8,7 @@ import {
 } from '../_common/abstract/base.pagination.dto';
 import { NOTFOUND_BOARD } from '../_common/constant/errors/404';
 import { errorHandling } from '../_common/abstract/error.handling';
+import { subDays } from 'date-fns';
 
 @Injectable()
 @Dependencies([PrismaService])
@@ -120,7 +121,122 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     const orderBy: Prisma.BoardsOrderByWithAggregationInput[] = [
       {
         board_score: 'desc',
-        // created_at: 'desc',
+      },
+    ];
+    const sql = {
+      take,
+      where: whereSql,
+      orderBy,
+      include: { reactions: true },
+    };
+    if (idCheck) {
+      sql['skip'] = 1;
+      sql['cursor'] = {
+        id: idCheck,
+      };
+    }
+
+    const currentList: Boards[] = await this.prisma.boards.findMany(sql);
+    const totalCount: number = await this.prisma.boards.count({
+      where: countSql,
+    });
+
+    return {
+      total_count: totalCount,
+      current_list: currentList,
+    };
+  }
+
+  public async allList(entity: {
+    readonly category: Boards['category'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+    readonly last_id: Boards['id'];
+  }): Promise<{
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
+  }> {
+    const { category, take, last_id } = entity;
+
+    let categoryCheck = category;
+    if (category === 'null') categoryCheck = null;
+
+    let idCheck = last_id;
+    if (last_id === 'null') idCheck = null;
+
+    const whereSql = { deleted_at: null };
+    const countSql = { deleted_at: null };
+    if (categoryCheck) {
+      whereSql['category'] = categoryCheck;
+      countSql['category'] = categoryCheck;
+    }
+
+    const orderBy: Prisma.BoardsOrderByWithAggregationInput[] = [
+      {
+        created_at: 'desc',
+      },
+    ];
+    const sql = {
+      take,
+      where: whereSql,
+      orderBy,
+      include: { reactions: true },
+    };
+    if (idCheck) {
+      sql['skip'] = 1;
+      sql['cursor'] = {
+        id: idCheck,
+      };
+    }
+
+    const currentList: Boards[] = await this.prisma.boards.findMany(sql);
+    const totalCount: number = await this.prisma.boards.count({
+      where: countSql,
+    });
+
+    return {
+      total_count: totalCount,
+      current_list: currentList,
+    };
+  }
+
+  public async popularList(entity: {
+    readonly category: Boards['category'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+    readonly last_id: Boards['id'];
+  }): Promise<{
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
+  }> {
+    const { category, take, last_id } = entity;
+
+    let categoryCheck = category;
+    if (category === 'null') categoryCheck = null;
+
+    let idCheck = last_id;
+    if (last_id === 'null') idCheck = null;
+
+    const threeDaysAgo = subDays(new Date(), 3);
+
+    const whereSql = {
+      deleted_at: null,
+      created_at: {
+        gte: threeDaysAgo,
+      },
+    };
+    const countSql = {
+      deleted_at: null,
+      created_at: {
+        gte: threeDaysAgo,
+      },
+    };
+    if (categoryCheck) {
+      whereSql['category'] = categoryCheck;
+      countSql['category'] = categoryCheck;
+    }
+
+    const orderBy: Prisma.BoardsOrderByWithAggregationInput[] = [
+      {
+        board_score: 'desc',
       },
     ];
     const sql = {

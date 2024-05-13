@@ -54,6 +54,14 @@ import {
 } from './dtos/boards.read.dto';
 import { NOTFOUND_BOARD } from '../_common/constant/errors/404';
 import { JwtAccessGuard } from 'src/users/infrastructure/token/guards/jwt.access.guard';
+import {
+  BoardsAllListInputDto,
+  BoardsAllListOutputDto,
+} from './dtos/boards.all.list.dto';
+import {
+  BoardsPopularListInputDto,
+  BoardsPopularListOutputDto,
+} from './dtos/boards.popular.list.dto';
 
 @ApiTags('boards')
 @Controller('boards')
@@ -62,11 +70,11 @@ export class BoardsController {
     @Inject('SERVICE') private readonly service: BoardsServiceInterface,
   ) {}
 
-  @Get('/')
+  @Get('/list')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
-    summary: 'BOARDS LIST API',
-    description: '게시판 리스트 절차',
+    summary: 'BOARDS HOME LIST API',
+    description: '게시판 홈 리스트 절차',
   })
   @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
   @ApiResponse({ status: 400, description: `${TAKE_REQUIRED}` })
@@ -78,6 +86,42 @@ export class BoardsController {
       throw new BadRequestException(TAKE_REQUIRED);
 
     return await this.service.list(dto);
+  }
+
+  @Get('/list/all')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'BOARDS ALL LIST API',
+    description: '게시판 모든 리스트 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${TAKE_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async allList(
+    @Query() dto: BoardsAllListInputDto,
+  ): Promise<BoardsAllListOutputDto> {
+    if (!dto?.take || dto.take < 0)
+      throw new BadRequestException(TAKE_REQUIRED);
+
+    return await this.service.allList(dto);
+  }
+
+  @Get('/list/popular')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'BOARDS POPULAR LIST API',
+    description: '게시판 인기 리스트 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${TAKE_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async popularList(
+    @Query() dto: BoardsPopularListInputDto,
+  ): Promise<BoardsPopularListOutputDto> {
+    if (!dto?.take || dto.take < 0)
+      throw new BadRequestException(TAKE_REQUIRED);
+
+    return await this.service.popularList(dto);
   }
 
   @Get('/read')

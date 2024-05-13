@@ -21,6 +21,24 @@ export interface BoardsRepositoryInterface {
     readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
   }>;
 
+  readonly allList: (entity: {
+    readonly category: Boards['category'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+    readonly last_id: Boards['id'];
+  }) => Promise<{
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
+  }>;
+
+  readonly popularList: (entity: {
+    readonly category: Boards['category'];
+    readonly take: BaseCursorPaginationInputDto['take'];
+    readonly last_id: Boards['id'];
+  }) => Promise<{
+    readonly total_count: BaseCursorPaginationOutputDto<Boards>['total_count'];
+    readonly current_list: BaseCursorPaginationOutputDto<Boards>['current_list'];
+  }>;
+
   readonly register: (entity: {
     readonly category: Boards['category'];
     readonly title: Boards['title'];
