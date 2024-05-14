@@ -17,7 +17,6 @@ ENV PORT=9898
 ENV HOST=3.35.207.45
 
 RUN rm -rf ./dist || true
-RUN npm install -g @prisma/client
 RUN prisma generate
 RUN npm run build
 
