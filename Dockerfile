@@ -5,10 +5,9 @@ WORKDIR /app/server
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm cache clean --force
 RUN npm install -g dotenv-cli
-RUN npm install -g prisma
-RUN npm ci --verbose
+RUN npm i -g prisma
+RUN npm install
 
 COPY ./ ./
 
