@@ -8,7 +8,7 @@ COPY prisma ./prisma/
 RUN npm cache clean --force
 RUN npm install -g dotenv-cli
 RUN npm install -g prisma
-RUN npm ci -g --verbose
+RUN npm ci --verbose
 
 COPY ./ ./
 
