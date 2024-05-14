@@ -7,9 +7,11 @@ import { GlobalReturnResponseInterceptor } from './_common/outbound/interceptors
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as process from 'process';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 async function bootstrap() {
-  console.log('process.env.NODE_ENV : ', process.env.NODE_ENV);
+ console.log('process.env.NODE_ENV : ', process.env.NODE_ENV);
   console.log('process.env.OS : ', process.env.OS);
   const logger = new Logger();
   const app = await NestFactory.create(AppModule, WINSTON_MODULE);
