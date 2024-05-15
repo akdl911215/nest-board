@@ -25,8 +25,14 @@ import {
   BoardsReadInputDto,
   BoardsReadOutputDto,
 } from './dtos/boards.read.dto';
-import { BoardsPopularListInputDto, BoardsPopularListOutputDto } from './dtos/boards.popular.list.dto';
-import { BoardsAllListInputDto, BoardsAllListOutputDto } from './dtos/boards.all.list.dto';
+import {
+  BoardsPopularListInputDto,
+  BoardsPopularListOutputDto,
+} from './dtos/boards.popular.list.dto';
+import {
+  BoardsAllListInputDto,
+  BoardsAllListOutputDto,
+} from './dtos/boards.all.list.dto';
 
 @Injectable()
 export class BoardsService implements BoardsServiceInterface {
@@ -55,7 +61,9 @@ export class BoardsService implements BoardsServiceInterface {
     });
   }
 
-  public async allList(dto: BoardsAllListInputDto): Promise<BoardsAllListOutputDto> {
+  public async allList(
+    dto: BoardsAllListInputDto,
+  ): Promise<BoardsAllListOutputDto> {
     return await this.repository.allList({
       last_id: dto.lastId,
       take: dto.take,
@@ -63,7 +71,9 @@ export class BoardsService implements BoardsServiceInterface {
     });
   }
 
-  public async popularList(dto: BoardsPopularListInputDto): Promise<BoardsPopularListOutputDto> {
+  public async popularList(
+    dto: BoardsPopularListInputDto,
+  ): Promise<BoardsPopularListOutputDto> {
     return await this.repository.popularList({
       last_id: dto.lastId,
       take: dto.take,
