@@ -5,20 +5,28 @@ WORKDIR /app/server
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm cache clean --force
 RUN npm install -g dotenv-cli
-RUN npm install -g prisma
-RUN npm install npm@latest -g --verbose
+RUN npm install -g dotenv
+RUN npm install -g cross-env
+
+RUN npm i -g prisma
+RUN npm install
 
 COPY ./ ./
 
-ENV DATABASE_URL=postgresql://postgres:123456@43.201.95.160:5432/postgres
+ENV DATABASE_URL=postgresql://postgres:123456@3.35.207.45:5432/postgres
 ENV PORT=9898
-ENV HOST=43.201.95.160
+ENV HOST=3.35.207.45
+ENV JWT_SECRET=ljhcommunity
+ENV JWT_ACCESS_SECRET=jwtAccessSecret
+ENV JWT_ACCESS_EXPIRE_IN=1000s
+ENV JWT_REFRESH_SECRET=jwtRefreshSecret
+ENV JWT_REFRESH_EXPIRE_IN=10000s
+ENV BCRYPT_SOLT_NUMBER=12345
+ENV NODE_ENV=production
 
 RUN rm -rf ./dist || true
-#RUN npm install npm@latest -g @prisma/client
-#RUN prisma generate
-RUN npm run npm@latest build
+RUN prisma generate
+RUN npm run build
 
-CMD ["npm", "run", "startprod"]
+CMD ["npm", "run", "start:prod"]

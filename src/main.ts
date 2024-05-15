@@ -7,6 +7,8 @@ import { GlobalReturnResponseInterceptor } from './_common/outbound/interceptors
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as process from 'process';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 async function bootstrap() {
   console.log('process.env.NODE_ENV : ', process.env.NODE_ENV);
@@ -55,7 +57,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  //
   await app.listen(PORT, () => console.log(`http://${HOST}:${PORT}/docs`));
 }
 bootstrap().then();
