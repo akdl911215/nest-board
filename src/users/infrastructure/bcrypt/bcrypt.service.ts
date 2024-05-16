@@ -34,11 +34,8 @@ export class BcryptService implements BcryptInterface {
     dto: BcryptEncodedInputDto,
   ): Promise<BcryptEncodedOutputDto> {
     const { password } = dto;
-    console.log('password : ', password);
 
     const salt: number = this.configService.get<number>('BCRYPT_SALT_NUMBER');
-    console.log('salt : ', salt);
-
     const encodedPassword: string = await bcrypt.hash(password, Number(salt));
     console.log('encodedPassword : ', encodedPassword);
 
