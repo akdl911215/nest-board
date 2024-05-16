@@ -122,6 +122,9 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       {
         board_score: 'desc',
       },
+      {
+        created_at: 'desc',
+      },
     ];
     const sql = {
       take,
