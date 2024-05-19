@@ -38,7 +38,6 @@ model Boards {
     updated_at DateTime @updatedAt
     deleted_at DateTime?
 
-    comments Comments[]
     reactions Reactions[]
 
 }
@@ -69,7 +68,6 @@ model Comments {
   nickname String
   content String @db.Text
 
-  board Boards @relation(fields: [board_id], references: [id])
   board_id String @db.Uuid
 
   created_at DateTime @default(now())
