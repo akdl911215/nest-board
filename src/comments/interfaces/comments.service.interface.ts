@@ -10,6 +10,10 @@ import {
   CommentsUpdateInputDto,
   CommentsUpdateOutputDto,
 } from '../dtos/comments.update.dto';
+import {
+  CommentsListInputDto,
+  CommentsListOutputDto,
+} from '../dtos/comments.list.dto';
 
 export interface CommentsServiceInterface {
   readonly delete: (
@@ -23,4 +27,6 @@ export interface CommentsServiceInterface {
   readonly update: (
     dto: CommentsUpdateInputDto,
   ) => Promise<CommentsUpdateOutputDto>;
+
+  readonly list: (dto: CommentsListInputDto) => Promise<CommentsListOutputDto>;
 }

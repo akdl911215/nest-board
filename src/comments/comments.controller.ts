@@ -2,9 +2,11 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Inject,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CommentsServiceInterface } from './interfaces/comments.service.interface';
 import {
@@ -34,6 +36,10 @@ import {
   CommentsUpdateInputDto,
   CommentsUpdateOutputDto,
 } from './dtos/comments.update.dto';
+import {
+  CommentsListInputDto,
+  CommentsListOutputDto,
+} from './dtos/comments.list.dto';
 
 @ApiTags('comments')
 @Controller('comments')
@@ -41,6 +47,26 @@ export class CommentsController {
   constructor(
     @Inject('SERVICE') private readonly service: CommentsServiceInterface,
   ) {}
+
+  @Get('/')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'COMMENTS LIST INQUIRY API',
+    description: '댓글 리스트 조회 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({
+    status: 400,
+    description: `${BOARD_ID_REQUIRED}`,
+  })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async list(
+    @Query() dto: CommentsListInputDto,
+  ): Promise<CommentsListOutputDto> {
+    if (!dto?.boardId) throw new BadRequestException(BOARD_ID_REQUIRED);
+
+    return await this.service.list(dto);
+  }
 
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')

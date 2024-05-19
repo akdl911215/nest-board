@@ -58,34 +58,9 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       where: {
         id,
         deleted_at: null,
-        comments: {
-          every: {
-            deleted_at: null,
-          },
-        },
       },
       orderBy: {
         created_at: 'desc',
-      },
-      include: {
-        comments: {
-          where: {
-            deleted_at: null,
-          },
-          orderBy: {
-            created_at: 'desc',
-          },
-          include: {
-            replies: {
-              where: {
-                deleted_at: null,
-              },
-              orderBy: {
-                created_at: 'desc',
-              },
-            },
-          },
-        },
       },
     });
 
@@ -351,34 +326,9 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       where: {
         AND: [{ id }, { title }],
         deleted_at: null,
-        comments: {
-          every: {
-            deleted_at: null,
-          },
-        },
       },
       orderBy: {
         created_at: 'desc',
-      },
-      include: {
-        comments: {
-          where: {
-            deleted_at: null,
-          },
-          orderBy: {
-            created_at: 'desc',
-          },
-          include: {
-            replies: {
-              where: {
-                deleted_at: null,
-              },
-              orderBy: {
-                created_at: 'desc',
-              },
-            },
-          },
-        },
       },
     });
 

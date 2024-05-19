@@ -78,4 +78,36 @@ export class CommentsRepository implements CommentsRepositoryInterface {
       errorHandling(e);
     }
   }
+
+  public async list(entity: {
+    readonly board_id: Comments['board_id'];
+  }): Promise<Comments[]> {
+    const { board_id } = entity;
+
+    const CommentsFindByBoardId: Comments[] =
+      await this.prisma.comments.findMany({
+        where: {
+          board_id,
+          deleted_at: null,
+          replies: {
+            every: {
+              deleted_at: null,
+            },
+          },
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+        include: {
+          replies: {
+            where: {
+              deleted_at: null,
+            },
+            orderBy: { created_at: 'asc' },
+          },
+        },
+      });
+
+    return CommentsFindByBoardId;
+  }
 }

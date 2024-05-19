@@ -17,4 +17,8 @@ export interface CommentsRepositoryInterface {
     readonly board_id: Comments['board_id'];
     readonly content: Comments['content'];
   }) => Promise<Comments>;
+
+  readonly list: (entity: {
+    readonly board_id: Comments['board_id'];
+  }) => Promise<Comments[]>;
 }

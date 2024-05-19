@@ -13,6 +13,10 @@ import {
   CommentsUpdateInputDto,
   CommentsUpdateOutputDto,
 } from './dtos/comments.update.dto';
+import {
+  CommentsListInputDto,
+  CommentsListOutputDto,
+} from './dtos/comments.list.dto';
 
 @Injectable()
 export class CommentsService implements CommentsServiceInterface {
@@ -47,5 +51,9 @@ export class CommentsService implements CommentsServiceInterface {
       board_id: dto.boardId,
       content: dto.content,
     });
+  }
+
+  public async list(dto: CommentsListInputDto): Promise<CommentsListOutputDto> {
+    return await this.service.list({ board_id: dto.boardId });
   }
 }
