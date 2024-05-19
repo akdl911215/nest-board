@@ -30,4 +30,8 @@ export interface ReactionsRepositoryInterface {
     readonly count: number;
     readonly board_score: number;
   }>;
+
+  readonly list: (entity: {
+    readonly board_id: Reactions['board_id'];
+  }) => Promise<Reactions[]>;
 }

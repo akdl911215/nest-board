@@ -11,6 +11,10 @@ import {
   ReactionsCountInputDto,
   ReactionsCountOutputDto,
 } from './dtos/reactions.count.dto';
+import {
+  ReactionsListInputDto,
+  ReactionsListOutputDto,
+} from './dtos/reactions.list.dto';
 
 @Injectable()
 export class ReactionsService implements ReactionsServiceInterface {
@@ -59,5 +63,11 @@ export class ReactionsService implements ReactionsServiceInterface {
     return await this.repository.count({
       board_id: dto.boardId,
     });
+  }
+
+  public async list(
+    dto: ReactionsListInputDto,
+  ): Promise<ReactionsListOutputDto> {
+    return await this.repository.list({ board_id: dto.boardId });
   }
 }

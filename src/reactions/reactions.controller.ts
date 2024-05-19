@@ -32,6 +32,10 @@ import {
   ReactionsCountInputDto,
   ReactionsCountOutputDto,
 } from './dtos/reactions.count.dto';
+import {
+  ReactionsListInputDto,
+  ReactionsListOutputDto,
+} from './dtos/reactions.list.dto';
 
 @ApiTags('/reactions')
 @Controller('/reactions')
@@ -44,7 +48,7 @@ export class ReactionsController {
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'REACTIONS COUNT API',
-    description: '리액션 숫자',
+    description: '리액션 숫자 절차',
   })
   @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
@@ -52,6 +56,20 @@ export class ReactionsController {
     @Query() dto: ReactionsCountInputDto,
   ): Promise<ReactionsCountOutputDto> {
     return await this.service.count(dto);
+  }
+
+  @Get('/list')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'REACTIONS LIST API',
+    description: '리액션 리스트 절차',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async list(
+    @Query() dto: ReactionsListInputDto,
+  ): Promise<ReactionsListOutputDto> {
+    return await this.service.list(dto);
   }
 
   @Post('/')

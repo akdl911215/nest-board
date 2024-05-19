@@ -131,7 +131,6 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
       where: { board_id },
       include: { board: true },
     });
-    console.log('reactionList : ', reactionList);
 
     const { boardScore, likeList, disLikeList, userIdList } =
       await this.boardScore(board_id);
@@ -174,5 +173,18 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
       disLikeList,
       userIdList,
     };
+  }
+
+  public async list(entity: {
+    readonly board_id: Reactions['board_id'];
+  }): Promise<Reactions[]> {
+    const { board_id } = entity;
+
+    const reactionsFindByIdAndUserId: Reactions[] =
+      await this.prisma.reactions.findMany({
+        where: { board_id },
+      });
+
+    return reactionsFindByIdAndUserId;
   }
 }

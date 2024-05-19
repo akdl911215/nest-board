@@ -6,6 +6,10 @@ import {
   ReactionsCountInputDto,
   ReactionsCountOutputDto,
 } from '../dtos/reactions.count.dto';
+import {
+  ReactionsListInputDto,
+  ReactionsListOutputDto,
+} from '../dtos/reactions.list.dto';
 
 export interface ReactionsServiceInterface {
   readonly reaction: (
@@ -15,4 +19,8 @@ export interface ReactionsServiceInterface {
   readonly count: (
     dto: ReactionsCountInputDto,
   ) => Promise<ReactionsCountOutputDto>;
+
+  readonly list: (
+    dto: ReactionsListInputDto,
+  ) => Promise<ReactionsListOutputDto>;
 }
