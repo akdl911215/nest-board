@@ -105,7 +105,6 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       take,
       where: whereSql,
       orderBy,
-      include: { reactions: true },
     };
     if (idCheck) {
       sql['skip'] = 1;
@@ -157,7 +156,6 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       take,
       where: whereSql,
       orderBy,
-      include: { reactions: true },
     };
     if (idCheck) {
       sql['skip'] = 1;
@@ -221,7 +219,6 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       take,
       where: whereSql,
       orderBy,
-      include: { reactions: true },
     };
     if (idCheck) {
       sql['skip'] = 1;
