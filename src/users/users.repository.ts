@@ -99,23 +99,6 @@ export class UsersRepository implements UsersRepositoryInterface {
         },
       },
       orderBy,
-      include: {
-        reactions: true,
-        comments: {
-          where: {
-            deleted_at: null,
-          },
-          orderBy,
-          include: {
-            replies: {
-              where: {
-                deleted_at: null,
-              },
-              orderBy,
-            },
-          },
-        },
-      },
     };
 
     if (idCheck) {
