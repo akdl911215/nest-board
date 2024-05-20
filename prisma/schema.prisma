@@ -37,9 +37,6 @@ model Boards {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
     deleted_at DateTime?
-
-    reactions Reactions[]
-
 }
 
 enum ReactionType {
@@ -54,7 +51,6 @@ model Reactions {
   type ReactionType @default(LIKE)
   user_id String @db.Uuid
 
-  board Boards @relation(fields: [board_id], references: [id])
   board_id String @db.Uuid
 
   created_at DateTime @default(now())
