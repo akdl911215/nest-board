@@ -2,6 +2,7 @@ import { IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Reactions, ReactionType } from '@prisma/client';
 
+export type ReactionTargetType = 'BOARD' | 'COMMENT' | 'REPLY';
 export class ReactionsBaseDto {
   @IsUUID()
   @IsNotEmpty()
@@ -18,6 +19,12 @@ export class ReactionsBaseDto {
     enum: ['LIKE', 'DISLIKE'],
   })
   public readonly type!: Reactions['type'];
+
+  @IsNotEmpty()
+  @ApiProperty({
+    enum: ['BOARD', 'COMMENT', 'REPLY'],
+  })
+  public readonly reactionTarget!: ReactionTargetType;
 
   @IsString()
   @IsNotEmpty()

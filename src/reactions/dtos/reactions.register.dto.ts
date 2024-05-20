@@ -6,6 +6,7 @@ export class ReactionsRegisterInputDto extends PickType(ReactionsBaseDto, [
   'type',
   'boardId',
   'userId',
+  'reactionTarget',
 ] as const) {}
 
 export type ReactionsRegisterOutputDto = Reactions;

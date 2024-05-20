@@ -10,6 +10,7 @@ import { Boards, Reactions, Users } from '@prisma/client';
 import { errorHandling } from '../_common/abstract/error.handling';
 import { NOTFOUND_REACTION } from '../_common/constant/errors/404';
 import { EXISTING_REACTION } from '../_common/constant/errors/409';
+import { ReactionTargetType } from './dtos/reactions.base.dto';
 
 @Injectable()
 @Dependencies([PrismaService])
@@ -47,17 +48,21 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
     readonly type: Reactions['type'];
     readonly user_id: Reactions['user_id'];
     readonly board_id: Reactions['board_id'];
+    readonly reaction_target: ReactionTargetType;
   }): Promise<Reactions> {
-    const { id, type, board_id, user_id } = entity;
+    const { id, type, board_id, user_id, reaction_target } = entity;
 
     try {
       const update = await this.prisma.$transaction(async () => {
-        const { boardScore, userIdList, likeList, disLikeList } =
-          await this.boardScore(board_id);
-        const board: Boards = await this.prisma.boards.update({
-          where: { id: board_id },
-          data: { board_score: boardScore },
-        });
+        if (reaction_target === 'BOARD') {
+          const { boardScore, userIdList, likeList, disLikeList } =
+            await this.boardScore(board_id);
+
+          const board: Boards = await this.prisma.boards.update({
+            where: { id: board_id },
+            data: { board_score: boardScore },
+          });
+        }
 
         const reaction: Reactions = await this.prisma.reactions.upsert({
           where: { id },
@@ -129,7 +134,6 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
 
     const reactionList: Reactions[] = await this.prisma.reactions.findMany({
       where: { board_id },
-      include: { board: true },
     });
 
     const { boardScore, likeList, disLikeList, userIdList } =
@@ -140,6 +144,19 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
     };
   }
 
+  public async list(entity: {
+    readonly board_id: Reactions['board_id'];
+  }): Promise<Reactions[]> {
+    const { board_id } = entity;
+
+    const reactionsFindByIdAndUserId: Reactions[] =
+      await this.prisma.reactions.findMany({
+        where: { board_id },
+      });
+
+    return reactionsFindByIdAndUserId;
+  }
+
   private async boardScore(board_id: string): Promise<{
     boardScore: number;
     likeList: string[];
@@ -148,7 +165,6 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
   }> {
     const reactionList: Reactions[] = await this.prisma.reactions.findMany({
       where: { board_id },
-      include: { board: true },
     });
 
     const likeList: string[] = [];
@@ -173,18 +189,5 @@ export class ReactionsRepository implements ReactionsRepositoryInterface {
       disLikeList,
       userIdList,
     };
-  }
-
-  public async list(entity: {
-    readonly board_id: Reactions['board_id'];
-  }): Promise<Reactions[]> {
-    const { board_id } = entity;
-
-    const reactionsFindByIdAndUserId: Reactions[] =
-      await this.prisma.reactions.findMany({
-        where: { board_id },
-      });
-
-    return reactionsFindByIdAndUserId;
   }
 }
