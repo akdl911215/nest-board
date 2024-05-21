@@ -6,6 +6,7 @@ import { RepliesModule } from './replies/replies.module';
 import { CommentsModule } from './comments/comments.module';
 import { ReactionsModule } from './reactions/reactions.module';
 import CONFIG_MODULE from './_common/infrastructure/env';
+import { S3Module } from './_common/infrastructure/aws/s3/s3.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import CONFIG_MODULE from './_common/infrastructure/env';
     CommentsModule,
     RepliesModule,
     ReactionsModule,
+    S3Module,
   ],
   controllers: [],
   providers: [PrismaService],

@@ -25,6 +25,7 @@ ENV JWT_REFRESH_EXPIRE_IN=10000s
 ENV BCRYPT_SOLT_NUMBER=12345
 ENV NODE_ENV=production
 
+
 RUN rm -rf ./dist || true
 RUN prisma generate
 RUN npm run build

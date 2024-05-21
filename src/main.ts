@@ -8,7 +8,8 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as process from 'process';
 import * as dotenv from 'dotenv';
-import * as path from 'path';
+
+dotenv.config();
 
 async function bootstrap() {
   console.log('process.env.NODE_ENV : ', process.env.NODE_ENV);
