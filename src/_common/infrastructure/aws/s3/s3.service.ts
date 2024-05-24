@@ -32,4 +32,17 @@ export class S3Service {
 
     return this.s3.getSignedUrlPromise('putObject', params);
   }
+
+  async deleteImage(key: string): Promise<{ readonly delete: boolean }> {
+    const params = {
+      Bucket: 'jaychbucket',
+      Key: key,
+    };
+
+    const response = await this.s3.deleteObject(params).promise();
+
+    console.log('response : ', response);
+
+    return { delete: true };
+  }
 }

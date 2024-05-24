@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import {
   ApiConsumes,
   ApiOperation,
@@ -43,7 +43,22 @@ export class S3Controller {
       key,
       expires,
     );
+    console.log('url : ', url);
 
     return { url };
+  }
+
+  @Delete('/')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'IMAGE URL LIST DELETE API',
+    description: '이미지 리스트 삭제 절차',
+  })
+  @ApiResponse({ status: 201, description: `${CREATE_SUCCESS}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async delete(
+    @Body() body: { readonly key: string },
+  ): Promise<{ readonly delete: boolean }> {
+    return await this.s3Service.deleteImage(body.key);
   }
 }
