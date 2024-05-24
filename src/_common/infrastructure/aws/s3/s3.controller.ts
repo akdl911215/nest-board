@@ -57,8 +57,9 @@ export class S3Controller {
   @ApiResponse({ status: 201, description: `${CREATE_SUCCESS}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async delete(
-    @Body() body: { readonly key: string },
+    @Body() body: { readonly keys: string[] },
   ): Promise<{ readonly delete: boolean }> {
-    return await this.s3Service.deleteImage(body.key);
+    console.log('body : ', body);
+    return await this.s3Service.deleteImage({ keys: body.keys });
   }
 }

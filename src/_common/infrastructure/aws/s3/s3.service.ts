@@ -33,15 +33,31 @@ export class S3Service {
     return this.s3.getSignedUrlPromise('putObject', params);
   }
 
-  async deleteImage(key: string): Promise<{ readonly delete: boolean }> {
+  async deleteImage({
+    keys,
+  }: {
+    readonly keys: string[];
+  }): Promise<{ readonly delete: boolean }> {
+    console.log('keys : ', keys);
     const params = {
       Bucket: 'jaychbucket',
-      Key: key,
+      Delete: {
+        Objects: keys.map((key: string) => ({ Key: key })),
+        Quiet: false,
+      },
     };
+    console.log('params : ', params);
 
-    const response = await this.s3.deleteObject(params).promise();
+    const response = await this.s3.deleteObjects(params).promise();
 
     console.log('response : ', response);
+
+    if (response.Deleted.length > 0) {
+      console.log('Successfully deleted objects:', response.Deleted);
+    }
+    if (response.Errors.length > 0) {
+      console.error('Failed to delete objects:', response.Errors);
+    }
 
     return { delete: true };
   }
