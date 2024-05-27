@@ -24,7 +24,7 @@ ENV JWT_REFRESH_SECRET=jwtRefreshSecret
 ENV JWT_REFRESH_EXPIRE_IN=10000s
 ENV BCRYPT_SOLT_NUMBER=12345
 ENV NODE_ENV=production
-
+ENV S3_BUCKET_NAME=jaychbucket
 
 RUN rm -rf ./dist || true
 RUN prisma generate
