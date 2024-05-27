@@ -18,3 +18,4 @@ export const NOT_MATCH_REFRESH_TOKEN = 'notMatchRefreshToken';
 export const USER_ID_REQUIRED = 'userIdRequired';
 export const TYPE_REQUIRED = 'typeRequired';
 export const REFRESH_TOKEN_REQUIRED = 'refreshTokenRequired';
+export const IDENTIFIER_ID_REQUIRED = 'identifierIdRequired';

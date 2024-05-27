@@ -23,16 +23,25 @@ model Users {
   deleted_at DateTime?
 }
 
+enum BoardType {
+  TEXT
+  LINK
+  MEDIA
+  YOUTUBE
+}
+
 model Boards {
     @@map(name: "boards")
 
     id String @id @default(uuid()) @db.Uuid
     identifier_id String
     title String
-    content String @db.Text
+    content String[] @db.Text
     category String
     nickname String
+
     board_score Int @default(0)
+    type BoardType @default(TEXT)
 
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt

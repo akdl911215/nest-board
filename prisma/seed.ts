@@ -110,7 +110,7 @@ async function main() {
     const boardObj = {
       identifier_id: boardList[i].identifier_id,
       category: boardList[i].category,
-      content: boardList[i].content,
+      content: [boardList[i].content],
       title: boardList[i].title,
       nickname: boardList[i].nickname,
       created_at: boardList[i].created_at,

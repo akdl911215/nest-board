@@ -45,6 +45,7 @@ export interface BoardsRepositoryInterface {
     readonly nickname: Boards['nickname'];
     readonly identifier_id: Boards['identifier_id'];
     readonly content: Boards['content'];
+    readonly type: Boards['type'];
   }) => Promise<Boards>;
 
   readonly update: (entity: {

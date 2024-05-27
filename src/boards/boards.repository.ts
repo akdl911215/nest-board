@@ -244,8 +244,9 @@ export class BoardsRepository implements BoardsRepositoryInterface {
     readonly nickname: Boards['nickname'];
     readonly identifier_id: Boards['identifier_id'];
     readonly content: Boards['content'];
+    readonly type: Boards['type'];
   }): Promise<Boards> {
-    const { category, title, nickname, content, identifier_id } = entity;
+    const { category, title, nickname, content, identifier_id, type } = entity;
 
     try {
       const registerBoard: Boards = await this.prisma.$transaction(async () => {
@@ -260,7 +261,7 @@ export class BoardsRepository implements BoardsRepositoryInterface {
         }
 
         return this.prisma.boards.create({
-          data: { identifier_id, category, title, nickname, content },
+          data: { identifier_id, category, title, nickname, content, type },
         });
       });
 

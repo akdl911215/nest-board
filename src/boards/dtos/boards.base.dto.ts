@@ -1,9 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsOptional, IsString, IsUUID } from 'class-validator';
-import { Boards } from '@prisma/client';
+import {
+  IsArray,
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { Boards, BoardType } from '@prisma/client';
 
 export class BoardsBaseDto {
   @IsUUID()
+  @IsNotEmpty()
   @ApiProperty({
     type: String,
     default: '',
@@ -12,6 +21,7 @@ export class BoardsBaseDto {
   public readonly id!: Boards['id'];
 
   @IsUUID()
+  @IsNotEmpty()
   @ApiProperty({
     type: String,
     default: '',
@@ -20,6 +30,7 @@ export class BoardsBaseDto {
   public readonly identifierId!: Boards['identifier_id'];
 
   @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     type: String,
     default: '',
@@ -28,6 +39,7 @@ export class BoardsBaseDto {
   public readonly title!: Boards['title'];
 
   @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     type: String,
     default: '',
@@ -35,22 +47,29 @@ export class BoardsBaseDto {
   })
   public readonly nickname!: Boards['nickname'];
 
+  @IsArray()
+  @ApiProperty({
+    type: Array,
+    default: [],
+    required: true,
+  })
+  public readonly content!: Boards['content'];
+
   @IsString()
+  @IsNotEmpty()
   @ApiProperty({
     type: String,
     default: '',
-    required: false,
+    required: true,
   })
-  public readonly content?: Boards['content'];
+  public readonly category!: Boards['category'];
 
-  @IsString()
-  @IsOptional()
+  @IsEnum(BoardType)
+  @IsNotEmpty()
   @ApiProperty({
-    type: String,
-    default: null,
-    required: false,
+    enum: ['TEXT', 'LINK', 'MEDIA', 'YOUTUBE'],
   })
-  public readonly category?: Boards['category'];
+  public readonly type!: Boards['type'];
 
   @IsDate()
   public readonly createdAt!: Boards['created_at'];

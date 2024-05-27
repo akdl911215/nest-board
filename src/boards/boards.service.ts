@@ -90,6 +90,7 @@ export class BoardsService implements BoardsServiceInterface {
       nickname: dto.nickname,
       content: dto.content,
       identifier_id: dto.identifierId,
+      type: dto.type,
     });
   }
 

@@ -26,9 +26,11 @@ import {
 } from './dtos/boards.list.dto';
 import {
   CATEGORY_REQUIRED,
+  IDENTIFIER_ID_REQUIRED,
   NICKNAME_REQUIRED,
   TAKE_REQUIRED,
   TITLE_REQUIRED,
+  TYPE_REQUIRED,
   UNIQUE_ID_REQUIRED,
 } from '../_common/constant/errors/400';
 import { CREATE_SUCCESS } from '../_common/constant/successes/201';
@@ -155,10 +157,20 @@ export class BoardsController {
     description: '게시판 등록 절차',
   })
   @ApiResponse({ status: 201, description: `${CREATE_SUCCESS}` })
+  @ApiResponse({
+    status: 400,
+    description: `${CATEGORY_REQUIRED}, ${NICKNAME_REQUIRED}, ${IDENTIFIER_ID_REQUIRED}, ${TYPE_REQUIRED}`,
+  })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async register(
     @Body() dto: BoardsRegisterInputDto,
   ): Promise<BoardsRegisterOutputDto> {
+    if (!dto?.category) throw new BadRequestException(CATEGORY_REQUIRED);
+    if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
+    if (!dto?.identifierId)
+      throw new BadRequestException(IDENTIFIER_ID_REQUIRED);
+    if (!dto?.type) throw new BadRequestException(TYPE_REQUIRED);
+
     return await this.service.register(dto);
   }
 
@@ -174,11 +186,17 @@ export class BoardsController {
     status: 200,
     description: `${TWO_HUNDRED_OK}`,
   })
-  @ApiResponse({ status: 400, description: `` })
+  @ApiResponse({
+    status: 400,
+    description: `${NICKNAME_REQUIRED}, ${NICKNAME_REQUIRED}`,
+  })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async delete(
     @Body() dto: BoardsDeleteInputDto,
   ): Promise<BoardsDeleteOutputDto> {
+    if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
+    if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
+
     return await this.service.delete(dto);
   }
 
