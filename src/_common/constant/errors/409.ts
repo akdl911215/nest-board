@@ -3,3 +3,4 @@
 // ex) 서버에 이미 있는 파일보다 오래된 파일을 업로드할 때 409 응답이 발생하여 버전 제어 충돌이 발생할 수 있다.
 export const EXISTING_MEMBER = 'existingMember';
 export const EXISTING_REACTION = 'existingReaction';
+export const EXISTING_CATEGORY = 'existingCategory';

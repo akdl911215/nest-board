@@ -1,36 +1,36 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 async function main() {
-  const categories = [
-    {
-      id: '99c4c144-59f3-481d-85d9-9e23b7e09e7c',
-      name: 'game',
-    },
-    {
-      id: '81c2385d-fff1-4a8a-91d7-94e8f6f129db',
-      name: 'economic',
-    },
-  ];
-
-  for (let i = 0; i < categories.length; ++i) {
-    await prisma.categories.upsert({
-      where: {
-        id: categories[i].id,
-      },
-      update: {
-        name: categories[i].id,
-      },
-      create: {
-        name: categories[i].name,
-      },
-    });
-  }
+  // const categories = [
+  //   {
+  //     id: '99c4c144-59f3-481d-85d9-9e23b7e09e7c',
+  //     name: 'game',
+  //   },
+  //   {
+  //     id: '81c2385d-fff1-4a8a-91d7-94e8f6f129db',
+  //     name: 'economic',
+  //   },
+  // ];
+  //
+  // for (let i = 0; i < categories.length; ++i) {
+  //   await prisma.categories.upsert({
+  //     where: {
+  //       id: categories[i].id,
+  //     },
+  //     update: {
+  //       name: categories[i].id,
+  //     },
+  //     create: {
+  //       name: categories[i].name,
+  //     },
+  //   });
+  // }
 
   const boardList = [
     {
       id: '01e173a3-67ba-4f4a-af70-e91ea136d451',
       identifier_id: '01e173a3-67ba-4f4a-af70-e91ea136d451',
-      category: 'economic',
+      category: '경제',
       content:
         'mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1vvvvmockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1mockingListContent1',
       title: 'mockingListTitle1',
@@ -43,7 +43,7 @@ async function main() {
     {
       id: '01e173a3-67ba-4f4a-af70-e91ea136d452',
       identifier_id: '01e173a3-67ba-4f4a-af70-e91ea136d452',
-      category: 'economic',
+      category: '경제',
       content:
         'mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2mockingListContent2',
       title: 'mockingListTitle2',
@@ -56,7 +56,7 @@ async function main() {
     {
       id: '01e173a3-67ba-4f4a-af70-e91ea136d453',
       identifier_id: '01e173a3-67ba-4f4a-af70-e91ea136d453',
-      category: 'economic',
+      category: '경제',
       content:
         'mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3mockingListContent3',
       title: 'mockingListTitle3',
@@ -69,7 +69,7 @@ async function main() {
     {
       id: '01e173a3-67ba-4f4a-af70-e91ea136d454',
       identifier_id: '01e173a3-67ba-4f4a-af70-e91ea136d454',
-      category: 'economic',
+      category: '경제',
       content:
         'mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4mockingListContent4',
       title: 'mockingListTitle4',
@@ -82,7 +82,7 @@ async function main() {
     {
       id: '01e173a3-67ba-4f4a-af70-e91ea136d455',
       identifier_id: '01e173a3-67ba-4f4a-af70-e91ea136d455',
-      category: 'economic',
+      category: '경제',
       content:
         'mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5mockingListContent5v',
       title: 'mockingListTitle5',
@@ -94,7 +94,7 @@ async function main() {
     {
       id: '01e173a3-67ba-4f4a-af70-e91ea136d456',
       identifier_id: '01e173a3-67ba-4f4a-af70-e91ea136d456',
-      category: 'economic',
+      category: '경제',
       content:
         'mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6mockingListContent6v',
       title: 'mockingListTitle6',

@@ -19,3 +19,6 @@ export const USER_ID_REQUIRED = 'userIdRequired';
 export const TYPE_REQUIRED = 'typeRequired';
 export const REFRESH_TOKEN_REQUIRED = 'refreshTokenRequired';
 export const IDENTIFIER_ID_REQUIRED = 'identifierIdRequired';
+export const PAGE_REQUIRED = 'pageRequired';
+export const NAME_REQUIRED = 'nameRequired';
+export const DESCRIPTION_REQUIRED = 'descriptionRequired';

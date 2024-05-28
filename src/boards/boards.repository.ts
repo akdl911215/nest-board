@@ -1,7 +1,7 @@
 import { Dependencies, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import { BoardsRepositoryInterface } from './interfaces/boards.repository.interface';
-import { Boards, Categories, Prisma } from '@prisma/client';
+import { Boards, Prisma } from '@prisma/client';
 import {
   BaseCursorPaginationInputDto,
   BaseCursorPaginationOutputDto,
@@ -250,16 +250,6 @@ export class BoardsRepository implements BoardsRepositoryInterface {
 
     try {
       const registerBoard: Boards = await this.prisma.$transaction(async () => {
-        const categorySearch: Categories =
-          await this.prisma.categories.findUnique({
-            where: { name: category },
-          });
-        if (!categorySearch) {
-          await this.prisma.categories.create({
-            data: { name: category },
-          });
-        }
-
         return this.prisma.boards.create({
           data: { identifier_id, category, title, nickname, content, type },
         });
@@ -287,16 +277,6 @@ export class BoardsRepository implements BoardsRepositoryInterface {
 
     try {
       const updateBoard: Boards = await this.prisma.$transaction(async () => {
-        const categorySearch: Categories =
-          await this.prisma.categories.findUnique({
-            where: { name: category },
-          });
-        if (!categorySearch) {
-          await this.prisma.categories.create({
-            data: { name: category },
-          });
-        }
-
         return this.prisma.boards.update({
           where: { id },
           data: {
