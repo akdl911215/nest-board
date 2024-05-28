@@ -8,10 +8,13 @@ import { ReactionsModule } from './reactions/reactions.module';
 import CONFIG_MODULE from './_common/infrastructure/env';
 import { S3Module } from './_common/infrastructure/aws/s3/s3.module';
 import { CategoriesModule } from './categories/categories.module';
+import { REDIS_MODULE } from './_common/infrastructure/redis/redis.config';
+import { SearchesModule } from './searches/searches.module';
 
 @Module({
   imports: [
     CONFIG_MODULE,
+    REDIS_MODULE,
     BoardsModule,
     UsersModule,
     CommentsModule,
@@ -19,6 +22,7 @@ import { CategoriesModule } from './categories/categories.module';
     ReactionsModule,
     S3Module,
     CategoriesModule,
+    SearchesModule,
   ],
   controllers: [],
   providers: [PrismaService],

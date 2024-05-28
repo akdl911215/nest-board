@@ -86,6 +86,7 @@ export class BoardsController {
   ): Promise<BoardsListOutputDto> {
     if (!dto?.take || dto.take < 0)
       throw new BadRequestException(TAKE_REQUIRED);
+    console.log('list dto : ', dto);
 
     return await this.service.list(dto);
   }
