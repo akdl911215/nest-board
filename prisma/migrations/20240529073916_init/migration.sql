@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "BoardType" AS ENUM ('TEXT', 'LINK', 'MEDIA', 'YOUTUBE');
+
+-- CreateEnum
 CREATE TYPE "ReactionType" AS ENUM ('LIKE', 'DISLIKE');
 
 -- CreateTable
@@ -21,9 +24,11 @@ CREATE TABLE "boards" (
     "id" UUID NOT NULL,
     "identifier_id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
-    "content" TEXT NOT NULL,
+    "content" TEXT[],
     "category" TEXT NOT NULL,
     "nickname" TEXT NOT NULL,
+    "board_score" INTEGER NOT NULL DEFAULT 0,
+    "type" "BoardType" NOT NULL DEFAULT 'TEXT',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -73,6 +78,10 @@ CREATE TABLE "repolies" (
 CREATE TABLE "categories" (
     "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "deleted_at" TIMESTAMP(3),
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
 );
@@ -88,12 +97,6 @@ CREATE UNIQUE INDEX "users_nickname_key" ON "users"("nickname");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
-
--- AddForeignKey
-ALTER TABLE "reactions" ADD CONSTRAINT "reactions_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "comments" ADD CONSTRAINT "comments_board_id_fkey" FOREIGN KEY ("board_id") REFERENCES "boards"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "repolies" ADD CONSTRAINT "repolies_comment_id_fkey" FOREIGN KEY ("comment_id") REFERENCES "comments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
