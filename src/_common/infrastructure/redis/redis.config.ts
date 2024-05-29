@@ -11,7 +11,7 @@ console.log('redis config PORT : ', PORT);
 export const REDIS_MODULE = RedisModule.forRoot({
   readyLog: true,
   config: {
-    host: '127.0.0.1',
+    host: HOST,
     port: PORT,
     // password: '',
   },
