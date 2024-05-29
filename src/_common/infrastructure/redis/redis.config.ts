@@ -4,7 +4,7 @@ export const REDIS_MODULE = RedisModule.forRoot({
   readyLog: true,
   config: {
     host: process.env.REDIS_HOST,
-    port: Number(process.env.REDIS_PORT),
+    port: parseInt(process.env.REDIS_PORT),
     // password: '',
   },
 });
