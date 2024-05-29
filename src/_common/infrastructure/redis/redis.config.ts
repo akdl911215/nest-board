@@ -5,13 +5,13 @@ const HOST = process.env.NODE_ENV === 'production'
   : '127.0.0.1'
 console.log('redis config HOST : ', HOST);
 
-const PORT: number = parseInt(process.env.REDIS_PORT);
+const PORT: number = parseInt(process.env.REDIS_PORT, 10);
 console.log('redis config PORT : ', PORT);
 
 export const REDIS_MODULE = RedisModule.forRoot({
   readyLog: true,
   config: {
-    host: HOST,
+    host: '127.0.0.1',
     port: PORT,
     // password: '',
   },
