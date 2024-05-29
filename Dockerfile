@@ -10,7 +10,7 @@ RUN npm install -g dotenv
 RUN npm install -g cross-env
 
 RUN npm i -g prisma
-RUN npm ci
+RUN npm ci --force
 
 COPY ./ ./
 
