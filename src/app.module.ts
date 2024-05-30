@@ -24,6 +24,7 @@ import { SearchesModule } from './searches/searches.module';
     CategoriesModule,
     SearchesModule,
   ],
+  exports: [REDIS_MODULE],
   controllers: [],
   providers: [PrismaService],
 })
