@@ -62,7 +62,8 @@ jobs:
         run: |
            docker network create connect-net || true
            docker stop nest || true && docker rm nest || true
-           docker stop ljh-redis || true && docker rm ljh-redis || true
+#           docker stop ljh-redis || true && docker rm ljh-redis || true
            docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
-           docker run -itd -p 6379:6379 --network connect-net --name ljh-redis --restart always redis
-           docker run -itd -p 9898:9898 --network connect-net --name nest -e REDIS_HOST=3.35.207.45 -e REDIS_PORT=6379 --restart always ${{ env.DOCKER_IMAGE }}:latest
+#           docker run -itd -p 6379:6379 --network connect-net --name ljh-redis --restart always redis
+#           docker run -itd -p 9898:9898 --network connect-net --name nest -e REDIS_HOST=3.35.207.45 -e REDIS_PORT=6379 --restart always ${{ env.DOCKER_IMAGE }}:latest
+           docker run -itd -p 9898:9898 --network connect-net --name nest --restart always ${{ env.DOCKER_IMAGE }}:latest
