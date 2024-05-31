@@ -1,0 +1,34 @@
+version: '3'
+services:
+  redis:
+    image: redis
+    container_name: ljh-redis
+    ports:
+      - "6379:6379"
+
+  app:
+    build: .
+    container_name: nest
+    environment:
+      - DATABASE_URL=postgresql://postgres:123456@3.35.207.45:5432/postgres
+      - PORT=9898
+      - HOST=3.35.207.45
+      - REDIS_PORT=6379
+      - REDIS_HOST=ljh-redis
+      - JWT_SECRET=ljhcommunity
+      - JWT_ACCESS_SECRET=jwtAccessSecret
+      - JWT_ACCESS_EXPIRE_IN=1000s
+      - JWT_REFRESH_SECRET=jwtRefreshSecret
+      - JWT_REFRESH_EXPIRE_IN=10000s
+      - BCRYPT_SOLT_NUMBER=12345
+      - NODE_ENV=production
+    depends_on:
+      - redis
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
