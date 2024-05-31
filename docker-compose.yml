@@ -26,8 +26,11 @@ services:
       - redis
     ports:
       - "3000:3000"
+    extra_hosts:
+      - "external-postgres:3.35.207.45"
+      - "external-redis:3.35.207.45"
     networks:
-      - app-network
+      - connect-net
 
 networks:
   app-network:
