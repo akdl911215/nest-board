@@ -38,6 +38,7 @@ export class CommentsRepository implements CommentsRepositoryInterface {
     readonly board_id: Comments['board_id'];
     readonly content: Comments['content'];
     readonly nickname: Comments['nickname'];
+    readonly user_id: Comments['user_id'];
   }): Promise<Comments> {
     try {
       const registerComment: Comments = await this.prisma.comments.create({
@@ -109,5 +110,18 @@ export class CommentsRepository implements CommentsRepositoryInterface {
       });
 
     return CommentsFindByBoardId;
+  }
+
+  public async inquiry(entity: {
+    readonly user_id: Comments['user_id'];
+  }): Promise<Comments[]> {
+    const { user_id } = entity;
+
+    const commentsFindByUserId: Comments[] =
+      await this.prisma.comments.findMany({
+        where: { user_id, deleted_at: null },
+      });
+
+    return commentsFindByUserId;
   }
 }

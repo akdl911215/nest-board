@@ -14,6 +14,10 @@ import {
   CommentsListInputDto,
   CommentsListOutputDto,
 } from '../dtos/comments.list.dto';
+import {
+  CommentsInquiryInputDto,
+  CommentsInquiryOutputDto,
+} from '../dtos/comments.inquiry.dto';
 
 export interface CommentsServiceInterface {
   readonly delete: (
@@ -29,4 +33,8 @@ export interface CommentsServiceInterface {
   ) => Promise<CommentsUpdateOutputDto>;
 
   readonly list: (dto: CommentsListInputDto) => Promise<CommentsListOutputDto>;
+
+  readonly inquiry: (
+    dto: CommentsInquiryInputDto,
+  ) => Promise<CommentsInquiryOutputDto>;
 }

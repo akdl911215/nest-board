@@ -17,12 +17,22 @@ import {
   CommentsListInputDto,
   CommentsListOutputDto,
 } from './dtos/comments.list.dto';
+import {
+  CommentsInquiryInputDto,
+  CommentsInquiryOutputDto,
+} from './dtos/comments.inquiry.dto';
 
 @Injectable()
 export class CommentsService implements CommentsServiceInterface {
   constructor(
     @Inject('REPOSITORY') private readonly service: CommentsRepositoryInterface,
   ) {}
+
+  public async inquiry(
+    dto: CommentsInquiryInputDto,
+  ): Promise<CommentsInquiryOutputDto> {
+    return await this.service.inquiry({ user_id: dto.userId });
+  }
 
   public async delete(
     dto: CommentsDeleteInputDto,
@@ -40,6 +50,7 @@ export class CommentsService implements CommentsServiceInterface {
       board_id: dto.boardId,
       nickname: dto.nickname,
       content: dto.content,
+      user_id: dto.userId,
     });
   }
 

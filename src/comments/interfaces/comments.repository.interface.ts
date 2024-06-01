@@ -10,6 +10,7 @@ export interface CommentsRepositoryInterface {
     readonly board_id: Comments['board_id'];
     readonly content: Comments['content'];
     readonly nickname: Comments['nickname'];
+    readonly user_id: Comments['user_id'];
   }) => Promise<Comments>;
 
   readonly update: (entity: {
@@ -22,7 +23,7 @@ export interface CommentsRepositoryInterface {
     readonly board_id: Comments['board_id'];
   }) => Promise<Comments[]>;
 
-  // readonly inquiry: (entity: {
-  //   readonly board_id: Comments['board_id'];
-  // }) => Promise<Comments[]>;
+  readonly inquiry: (entity: {
+    readonly user_id: Comments['user_id'];
+  }) => Promise<Comments[]>;
 }

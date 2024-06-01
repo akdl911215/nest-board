@@ -19,6 +19,14 @@ export class CommentsBaseDto {
   })
   public readonly boardId!: Comments['board_id'];
 
+  @IsUUID()
+  @ApiProperty({
+    type: String,
+    default: '',
+    required: true,
+  })
+  public readonly userId!: Comments['user_id'];
+
   @IsString()
   @ApiProperty({
     type: String,

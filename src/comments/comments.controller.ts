@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Patch,
   Post,
   Query,
@@ -31,6 +32,7 @@ import {
   BOARD_ID_REQUIRED,
   NICKNAME_REQUIRED,
   UNIQUE_ID_REQUIRED,
+  USER_ID_REQUIRED,
 } from '../_common/constant/errors/400';
 import {
   CommentsUpdateInputDto,
@@ -40,6 +42,10 @@ import {
   CommentsListInputDto,
   CommentsListOutputDto,
 } from './dtos/comments.list.dto';
+import {
+  CommentsInquiryInputDto,
+  CommentsInquiryOutputDto,
+} from './dtos/comments.inquiry.dto';
 
 @ApiTags('comments')
 @Controller('comments')
@@ -68,6 +74,23 @@ export class CommentsController {
     return await this.service.list(dto);
   }
 
+  @Get('/:userId')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'RETRIEVE COMMENT LIST BASED ON USER UNIQUE KEY API',
+    description: '유저 유니크키 기준으로 댓글 리스트 조회',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${USER_ID_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async inquiry(
+    @Param() dto: CommentsInquiryInputDto,
+  ): Promise<CommentsInquiryOutputDto> {
+    if (!dto?.userId) throw new BadRequestException(USER_ID_REQUIRED);
+
+    return await this.service.inquiry(dto);
+  }
+
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -77,7 +100,7 @@ export class CommentsController {
   @ApiResponse({ status: 201, description: `${CREATE_SUCCESS}` })
   @ApiResponse({
     status: 400,
-    description: `${BOARD_ID_REQUIRED}, ${NICKNAME_REQUIRED}`,
+    description: `${BOARD_ID_REQUIRED}, ${NICKNAME_REQUIRED}, ${USER_ID_REQUIRED}`,
   })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async register(
@@ -85,6 +108,7 @@ export class CommentsController {
   ): Promise<CommentsRegisterOutputDto> {
     if (!dto?.boardId) throw new BadRequestException(BOARD_ID_REQUIRED);
     if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
+    if (!dto?.userId) throw new BadRequestException(USER_ID_REQUIRED);
 
     return await this.service.register(dto);
   }
