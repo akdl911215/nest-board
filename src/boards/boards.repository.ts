@@ -58,9 +58,6 @@ export class BoardsRepository implements BoardsRepositoryInterface {
       },
     );
 
-    if (boardFindByIdentifierId.length === 0)
-      throw new NotFoundException(NOTFOUND_BOARD);
-
     return boardFindByIdentifierId;
   }
 
