@@ -10,7 +10,9 @@ export interface BoardsRepositoryInterface {
     readonly nickname: Boards['nickname'];
   }) => Promise<Boards>;
 
-  readonly inquiry: (entity: { readonly id: Boards['id'] }) => Promise<Boards>;
+  readonly inquiry: (entity: {
+    readonly id: Boards['id'];
+  }) => Promise<Boards[]>;
 
   readonly list: (entity: {
     readonly category: Boards['category'];

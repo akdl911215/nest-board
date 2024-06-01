@@ -202,6 +202,7 @@ export class BoardsController {
   }
 
   @Get('/:id')
+  @UseGuards(JwtAccessGuard)
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'BOARD INQUIRY API',
@@ -215,7 +216,9 @@ export class BoardsController {
   ): Promise<BoardsInquiryOutputDto> {
     if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
 
-    return await this.service.inquiry(dto);
+    const res = await this.service.inquiry(dto);
+
+    return res;
   }
 
   @UseGuards(JwtAccessGuard)

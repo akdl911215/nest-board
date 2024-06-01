@@ -6,4 +6,4 @@ export class BoardsInquiryInputDto extends PickType(BoardsBaseDto, [
   'id',
 ] as const) {}
 
-export type BoardsInquiryOutputDto = Boards;
+export type BoardsInquiryOutputDto = Boards[];
