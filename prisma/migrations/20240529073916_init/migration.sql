@@ -100,3 +100,5 @@ CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
 
 -- AddForeignKey
 ALTER TABLE "repolies" ADD CONSTRAINT "repolies_comment_id_fkey" FOREIGN KEY ("comment_id") REFERENCES "comments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+
