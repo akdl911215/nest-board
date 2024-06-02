@@ -1,4 +1,4 @@
-import { Dependencies, Injectable } from '@nestjs/common';
+import { Dependencies, Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 import { SearchesRepositoryInterface } from './interfaces/searches.repository.interface';
 import { SearchesBaseDto } from './dtos/searches.base.dto';
@@ -8,7 +8,7 @@ import { Cron } from '@nestjs/schedule';
 @Injectable()
 @Dependencies([Redis])
 export class SearchesRepository implements SearchesRepositoryInterface {
-  constructor(private readonly redis: Redis) {}
+  constructor(@Inject('REDIS_MODULE') private readonly redis: Redis) {}
 
   public async addSearch(entity: {
     readonly query: SearchesBaseDto['query'];
