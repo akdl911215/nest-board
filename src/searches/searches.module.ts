@@ -16,5 +16,6 @@ import { RedisProvider } from '../_common/infrastructure/redis/redis.config';
     // repository
     { provide: 'REPOSITORY', useClass: SearchesRepository },
   ],
+
 })
 export class SearchesModule {}
