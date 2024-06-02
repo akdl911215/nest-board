@@ -64,10 +64,13 @@ export class SearchesRepository implements SearchesRepositoryInterface {
   async decrementScores() {
     await this.redis.eval(
       `local keys = redis.call('ZRANGE', 'searches', 0, -1)
-       for _, key in ipairs(keys) do
-         redis.call('ZINCRBY', 'searches', -1, key)
-       end
-       return keys`,
+         for _, key in ipairs(keys) do
+           local new_score = redis.call('ZINCRBY', 'searches', -1, key)
+           if tonumber(new_score) <= 0 then
+             redis.call('ZREM', 'searches', key)
+           end
+         end
+         return keys`,
       0,
     );
   }
