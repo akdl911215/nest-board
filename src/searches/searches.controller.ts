@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Post,
 } from '@nestjs/common';
 
@@ -23,6 +24,22 @@ import {
 import { CREATE_SUCCESS } from '../_common/constant/successes/201';
 import { INTERNAL_SERVER_ERROR } from '../_common/constant/errors/500';
 import { TWO_HUNDRED_OK } from '../_common/constant/successes/200';
+import {
+  SearchesGetSearchBoardsInputDto,
+  SearchesGetSearchBoardsOutputDto,
+} from './dtos/searches.get.search.boards.dto';
+import {
+  SearchesGetSearchCommunitiesInputDto,
+  SearchesGetSearchCommunitiesOutputDto,
+} from './dtos/searches.get.search.communities.dto';
+import {
+  SearchesGetSearchMediaInputDto,
+  SearchesGetSearchMediaOutputDto,
+} from './dtos/searches.get.search.media.dto';
+import {
+  SearchesGetSearchPeopleInputDto,
+  SearchesGetSearchPeopleOutputDto,
+} from './dtos/searches.get.search.people.dto';
 
 @ApiTags('searches')
 @Controller('searches')
@@ -30,6 +47,74 @@ export class SearchesController {
   constructor(
     @Inject('SERVICE') private readonly service: SearchesServiceInterface,
   ) {}
+
+  @Get('/get/boards/:query')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'SEARCH BOARDS LIST API',
+    description: '보드 리스트 검색 결과 조회',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${QUERY_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async getSearchBoards(
+    @Param() dto: SearchesGetSearchBoardsInputDto,
+  ): Promise<SearchesGetSearchBoardsOutputDto> {
+    if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
+
+    return await this.service.getSearchBoards(dto);
+  }
+
+  @Get('/get/communities/:query')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'SEARCH COMMUNITY LIST API',
+    description: '커뮤니티 리스트 검색 결과 조회',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${QUERY_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async getSearchCommunities(
+    @Param() dto: SearchesGetSearchCommunitiesInputDto,
+  ): Promise<SearchesGetSearchCommunitiesOutputDto> {
+    if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
+
+    return await this.service.getSearchCommunities(dto);
+  }
+
+  @Get('/get/media/:query')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'SEARCH MEDIA LIST API',
+    description: '미디어 리스트 검색 결과 조회',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${QUERY_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async getSearchMedia(
+    @Param() dto: SearchesGetSearchMediaInputDto,
+  ): Promise<SearchesGetSearchMediaOutputDto> {
+    if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
+
+    return await this.service.getSearchMedia(dto);
+  }
+
+  @Get('/get/people/:query')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'SEARCH PEOPLE LIST API',
+    description: '유저 리스트 검색 결과 조회',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${QUERY_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async getSearchPeople(
+    @Param() dto: SearchesGetSearchPeopleInputDto,
+  ): Promise<SearchesGetSearchPeopleOutputDto> {
+    if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
+
+    return await this.service.getSearchPeople(dto);
+  }
 
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')

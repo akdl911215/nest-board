@@ -4,11 +4,96 @@ import { SearchesRepositoryInterface } from './interfaces/searches.repository.in
 import { SearchesBaseDto } from './dtos/searches.base.dto';
 import { errorHandling } from '../_common/abstract/error.handling';
 import { Cron } from '@nestjs/schedule';
+import { PrismaService } from '../_common/infrastructure/prisma.service';
+import * as console from 'console';
+import { Boards, Categories, Users } from '@prisma/client';
 
 @Injectable()
-@Dependencies([Redis])
+@Dependencies([Redis, PrismaService])
 export class SearchesRepository implements SearchesRepositoryInterface {
-  constructor(@Inject('REDIS_MODULE') private readonly redis: Redis) {}
+  constructor(
+    @Inject('REDIS_MODULE') private readonly redis: Redis,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  public async getSearchBoards(entity: {
+    readonly query: string;
+  }): Promise<Boards[]> {
+    const { query } = entity;
+
+    const searchBoards: Boards[] = await this.prisma.boards.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              { title: { contains: query, mode: 'insensitive' } },
+              { content: { hasSome: [query] } },
+              { nickname: { contains: query, mode: 'insensitive' } },
+            ],
+          },
+          { type: 'TEXT' },
+          { deleted_at: null },
+        ],
+      },
+    });
+
+    return searchBoards;
+  }
+
+  public async getSearchMedia(entity: {
+    readonly query: string;
+  }): Promise<Boards[]> {
+    const { query } = entity;
+
+    const searchBoards: Boards[] = await this.prisma.boards.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              { title: { contains: query, mode: 'insensitive' } },
+              { content: { hasSome: [query] } },
+              { nickname: { contains: query, mode: 'insensitive' } },
+            ],
+          },
+          { type: 'MEDIA' || 'LINK' },
+          { deleted_at: null },
+        ],
+      },
+    });
+
+    return searchBoards;
+  }
+
+  public async getSearchPeople(entity: {
+    readonly query: string;
+  }): Promise<Users[]> {
+    const { query } = entity;
+
+    const searchPeople: Users[] = await this.prisma.users.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              { nickname: { contains: query, mode: 'insensitive' } },
+              { email: { contains: query, mode: 'insensitive' } },
+            ],
+          },
+          { deleted_at: null },
+        ],
+      },
+    });
+
+    return searchPeople;
+  }
+
+  public async getSearchCommunities(entity: {
+    readonly query: string;
+  }): Promise<Categories[]> {
+    const { query } = entity;
+
+    // const serchCommunities
+    return Promise.resolve([]);
+  }
 
   public async addSearch(entity: {
     readonly query: SearchesBaseDto['query'];
