@@ -33,7 +33,6 @@ import {
   NICKNAME_REQUIRED,
   PASSWORD_REQUIRED,
   PHONE_REQUIRED,
-  REFRESH_TOKEN_REQUIRED,
   UNIQUE_ID_REQUIRED,
 } from '../_common/constant/errors/400';
 import {

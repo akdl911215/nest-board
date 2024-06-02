@@ -92,11 +92,6 @@ export class UsersRepository implements UsersRepositoryInterface {
       where: {
         nickname,
         deleted_at: null,
-        comments: {
-          every: {
-            deleted_at: null,
-          },
-        },
       },
       orderBy,
     };
