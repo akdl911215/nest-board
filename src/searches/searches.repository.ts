@@ -6,7 +6,7 @@ import { errorHandling } from '../_common/abstract/error.handling';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import * as console from 'console';
-import { Boards, Categories, Users } from '@prisma/client';
+import { Boards, Categories, Comments, Users } from '@prisma/client';
 
 @Injectable()
 @Dependencies([Redis, PrismaService])
@@ -40,6 +40,28 @@ export class SearchesRepository implements SearchesRepositoryInterface {
     return searchBoards;
   }
 
+  public async getSearchComments(entity: {
+    readonly query: string;
+  }): Promise<Comments[]> {
+    const { query } = entity;
+
+    const searchComments: Comments[] = await this.prisma.comments.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              { nickname: { contains: query, mode: 'insensitive' } },
+              { content: { contains: query, mode: 'insensitive' } },
+            ],
+          },
+          { deleted_at: null },
+        ],
+      },
+    });
+
+    return searchComments;
+  }
+
   public async getSearchMedia(entity: {
     readonly query: string;
   }): Promise<Boards[]> {
@@ -60,6 +82,7 @@ export class SearchesRepository implements SearchesRepositoryInterface {
         ],
       },
     });
+    console.log('searchBoards : ', searchBoards);
 
     return searchBoards;
   }
@@ -123,7 +146,6 @@ export class SearchesRepository implements SearchesRepositoryInterface {
         9,
         'WITHSCORES',
       );
-      console.log('topTenSearches : ', topTenSearches);
       // this.redis.zrevrange('searches', 0, 9, 'WITHSCORES')는 Redis의 ZREVRANGE
       // 명령을 사용하여 searches라는 정렬된 셋(sorted set)에서 상위 10개의 항목을 점수와 함께 가져옴.
 

@@ -1,5 +1,5 @@
 import { SearchesBaseDto } from '../dtos/searches.base.dto';
-import { Boards, Categories, Users } from '@prisma/client';
+import { Boards, Categories, Comments, Users } from '@prisma/client';
 
 export interface SearchesRepositoryInterface {
   readonly addSearch: (entity: {
@@ -16,6 +16,10 @@ export interface SearchesRepositoryInterface {
   readonly getSearchBoards: (entity: {
     readonly query: string;
   }) => Promise<Boards[]>;
+
+  readonly getSearchComments: (entity: {
+    readonly query: string;
+  }) => Promise<Comments[]>;
 
   readonly getSearchCommunities: (entity: {
     readonly query: string;

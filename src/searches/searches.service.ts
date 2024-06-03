@@ -22,6 +22,10 @@ import {
   SearchesGetSearchPeopleInputDto,
   SearchesGetSearchPeopleOutputDto,
 } from './dtos/searches.get.search.people.dto';
+import {
+  SearchesGetSearchCommentsInputDto,
+  SearchesGetSearchCommentsOutputDto,
+} from './dtos/searches.get.search.comments.dto';
 
 @Injectable()
 export class SearchesService implements SearchesServiceInterface {
@@ -62,5 +66,11 @@ export class SearchesService implements SearchesServiceInterface {
     dto: SearchesGetSearchPeopleInputDto,
   ): Promise<SearchesGetSearchPeopleOutputDto> {
     return await this.repository.getSearchPeople(dto);
+  }
+
+  public async getSearchComments(
+    dto: SearchesGetSearchCommentsInputDto,
+  ): Promise<SearchesGetSearchCommentsOutputDto> {
+    return await this.repository.getSearchComments(dto);
   }
 }

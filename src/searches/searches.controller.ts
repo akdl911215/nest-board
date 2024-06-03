@@ -40,6 +40,10 @@ import {
   SearchesGetSearchPeopleInputDto,
   SearchesGetSearchPeopleOutputDto,
 } from './dtos/searches.get.search.people.dto';
+import {
+  SearchesGetSearchCommentsInputDto,
+  SearchesGetSearchCommentsOutputDto,
+} from './dtos/searches.get.search.comments.dto';
 
 @ApiTags('searches')
 @Controller('searches')
@@ -82,8 +86,25 @@ export class SearchesController {
     return await this.service.getSearchCommunities(dto);
   }
 
-  @Get('/get/media/:query')
+  @Get('/get/comments/:query')
   @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'SEARCH COMMENTS LIST API',
+    description: '댓글 리스트 검색 결과 조회',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${QUERY_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async getSearchComments(
+    @Param() dto: SearchesGetSearchCommentsInputDto,
+  ): Promise<SearchesGetSearchCommentsOutputDto> {
+    if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
+
+    return await this.service.getSearchComments(dto);
+  }
+
+  @Get('/get/media/:query')
+  @ApiConsumes('applicati on/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'SEARCH MEDIA LIST API',
     description: '미디어 리스트 검색 결과 조회',
@@ -94,9 +115,13 @@ export class SearchesController {
   private async getSearchMedia(
     @Param() dto: SearchesGetSearchMediaInputDto,
   ): Promise<SearchesGetSearchMediaOutputDto> {
+    console.log('media dto : ', dto);
     if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
 
-    return await this.service.getSearchMedia(dto);
+    const res = await this.service.getSearchMedia(dto);
+    console.log('res : ', res);
+
+    return res;
   }
 
   @Get('/get/people/:query')

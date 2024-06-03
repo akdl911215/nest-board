@@ -19,6 +19,10 @@ import {
   SearchesGetSearchPeopleInputDto,
   SearchesGetSearchPeopleOutputDto,
 } from '../dtos/searches.get.search.people.dto';
+import {
+  SearchesGetSearchCommentsInputDto,
+  SearchesGetSearchCommentsOutputDto,
+} from '../dtos/searches.get.search.comments.dto';
 
 export interface SearchesServiceInterface {
   readonly addSearch: (
@@ -34,6 +38,10 @@ export interface SearchesServiceInterface {
   readonly getSearchCommunities: (
     dto: SearchesGetSearchCommunitiesInputDto,
   ) => Promise<SearchesGetSearchCommunitiesOutputDto>;
+
+  readonly getSearchComments: (
+    dto: SearchesGetSearchCommentsInputDto,
+  ) => Promise<SearchesGetSearchCommentsOutputDto>;
 
   readonly getSearchMedia: (
     dto: SearchesGetSearchMediaInputDto,
