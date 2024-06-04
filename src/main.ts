@@ -12,6 +12,12 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 async function bootstrap() {
+  console.log('process.env.AWSACCESSKEYID : ', process.env.AWSACCESSKEYID);
+  console.log(
+    'process.env.AWSSECRETACCESSKEY : ',
+    process.env.AWSSECRETACCESSKEY,
+  );
+  console.log('process.env.S3BUCKETNAME : ', process.env.S3BUCKETNAME);
   console.log('process.env.NODE_ENV : ', process.env.NODE_ENV);
   console.log('process.env.OS : ', process.env.OS);
   const logger = new Logger();

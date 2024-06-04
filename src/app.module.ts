@@ -13,13 +13,13 @@ import { RedisProvider } from './_common/infrastructure/redis/redis.config';
 
 @Module({
   imports: [
+    S3Module,
     CONFIG_MODULE,
     BoardsModule,
     UsersModule,
     CommentsModule,
     RepliesModule,
     ReactionsModule,
-    S3Module,
     CategoriesModule,
     SearchesModule,
   ],
