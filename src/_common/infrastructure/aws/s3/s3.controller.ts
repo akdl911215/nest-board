@@ -37,6 +37,7 @@ export class S3Controller {
     // key 값으로 images/profile.jpg를 사용한다.
 
     const bucket: string = process.env.S3_BUCKET_NAME;
+    console.log('bucket : ', bucket);
 
     const url: string = await this.s3Service.generatePresignedUrl(
       bucket,

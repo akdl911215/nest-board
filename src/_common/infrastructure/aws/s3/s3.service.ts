@@ -29,8 +29,11 @@ export class S3Service {
       Expires: expires,
       ACL: 'public-read',
     };
+    console.log('generatePresignedUrl params : ', params);
 
-    return this.s3.getSignedUrlPromise('putObject', params);
+    const res = await this.s3.getSignedUrlPromise('putObject', params);
+    console.log('res : ', res);
+    return res;
   }
 
   async deleteImage({
