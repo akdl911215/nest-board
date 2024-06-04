@@ -7,8 +7,8 @@ export class S3Service {
 
   constructor() {
     this.s3 = new S3({
-      // accessKeyId: process.env.AWS_ACCEESS_KEY_ID,
-      // secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       region: process.env.AWS_REGION,
     });
   }
@@ -29,6 +29,14 @@ export class S3Service {
       Expires: expires,
       ACL: 'public-read',
     };
+    console.log(
+      'process.env.AWS_ACCEESS_KEY_ID : ',
+      process.env.AWS_ACCESS_KEY_ID,
+    );
+    console.log(
+      'process.env.AWS_SECRET_ACCESS_KEY : ',
+      process.env.AWS_SECRET_ACCESS_KEY,
+    );
     console.log('generatePresignedUrl params : ', params);
 
     const res = await this.s3.getSignedUrlPromise('putObject', params);
