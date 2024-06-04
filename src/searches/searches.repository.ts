@@ -77,7 +77,7 @@ export class SearchesRepository implements SearchesRepositoryInterface {
               { nickname: { contains: query, mode: 'insensitive' } },
             ],
           },
-          { type: 'MEDIA' || 'LINK' },
+          { OR: [{ type: 'MEDIA' }, { type: 'LINK' }] },
           { deleted_at: null },
         ],
       },
