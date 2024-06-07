@@ -10,10 +10,10 @@ env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/nest
   VERSION: ${{ github.sha }}
   NAME: go_cicd
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWSACCESSKEYID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWSSECRETACCESSKEY }}
-  AWS_REGION: ${{ secrets.AWSREGION }}
-  S3_BUCKET_NAME: ${{ secrets.S3BUCKETNAME }}
+  AWSACCESSKEYID: ${{ secrets.AWSACCESSKEYID }}
+  AWSSECRETACCESSKEY: ${{ secrets.AWSSECRETACCESSKEY }}
+  AWSREGION: ${{ secrets.AWSREGION }}
+  S3BUCKETNAME: ${{ secrets.S3BUCKETNAME }}
 
 jobs:
   build:
