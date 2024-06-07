@@ -73,7 +73,14 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Docker run
         run: |
-           docker network create connect-net || true
-           docker stop nest || true && docker rm nest || true
-           docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
-           docker run -itd -p 9898:9898 --network connect-net -e REDIS_HOST=ljh-redis -e REDIS_PORT=6379 --name nest --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker network create connect-net || true
+          docker stop nest || true && docker rm nest || true
+          docker rmi ${{ env.DOCKER_IMAGE }}:latest || true
+          docker run -itd -p 9898:9898 --network connect-net \
+            -e REDIS_HOST=ljh-redis \
+            -e REDIS_PORT=6379 \
+            -e AWSACCESSKEYID="${{ secrets.AWSACCESSKEYID }}" \
+            -e AWSSECRETACCESSKEY="${{ secrets.AWSSECRETACCESSKEY }}" \
+            -e AWSREGION="${{ secrets.AWSREGION }}" \
+            -e S3BUCKETNAME="${{ secrets.S3BUCKETNAME }}" \
+            --name nest --restart always ${{ env.DOCKER_IMAGE }}:latest
