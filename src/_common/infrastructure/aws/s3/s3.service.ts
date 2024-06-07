@@ -9,7 +9,7 @@ export class S3Service {
     this.s3 = new S3({
       accessKeyId: process.env.AWSACCESSKEYID,
       secretAccessKey: process.env.AWSSECRETACCESSKEY,
-      region: process.env.AWS_REGION,
+      region: process.env.AWSREGION,
     });
   }
 

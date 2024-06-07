@@ -69,13 +69,16 @@ export class CategoriesController {
   @UseGuards(JwtAccessGuard)
   @ApiBearerAuth('access_token')
   @Post('/')
-  @ApiConsumes('appication/x-www-form-urlencoded')
+  @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'CATEGORY REGISTER API',
     description: '카테고리 등록 절차',
   })
   @ApiResponse({ status: 201, description: `${CREATE_SUCCESS}` })
-  @ApiResponse({ status: 400, description: `` })
+  @ApiResponse({
+    status: 400,
+    description: `${NAME_REQUIRED}, ${DESCRIPTION_REQUIRED}`,
+  })
   @ApiResponse({ status: 409, description: `${EXISTING_CATEGORY}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async register(
