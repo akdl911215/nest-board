@@ -10,6 +10,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { SearchesModule } from './searches/searches.module';
 import CONFIG_MODULE from './_common/infrastructure/env';
 import { RedisProvider } from './_common/infrastructure/redis/redis.config';
+import { CommunitiesModule } from './communities/communities.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { RedisProvider } from './_common/infrastructure/redis/redis.config';
     ReactionsModule,
     CategoriesModule,
     SearchesModule,
+    CommunitiesModule,
   ],
   exports: [RedisProvider],
   controllers: [],
