@@ -98,12 +98,14 @@ model Replies {
   deleted_at DateTime?
 }
 
-model Categories {
-  @@map(name: "categories")
+model Communities {
+  @@map(name: "communities")
 
   id String @id @default(uuid()) @db.Uuid
-  name String @unique
+  name String @unique @default("jaych")
   description String @db.Text
+  banner String
+  icon String
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
