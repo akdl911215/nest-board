@@ -7,7 +7,7 @@ import {
 export interface CommunitiesRepositoryInterface {
   readonly delete: (entity: {
     readonly id: Communities['id'];
-  }) => Promise<{ readonly delete: boolean }>;
+  }) => Promise<Communities>;
 
   readonly inquiry: (entity: {
     readonly id: Communities['id'];

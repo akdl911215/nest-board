@@ -4,3 +4,4 @@
 export const EXISTING_MEMBER = 'existingMember';
 export const EXISTING_REACTION = 'existingReaction';
 export const EXISTING_CATEGORY = 'existingCategory';
+export const EXISTING_COMMUNITY = 'existringCommunity';

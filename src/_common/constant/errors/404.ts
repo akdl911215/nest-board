@@ -8,3 +8,4 @@ export const NOTFOUND_USER = 'notfoundUser';
 export const NOTFOUND_COMMENT = 'notFoundComment';
 export const NOTFOUND_REPLY = 'notFoundReply';
 export const NOTFOUND_REACTION = 'notFoundReaction';
+export const NOTFOUND_COMMUNITY = 'notFindCommunity';

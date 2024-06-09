@@ -6,7 +6,7 @@ import { errorHandling } from '../_common/abstract/error.handling';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
 import * as console from 'console';
-import { Boards, Categories, Comments, Users } from '@prisma/client';
+import { Boards, Comments, Communities, Users } from '@prisma/client';
 
 @Injectable()
 @Dependencies([Redis, PrismaService])
@@ -111,7 +111,7 @@ export class SearchesRepository implements SearchesRepositoryInterface {
 
   public async getSearchCommunities(entity: {
     readonly query: string;
-  }): Promise<Categories[]> {
+  }): Promise<Communities[]> {
     const { query } = entity;
 
     // const serchCommunities
