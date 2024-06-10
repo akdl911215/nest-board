@@ -23,3 +23,5 @@ export const PAGE_REQUIRED = 'pageRequired';
 export const NAME_REQUIRED = 'nameRequired';
 export const DESCRIPTION_REQUIRED = 'descriptionRequired';
 export const QUERY_REQUIRED = 'queryRequired';
+export const TAG_ID_REQUIRED = 'tagIdRequired';
+export const TAGS_REQUIRED = 'tagsRequired';
