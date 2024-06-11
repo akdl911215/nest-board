@@ -10,7 +10,6 @@ import { SearchesModule } from './searches/searches.module';
 import CONFIG_MODULE from './_common/infrastructure/env';
 import { RedisProvider } from './_common/infrastructure/redis/redis.config';
 import { CommunitiesModule } from './communities/communities.module';
-import { BoardTagsModule } from './board.tags/board.tags.module';
 import { CommunityTagsModule } from './community.tags/community.tags.module';
 
 @Module({
@@ -24,7 +23,6 @@ import { CommunityTagsModule } from './community.tags/community.tags.module';
     ReactionsModule,
     SearchesModule,
     CommunitiesModule,
-    BoardTagsModule,
     CommunityTagsModule,
   ],
   exports: [RedisProvider],

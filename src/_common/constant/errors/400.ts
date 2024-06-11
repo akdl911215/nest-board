@@ -27,3 +27,4 @@ export const TAG_ID_REQUIRED = 'tagIdRequired';
 export const TAGS_REQUIRED = 'tagsRequired';
 
 export const VISIBILITY_REQUIRED = 'visibilityRequired';
+export const COMMUNITY_ID_REQUIRED = 'communityIdRequired';
