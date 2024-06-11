@@ -63,7 +63,6 @@ export class CommunityTagsRepository
     const filterTags: string[] = tags.filter(
       (tag: string): boolean => tag !== '',
     );
-    console.log('filterTags : ', filterTags);
 
     try {
       const registerBoardTags: CommunitiesTags[] =
@@ -77,7 +76,6 @@ export class CommunityTagsRepository
             });
 
             const tag_id: string = registerTag.id;
-            console.log('tag_id : ', tag_id);
 
             const registerBoardTags: CommunitiesTags =
               await this.prisma.communitiesTags.upsert({
