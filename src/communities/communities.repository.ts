@@ -98,8 +98,9 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
     readonly description: Communities['description'];
     readonly banner: Communities['banner'];
     readonly icon: Communities['icon'];
+    readonly visibility: Communities['visibility'];
   }): Promise<Communities> {
-    const { name, description, banner, icon } = entity;
+    const { name, description, banner, icon, visibility } = entity;
 
     const communityFindByName: Communities =
       await this.prisma.communities.findUnique({
@@ -110,7 +111,7 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
     try {
       const communityRegister: Communities =
         await this.prisma.communities.create({
-          data: { name, description, banner, icon },
+          data: { name, description, banner, icon, visibility },
         });
 
       return communityRegister;
@@ -125,8 +126,9 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
     readonly description: Communities['description'];
     readonly banner: Communities['banner'];
     readonly icon: Communities['icon'];
+    readonly visibility: Communities['visibility'];
   }): Promise<Communities> {
-    const { id, name, description, banner, icon } = entity;
+    const { id, name, description, banner, icon, visibility } = entity;
 
     const communityFindByIdOrName: Communities =
       await this.prisma.communities.findFirst({
@@ -144,7 +146,14 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
       const updateCommunity: Communities = await this.prisma.communities.update(
         {
           where: { id },
-          data: { name, description, banner, icon, updated_at: new Date() },
+          data: {
+            name,
+            description,
+            banner,
+            icon,
+            visibility,
+            updated_at: new Date(),
+          },
         },
       );
 

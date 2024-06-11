@@ -8,6 +8,7 @@ export class CommunitiesUpdateInputDto extends PickType(CommunitiesBaseDto, [
   'description',
   'icon',
   'banner',
+  'visibility',
 ] as const) {}
 
 export type CommunitiesUpdateOutputDto = Communities;

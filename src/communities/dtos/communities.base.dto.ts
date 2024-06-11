@@ -1,12 +1,13 @@
 import {
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Communities } from '@prisma/client';
+import { CimmunityVisibilityType, Communities } from '@prisma/client';
 
 export class CommunitiesBaseDto {
   @IsUUID()
@@ -35,6 +36,12 @@ export class CommunitiesBaseDto {
     required: true,
   })
   public readonly description!: Communities['description'];
+
+  @IsEnum(CimmunityVisibilityType)
+  @ApiProperty({
+    enum: ['PUBLIC', 'RESTRICTED', 'PRIVATE'],
+  })
+  public readonly visibility!: Communities['visibility'];
 
   @IsString()
   @IsOptional()

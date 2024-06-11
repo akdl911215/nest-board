@@ -28,6 +28,7 @@ export interface CommunitiesRepositoryInterface {
     readonly description: Communities['description'];
     readonly banner: Communities['banner'];
     readonly icon: Communities['icon'];
+    readonly visibility: Communities['visibility'];
   }) => Promise<Communities>;
 
   readonly update: (entity: {
@@ -36,5 +37,6 @@ export interface CommunitiesRepositoryInterface {
     readonly description: Communities['description'];
     readonly banner: Communities['banner'];
     readonly icon: Communities['icon'];
+    readonly visibility: Communities['visibility'];
   }) => Promise<Communities>;
 }

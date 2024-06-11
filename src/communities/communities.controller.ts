@@ -8,8 +8,10 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiConsumes,
   ApiOperation,
   ApiResponse,
@@ -28,6 +30,7 @@ import {
   PAGE_REQUIRED,
   TAKE_REQUIRED,
   UNIQUE_ID_REQUIRED,
+  VISIBILITY_REQUIRED,
 } from '../_common/constant/errors/400';
 import {
   CommunitiesInquiryInputDto,
@@ -46,6 +49,9 @@ import {
   CommunitiesUpdateInputDto,
   CommunitiesUpdateOutputDto,
 } from './dtos/communities.update.dto';
+import { NOTFOUND_COMMUNITY } from '../_common/constant/errors/404';
+import { EXISTING_COMMUNITY } from '../_common/constant/errors/409';
+import { JwtAccessGuard } from '../users/infrastructure/token/guards/jwt.access.guard';
 
 @ApiTags('communities')
 @Controller('communities')
@@ -94,6 +100,8 @@ export class CommunitiesController {
     return await this.service.inquiry(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @Post('/')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -103,18 +111,22 @@ export class CommunitiesController {
   @ApiResponse({ status: 201, description: `${CREATE_SUCCESS}` })
   @ApiResponse({
     status: 400,
-    description: `${NAME_REQUIRED}, ${DESCRIPTION_REQUIRED}`,
+    description: `${NAME_REQUIRED}, ${DESCRIPTION_REQUIRED}, ${VISIBILITY_REQUIRED}`,
   })
+  @ApiResponse({ status: 409, description: `${EXISTING_COMMUNITY}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async register(
     @Body() dto: CommunitiesRegisterInputDto,
   ): Promise<CommunitiesRegisterOutputDto> {
     if (!dto?.name) throw new BadRequestException(NAME_REQUIRED);
     if (!dto?.description) throw new BadRequestException(DESCRIPTION_REQUIRED);
+    if (!dto?.visibility) throw new BadRequestException(VISIBILITY_REQUIRED);
 
     return await this.service.register(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @Patch('/delete')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -123,6 +135,7 @@ export class CommunitiesController {
   })
   @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
   @ApiResponse({ status: 400, description: `${UNIQUE_ID_REQUIRED}` })
+  @ApiResponse({ status: 404, description: `${NOTFOUND_COMMUNITY}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async delete(
     @Body() dto: CommunitiesDeleteInputDto,
@@ -132,6 +145,8 @@ export class CommunitiesController {
     return await this.service.delete(dto);
   }
 
+  @UseGuards(JwtAccessGuard)
+  @ApiBearerAuth('access_token')
   @Patch('/')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
@@ -141,8 +156,9 @@ export class CommunitiesController {
   @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
   @ApiResponse({
     status: 400,
-    description: `${UNIQUE_ID_REQUIRED}, ${NAME_REQUIRED}, ${DESCRIPTION_REQUIRED}`,
+    description: `${UNIQUE_ID_REQUIRED}, ${NAME_REQUIRED}, ${DESCRIPTION_REQUIRED}, ${VISIBILITY_REQUIRED}`,
   })
+  @ApiResponse({ status: 404, description: `${NOTFOUND_COMMUNITY}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async update(
     @Body() dto: CommunitiesUpdateInputDto,
@@ -150,6 +166,7 @@ export class CommunitiesController {
     if (!dto?.id) throw new BadRequestException(UNIQUE_ID_REQUIRED);
     if (!dto?.name) throw new BadRequestException(NAME_REQUIRED);
     if (!dto?.description) throw new BadRequestException(DESCRIPTION_REQUIRED);
+    if (!dto?.visibility) throw new BadRequestException(VISIBILITY_REQUIRED);
 
     return await this.service.update(dto);
   }
