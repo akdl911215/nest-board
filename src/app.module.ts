@@ -11,6 +11,7 @@ import CONFIG_MODULE from './_common/infrastructure/env';
 import { RedisProvider } from './_common/infrastructure/redis/redis.config';
 import { CommunitiesModule } from './communities/communities.module';
 import { BoardTagsModule } from './board.tags/board.tags.module';
+import { CommunityTagsModule } from './community.tags/community.tags.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { BoardTagsModule } from './board.tags/board.tags.module';
     SearchesModule,
     CommunitiesModule,
     BoardTagsModule,
+    CommunityTagsModule,
   ],
   exports: [RedisProvider],
   controllers: [],

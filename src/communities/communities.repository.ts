@@ -108,10 +108,22 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
       });
     if (communityFindByName) throw new ConflictException(EXISTING_COMMUNITY);
 
+    let sqlBanner = null;
+    if (banner) sqlBanner = banner;
+
+    let sqlIcon = null;
+    if (banner) sqlIcon = icon;
+
     try {
       const communityRegister: Communities =
         await this.prisma.communities.create({
-          data: { name, description, banner, icon, visibility },
+          data: {
+            name,
+            description,
+            banner: sqlBanner,
+            icon: sqlIcon,
+            visibility,
+          },
         });
 
       return communityRegister;
@@ -142,6 +154,12 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
     if (!communityFindByIdOrName)
       throw new NotFoundException(NOTFOUND_COMMUNITY);
 
+    let sqlBanner = null;
+    if (banner) sqlBanner = banner;
+
+    let sqlIcon = null;
+    if (banner) sqlIcon = icon;
+
     try {
       const updateCommunity: Communities = await this.prisma.communities.update(
         {
@@ -149,8 +167,8 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
           data: {
             name,
             description,
-            banner,
-            icon,
+            banner: sqlBanner,
+            icon: sqlIcon,
             visibility,
             updated_at: new Date(),
           },

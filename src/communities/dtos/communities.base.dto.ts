@@ -7,7 +7,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { CimmunityVisibilityType, Communities } from '@prisma/client';
+import { CommunityVisibilityType, Communities } from '@prisma/client';
 
 export class CommunitiesBaseDto {
   @IsUUID()
@@ -37,7 +37,7 @@ export class CommunitiesBaseDto {
   })
   public readonly description!: Communities['description'];
 
-  @IsEnum(CimmunityVisibilityType)
+  @IsEnum(CommunityVisibilityType)
   @ApiProperty({
     enum: ['PUBLIC', 'RESTRICTED', 'PRIVATE'],
   })

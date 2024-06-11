@@ -59,18 +59,24 @@ export class BoardTagsRepository implements BoardTagsRepositoryInterface {
   }): Promise<BoardTags[]> {
     const { board_id, tags } = entity;
 
+    const filterTags: string[] = tags.filter(
+      (tag: string): boolean => tag !== '',
+    );
+    console.log('filterTags : ', filterTags);
+
     try {
       const registerBoardTags: BoardTags[] = await this.prisma.$transaction(
         async () => {
           const arr: BoardTags[] = [];
-          for (let i = 0; i < tags.length; ++i) {
+          for (let i = 0; i < filterTags.length; ++i) {
             const registerTag: Tags = await this.prisma.tags.upsert({
-              where: { name: tags[i] },
-              update: { name: tags[i] },
-              create: { name: tags[i] },
+              where: { name: filterTags[i] },
+              update: {},
+              create: { name: filterTags[i] },
             });
 
-            const tag_id: BoardTags['tag_id'] = registerTag.id;
+            const tag_id: string = registerTag.id;
+            console.log('tag_id : ', tag_id);
 
             const registerBoardTags: BoardTags =
               await this.prisma.boardTags.upsert({
@@ -80,7 +86,7 @@ export class BoardTagsRepository implements BoardTagsRepositoryInterface {
                     board_id,
                   },
                 },
-                update: { tag_id, board_id },
+                update: {},
                 create: { tag_id, board_id },
               });
 

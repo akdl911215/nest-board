@@ -108,6 +108,7 @@ export class BoardTagsController {
   private async register(
     @Body() dto: BoardTagsRegisterInputDto,
   ): Promise<BoardTagsRegisterOutputDto> {
+    console.log('register dto : ', dto);
     if (!dto?.boardId) throw new BadRequestException(BOARD_ID_REQUIRED);
     if (!dto?.tags.length || dto.tags.length < 1)
       throw new BadRequestException(TAGS_REQUIRED);

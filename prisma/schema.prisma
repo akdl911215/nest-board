@@ -10,11 +10,11 @@ datasource db {
 model Users {
   @@map(name: "users")
 
-  id            String @id @default(uuid()) @db.Uuid
-  email         String @unique
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique
   password      String
-  phone         String @unique
-  nickname      String @unique
+  phone         String   @unique
+  nickname      String   @unique
 
   refresh_token String?
 
@@ -33,21 +33,19 @@ enum BoardType {
 model Boards {
     @@map(name: "boards")
 
-    id            String @id @default(uuid()) @db.Uuid
+    id            String    @id @default(uuid()) @db.Uuid
     identifier_id String
     title         String
-    content       String[] @db.Text
+    content       String[]  @db.Text
     category      String
     nickname      String
 
-    board_score   Int @default(0)
+    board_score   Int       @default(0)
     type          BoardType @default(TEXT)
 
-    created_at    DateTime @default(now())
-    updated_at    DateTime @updatedAt
+    created_at    DateTime   @default(now())
+    updated_at    DateTime   @updatedAt
     deleted_at    DateTime?
-
-    tags          BoardTags[]
 }
 
 enum ReactionType {
@@ -58,25 +56,25 @@ enum ReactionType {
 model Reactions {
   @@map(name: "reactions")
 
-  id        String @id @default(uuid()) @db.Uuid
+  id        String       @id @default(uuid()) @db.Uuid
   type      ReactionType @default(LIKE)
-  user_id   String @db.Uuid
+  user_id   String       @db.Uuid
 
-  board_id  String @db.Uuid
+  board_id  String       @db.Uuid
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
 }
 
 model Comments {
   @@map(name: "comments")
 
-  id         String @id @default(uuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   nickname   String
-  content    String @db.Text
+  content    String   @db.Text
 
-  board_id   String @db.Uuid
-  user_id    String @db.Uuid
+  board_id   String   @db.Uuid
+  user_id    String   @db.Uuid
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -88,19 +86,19 @@ model Comments {
 model Replies {
   @@map(name: "repolies")
 
-  id         String @id @default(uuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   nickname   String
-  content    String @db.Text
+  content    String   @db.Text
 
   comment    Comments @relation(fields: [comment_id], references: [id])
-  comment_id String @db.Uuid
+  comment_id String   @db.Uuid
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   deleted_at DateTime?
 }
 
-enum CimmunityVisibilityType {
+enum CommunityVisibilityType {
   PUBLIC
   RESTRICTED
   PRIVATE
@@ -109,34 +107,36 @@ enum CimmunityVisibilityType {
 model Communities {
   @@map(name: "communities")
 
-  id          String @id @default(uuid()) @db.Uuid
-  name        String @unique @default("jaych")
-  description String @db.Text
-  banner      String
-  icon        String
-  visibility  CimmunityVisibilityType @default(PUBLIC)
+  id          String                 @id @default(uuid()) @db.Uuid
+  name        String                 @unique @default("jaych")
+  description String                 @db.Text
+  banner      String?
+  icon        String?
+  visibility  CommunityVisibilityType @default(PUBLIC)
 
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  created_at  DateTime                @default(now())
+  updated_at  DateTime                @updatedAt
   deleted_at  DateTime?
+
+  tags        CommunitiesTags[]
 }
 
 model Tags {
   @@map(name: "tags")
 
-  id   String @id @default(uuid()) @db.Uuid
-  name String @unique @db.VarChar(255)
+  id          String            @id @default(uuid()) @db.Uuid
+  name        String            @unique @db.VarChar(255)
 
-  boards BoardTags[]
+  communities CommunitiesTags[]
 }
 
-model BoardTags {
-  @@map(name: "board_tags")
-  @@id([board_id, tag_id])
+model CommunitiesTags {
+  @@map(name: "community_tags")
+  @@id([community_id, tag_id])
 
-  board_id String @db.Uuid
-  tag_id   String @db.Uuid
+  community_id String      @db.Uuid
+  tag_id       String      @db.Uuid
 
-  board Boards @relation(fields: [board_id], references: [id])
-  tag   Tags   @relation(fields: [tag_id],   references: [id])
+  community    Communities @relation(fields: [community_id], references: [id])
+  tag          Tags        @relation(fields: [tag_id],   references: [id])
 }
