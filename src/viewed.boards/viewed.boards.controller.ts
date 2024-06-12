@@ -3,8 +3,9 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
+  Param,
   Post,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -35,9 +36,11 @@ import {
 @ApiTags('viewed/boards')
 @Controller('viewed/boards')
 export class ViewedBoardsController {
-  constructor(private readonly service: ViewedBoardsServiceInterface) {}
+  constructor(
+    @Inject('SERVICE') private readonly service: ViewedBoardsServiceInterface,
+  ) {}
 
-  @Get('/')
+  @Get('/:userId')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'GET RECENT VIEWED BOARD LIST API',
@@ -47,7 +50,7 @@ export class ViewedBoardsController {
   @ApiResponse({ status: 400, description: `${USER_ID_REQUIRED}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async getRecentViewedBoards(
-    @Query() dto: ViewedBoardsGetRecentViewedBoardsInputDto,
+    @Param() dto: ViewedBoardsGetRecentViewedBoardsInputDto,
   ): Promise<ViewedBoardsGetRecentViewedBoardsOutputDto> {
     if (!dto?.userId) throw new BadRequestException(USER_ID_REQUIRED);
 
