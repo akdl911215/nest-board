@@ -29,15 +29,9 @@ export class S3Service {
       Expires: expires,
       ACL: 'public-read',
     };
-    console.log('process.env.AWSACCESSKEYID : ', process.env.AWSACCESSKEYID);
-    console.log(
-      'process.env.AWSSECRETACCESSKEY : ',
-      process.env.AWSSECRETACCESSKEY,
-    );
-    console.log('generatePresignedUrl params : ', params);
 
     const res = await this.s3.getSignedUrlPromise('putObject', params);
-    console.log('res : ', res);
+
     return res;
   }
 

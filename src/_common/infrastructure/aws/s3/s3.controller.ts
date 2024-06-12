@@ -6,7 +6,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { S3Service } from './s3.service';
-import * as process from 'process';
 import { CREATE_SUCCESS } from '../../../constant/successes/201';
 import { INTERNAL_SERVER_ERROR } from '../../../constant/errors/500';
 import {
@@ -36,14 +35,12 @@ export class S3Controller {
     // 예를 들어, 사용자가 images/profile.jpg라는 파일을 업로드하려면
     // key 값으로 images/profile.jpg를 사용한다.
     const bucket: string = 'jaychbucket2';
-    console.log('bucket : ', bucket);
 
     const url: string = await this.s3Service.generatePresignedUrl(
       bucket,
       key,
       expires,
     );
-    console.log('url : ', url);
 
     return { url };
   }
@@ -59,7 +56,6 @@ export class S3Controller {
   private async delete(
     @Body() body: { readonly keys: string[] },
   ): Promise<{ readonly delete: boolean }> {
-    console.log('body : ', body);
     return await this.s3Service.deleteImage({ keys: body.keys });
   }
 }

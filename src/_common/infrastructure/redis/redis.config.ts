@@ -2,15 +2,15 @@
 import Redis from 'ioredis';
 import { Provider } from '@nestjs/common';
 
-const HOST: string = process.env.REDIS_HOST;
-console.log('redis config HOST : ', HOST);
+const REDIS_HOST: string = process.env.REDIS_HOST;
+console.log('redis config REDIS_HOST : ', REDIS_HOST);
 
-const PORT: number = parseInt(process.env.REDIS_PORT, 10);
-console.log('redis config PORT : ', PORT);
+const REDIS_PORT: number = parseInt(process.env.REDIS_PORT, 10);
+console.log('redis config PORT : ', REDIS_PORT);
 
 const REDIS_MODULE = new Redis({
-  host: HOST,
-  port: PORT,
+  host: REDIS_HOST,
+  port: REDIS_PORT,
 });
 
 export const RedisProvider: Provider = {
