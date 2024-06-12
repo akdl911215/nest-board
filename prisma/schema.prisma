@@ -21,6 +21,8 @@ model Users {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
   deleted_at    DateTime?
+
+  viewedBoards  ViewedBoards[]
 }
 
 enum BoardType {
@@ -46,6 +48,23 @@ model Boards {
     created_at    DateTime   @default(now())
     updated_at    DateTime   @updatedAt
     deleted_at    DateTime?
+
+    viewedBoards  ViewedBoards[]
+}
+
+model ViewedBoards {
+  @@map(name: "viewed_boards")
+
+  id       String   @id @default(uuid()) @db.Uuid
+  viewed_at DateTime @default(now())
+
+  user_id  String   @db.Uuid
+  board_id String   @db.Uuid
+
+  user     Users    @relation(fields: [user_id], references: [id])
+  board    Boards   @relation(fields: [board_id], references: [id])
+
+  @@unique([user_id, board_id])
 }
 
 enum ReactionType {
