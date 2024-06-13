@@ -404,4 +404,11 @@ export class UsersRepository implements UsersRepositoryInterface {
       errorHandling(e);
     }
   }
+
+  public async kakaoAuth(entity: { readonly profile: any }): Promise<any> {
+    const { profile } = entity;
+    console.log('kakao repository profile : ', profile);
+
+    return Promise.resolve(undefined);
+  }
 }

@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -82,6 +83,7 @@ import {
   UsersLogoutInputDto,
   UsersLogoutOutputDto,
 } from './dtos/users.logout.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('users')
 @Controller('users')
@@ -90,6 +92,20 @@ export class UsersController {
   constructor(
     @Inject('SERVICE') private readonly service: UsersServiceInterface,
   ) {}
+
+  @Get('/kakao')
+  @UseGuards(AuthGuard('kakao'))
+  private async kakaoLogin() {
+    // Kakao 로그인 페이지로 리디렉션
+  }
+
+  @Get('/kakao/callback')
+  @UseGuards(AuthGuard('kakao'))
+  private async kakaoCallback(@Req() req) {
+    console.log('req : ', req);
+
+    return req.user;
+  }
 
   @Get('/existing/nickname/:nickname')
   @ApiConsumes('application/x-www-form-urlencoded')

@@ -117,4 +117,8 @@ export class UsersService implements UsersServiceInterface {
   public async logout(dto: UsersLogoutInputDto): Promise<UsersLogoutOutputDto> {
     return await this.repository.logout(dto);
   }
+
+  public async kakaoAuth(dto: { readonly profile: any }): Promise<any> {
+    return await this.repository.kakaoAuth(dto);
+  }
 }
