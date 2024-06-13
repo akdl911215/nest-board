@@ -5,8 +5,8 @@ import { SearchesBaseDto } from './dtos/searches.base.dto';
 import { errorHandling } from '../_common/abstract/error.handling';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '../_common/infrastructure/prisma.service';
-import * as console from 'console';
-import { Boards, Comments, Communities, Users } from '@prisma/client';
+import { $Enums, Boards, Comments, Communities, Users } from '@prisma/client';
+import e from 'express';
 
 @Injectable()
 @Dependencies([Redis, PrismaService])
@@ -122,6 +122,27 @@ export class SearchesRepository implements SearchesRepositoryInterface {
                 { name: { contains: query, mode: 'insensitive' } },
                 { description: { contains: query, mode: 'insensitive' } },
               ],
+            },
+            { visibility: 'PUBLIC' },
+            { deleted_at: null },
+          ],
+        },
+      });
+
+    return searchCommunities;
+  }
+
+  public async getSearchCommunitiesName(entity: {
+    readonly query: string;
+  }): Promise<Communities[]> {
+    const { query } = entity;
+
+    const searchCommunities: Communities[] =
+      await this.prisma.communities.findMany({
+        where: {
+          AND: [
+            {
+              OR: [{ name: { contains: query, mode: 'insensitive' } }],
             },
             { visibility: 'PUBLIC' },
             { deleted_at: null },

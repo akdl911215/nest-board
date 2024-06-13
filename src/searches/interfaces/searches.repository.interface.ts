@@ -25,6 +25,10 @@ export interface SearchesRepositoryInterface {
     readonly query: string;
   }) => Promise<Communities[]>;
 
+  readonly getSearchCommunitiesName: (entity: {
+    readonly query: string;
+  }) => Promise<Communities[]>;
+
   readonly getSearchMedia: (entity: {
     readonly query: string;
   }) => Promise<Boards[]>;

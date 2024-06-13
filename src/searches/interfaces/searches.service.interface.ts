@@ -23,6 +23,10 @@ import {
   SearchesGetSearchCommentsInputDto,
   SearchesGetSearchCommentsOutputDto,
 } from '../dtos/searches.get.search.comments.dto';
+import {
+  SearchesGetSearchCommunitiesNameInputDto,
+  SearchesGetSearchCommunitiesNameOutputDto,
+} from '../dtos/searches.get.search.communities.name.dto';
 
 export interface SearchesServiceInterface {
   readonly addSearch: (
@@ -38,6 +42,10 @@ export interface SearchesServiceInterface {
   readonly getSearchCommunities: (
     dto: SearchesGetSearchCommunitiesInputDto,
   ) => Promise<SearchesGetSearchCommunitiesOutputDto>;
+
+  readonly getSearchCommunitiesName: (
+    dto: SearchesGetSearchCommunitiesNameInputDto,
+  ) => Promise<SearchesGetSearchCommunitiesNameOutputDto>;
 
   readonly getSearchComments: (
     dto: SearchesGetSearchCommentsInputDto,
