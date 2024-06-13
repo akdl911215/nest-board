@@ -132,27 +132,6 @@ export class SearchesRepository implements SearchesRepositoryInterface {
     return searchCommunities;
   }
 
-  public async getSearchCommunitiesName(entity: {
-    readonly query: string;
-  }): Promise<Communities[]> {
-    const { query } = entity;
-
-    const searchCommunities: Communities[] =
-      await this.prisma.communities.findMany({
-        where: {
-          AND: [
-            {
-              OR: [{ name: { contains: query, mode: 'insensitive' } }],
-            },
-            { visibility: 'PUBLIC' },
-            { deleted_at: null },
-          ],
-        },
-      });
-
-    return searchCommunities;
-  }
-
   public async addSearch(entity: {
     readonly query: SearchesBaseDto['query'];
   }): Promise<void> {

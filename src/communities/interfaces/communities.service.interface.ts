@@ -18,6 +18,10 @@ import {
   CommunitiesUpdateInputDto,
   CommunitiesUpdateOutputDto,
 } from '../dtos/communities.update.dto';
+import {
+  CommunitiesGetCommunitiesNameInputDto,
+  CommunitiesGetCommunitiesNameOutputDto,
+} from '../dtos/communities.get.communities.name.dto';
 
 export interface CommunitiesServiceInterface {
   readonly delete: (
@@ -39,4 +43,8 @@ export interface CommunitiesServiceInterface {
   readonly update: (
     dto: CommunitiesUpdateInputDto,
   ) => Promise<CommunitiesUpdateOutputDto>;
+
+  readonly getCommunitiesName: (
+    dto: CommunitiesGetCommunitiesNameInputDto,
+  ) => Promise<CommunitiesGetCommunitiesNameOutputDto>;
 }

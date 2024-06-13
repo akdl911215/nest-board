@@ -180,4 +180,23 @@ export class CommunitiesRepository implements CommunitiesRepositoryInterface {
       errorHandling(e);
     }
   }
+
+  public async getCommunitiesName(entity: {
+    readonly name: Communities['name'];
+  }): Promise<Communities[]> {
+    const { name } = entity;
+
+    const getCommunities: Communities[] =
+      await this.prisma.communities.findMany({
+        where: {
+          AND: [
+            { name: { contains: name, mode: 'insensitive' } },
+            { visibility: 'PUBLIC' },
+            { deleted_at: null },
+          ],
+        },
+      });
+
+    return getCommunities;
+  }
 }

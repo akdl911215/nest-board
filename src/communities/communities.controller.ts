@@ -28,6 +28,7 @@ import {
   DESCRIPTION_REQUIRED,
   NAME_REQUIRED,
   PAGE_REQUIRED,
+  QUERY_REQUIRED,
   TAKE_REQUIRED,
   UNIQUE_ID_REQUIRED,
   VISIBILITY_REQUIRED,
@@ -52,6 +53,14 @@ import {
 import { NOTFOUND_COMMUNITY } from '../_common/constant/errors/404';
 import { EXISTING_COMMUNITY } from '../_common/constant/errors/409';
 import { JwtAccessGuard } from '../users/infrastructure/token/guards/jwt.access.guard';
+import {
+  SearchesGetSearchCommunitiesInputDto,
+  SearchesGetSearchCommunitiesOutputDto,
+} from '../searches/dtos/searches.get.search.communities.dto';
+import {
+  CommunitiesGetCommunitiesNameInputDto,
+  CommunitiesGetCommunitiesNameOutputDto,
+} from './dtos/communities.get.communities.name.dto';
 
 @ApiTags('communities')
 @Controller('communities')
@@ -81,6 +90,23 @@ export class CommunitiesController {
       throw new BadRequestException(PAGE_REQUIRED);
 
     return await this.service.list(dto);
+  }
+
+  @Get('/get/communities/name/:name')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'SEARCH COMMUNITY NAME LIST API',
+    description: '커뮤니티 리스트 이름 검색 결과 조회',
+  })
+  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
+  @ApiResponse({ status: 400, description: `${NAME_REQUIRED}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async getCommunitiesName(
+    @Param() dto: CommunitiesGetCommunitiesNameInputDto,
+  ): Promise<CommunitiesGetCommunitiesNameOutputDto> {
+    if (!dto?.name) throw new BadRequestException(NAME_REQUIRED);
+
+    return await this.service.getCommunitiesName(dto);
   }
 
   @Get('/:id')

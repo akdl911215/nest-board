@@ -86,23 +86,6 @@ export class SearchesController {
     return await this.service.getSearchCommunities(dto);
   }
 
-  @Get('/get/communities/name/:query')
-  @ApiConsumes('application/x-www-form-urlencoded')
-  @ApiOperation({
-    summary: 'SEARCH COMMUNITY NAME LIST API',
-    description: '커뮤니티 리스트 이름 검색 결과 조회',
-  })
-  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
-  @ApiResponse({ status: 400, description: `${QUERY_REQUIRED}` })
-  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
-  private async getSearchCommunitiesName(
-    @Param() dto: SearchesGetSearchCommunitiesInputDto,
-  ): Promise<SearchesGetSearchCommunitiesOutputDto> {
-    if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
-
-    return await this.service.getSearchCommunitiesName(dto);
-  }
-
   @Get('/get/comments/:query')
   @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({

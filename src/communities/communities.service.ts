@@ -21,6 +21,10 @@ import {
   CommunitiesUpdateInputDto,
   CommunitiesUpdateOutputDto,
 } from './dtos/communities.update.dto';
+import {
+  CommunitiesGetCommunitiesNameInputDto,
+  CommunitiesGetCommunitiesNameOutputDto,
+} from './dtos/communities.get.communities.name.dto';
 
 @Injectable()
 export class CommunitiesService implements CommunitiesServiceInterface {
@@ -65,5 +69,11 @@ export class CommunitiesService implements CommunitiesServiceInterface {
       banner: dto.banner,
       icon: dto.icon,
     });
+  }
+
+  public async getCommunitiesName(
+    dto: CommunitiesGetCommunitiesNameInputDto,
+  ): Promise<CommunitiesGetCommunitiesNameOutputDto> {
+    return await this.repository.getCommunitiesName(dto);
   }
 }

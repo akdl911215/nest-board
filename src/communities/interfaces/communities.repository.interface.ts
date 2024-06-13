@@ -39,4 +39,8 @@ export interface CommunitiesRepositoryInterface {
     readonly icon: Communities['icon'];
     readonly visibility: Communities['visibility'];
   }) => Promise<Communities>;
+
+  readonly getCommunitiesName: (entity: {
+    readonly name: Communities['name'];
+  }) => Promise<Communities[]>;
 }

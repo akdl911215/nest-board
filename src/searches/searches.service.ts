@@ -26,10 +26,6 @@ import {
   SearchesGetSearchCommentsInputDto,
   SearchesGetSearchCommentsOutputDto,
 } from './dtos/searches.get.search.comments.dto';
-import {
-  SearchesGetSearchCommunitiesNameInputDto,
-  SearchesGetSearchCommunitiesNameOutputDto,
-} from './dtos/searches.get.search.communities.name.dto';
 
 @Injectable()
 export class SearchesService implements SearchesServiceInterface {
@@ -58,12 +54,6 @@ export class SearchesService implements SearchesServiceInterface {
     dto: SearchesGetSearchCommunitiesInputDto,
   ): Promise<SearchesGetSearchCommunitiesOutputDto> {
     return await this.repository.getSearchCommunities(dto);
-  }
-
-  public async getSearchCommunitiesName(
-    dto: SearchesGetSearchCommunitiesNameInputDto,
-  ): Promise<SearchesGetSearchCommunitiesNameOutputDto> {
-    return await this.repository.getSearchCommunitiesName(dto);
   }
 
   public async getSearchMedia(
