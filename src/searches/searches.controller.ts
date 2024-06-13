@@ -81,6 +81,7 @@ export class SearchesController {
   private async getSearchCommunities(
     @Param() dto: SearchesGetSearchCommunitiesInputDto,
   ): Promise<SearchesGetSearchCommunitiesOutputDto> {
+    console.log('dto : ', dto);
     if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
 
     return await this.service.getSearchCommunities(dto);
@@ -104,7 +105,7 @@ export class SearchesController {
   }
 
   @Get('/get/media/:query')
-  @ApiConsumes('applicati on/x-www-form-urlencoded')
+  @ApiConsumes('application/x-www-form-urlencoded')
   @ApiOperation({
     summary: 'SEARCH MEDIA LIST API',
     description: '미디어 리스트 검색 결과 조회',
@@ -115,11 +116,9 @@ export class SearchesController {
   private async getSearchMedia(
     @Param() dto: SearchesGetSearchMediaInputDto,
   ): Promise<SearchesGetSearchMediaOutputDto> {
-    console.log('media dto : ', dto);
     if (!dto?.query) throw new BadRequestException(QUERY_REQUIRED);
 
     const res = await this.service.getSearchMedia(dto);
-    console.log('res : ', res);
 
     return res;
   }

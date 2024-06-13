@@ -82,7 +82,6 @@ export class SearchesRepository implements SearchesRepositoryInterface {
         ],
       },
     });
-    console.log('searchBoards : ', searchBoards);
 
     return searchBoards;
   }
@@ -114,8 +113,23 @@ export class SearchesRepository implements SearchesRepositoryInterface {
   }): Promise<Communities[]> {
     const { query } = entity;
 
-    // const serchCommunities
-    return Promise.resolve([]);
+    const searchCommunities: Communities[] =
+      await this.prisma.communities.findMany({
+        where: {
+          AND: [
+            {
+              OR: [
+                { name: { contains: query, mode: 'insensitive' } },
+                { description: { contains: query, mode: 'insensitive' } },
+              ],
+            },
+            { visibility: 'PUBLIC' },
+            { deleted_at: null },
+          ],
+        },
+      });
+
+    return searchCommunities;
   }
 
   public async addSearch(entity: {
