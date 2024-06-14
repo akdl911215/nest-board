@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable } from 'rxjs';
 import { PrismaService } from '../../../../_common/infrastructure/prisma.service';
 import { Users } from '@prisma/client';
 import { NOTFOUND_USER } from '../../../../_common/constant/errors/404';

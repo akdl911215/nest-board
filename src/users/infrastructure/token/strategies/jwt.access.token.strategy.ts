@@ -20,9 +20,11 @@ export class JwtAccessTokenStrategy extends PassportStrategy(
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
     });
+    console.log('1');
   }
 
   async validate({ id }: { readonly id: Users['id'] }): Promise<Users> {
+    console.log('3');
     const userFindById: Users = await this.prisma.users.findUnique({
       where: { id },
     });
