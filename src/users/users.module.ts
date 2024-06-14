@@ -7,8 +7,8 @@ import { BcryptService } from './infrastructure/bcrypt/bcrypt.service';
 import { ConfigService } from '@nestjs/config';
 import { TokenService } from './infrastructure/token/token.service';
 import { JwtService } from '@nestjs/jwt';
-import { JwtAccessTokenStrategy } from './infrastructure/token/strategys/jwt.access.token.strategy';
-import { JwtRefreshTokenStrategy } from './infrastructure/token/strategys/jwt.refresh.token.strategy';
+import { JwtAccessTokenStrategy } from './infrastructure/token/strategies/jwt.access.token.strategy';
+import { JwtRefreshTokenStrategy } from './infrastructure/token/strategies/jwt.refresh.token.strategy';
 import { TokenModule } from './infrastructure/token/token.module';
 
 @Module({

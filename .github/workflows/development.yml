@@ -14,6 +14,7 @@ env:
   AWSSECRETACCESSKEY: ${{ secrets.AWSSECRETACCESSKEY }}
   AWSREGION: ${{ secrets.AWSREGION }}
   S3BUCKETNAME: ${{ secrets.S3BUCKETNAME }}
+  KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
 
 jobs:
   build:
@@ -41,6 +42,7 @@ jobs:
           --build-arg AWSSECRETACCESSKEY="${{ env.AWSSECRETACCESSKEY }}" \
           --build-arg AWSREGION="${{ env.AWSREGION }}" \
           --build-arg S3BUCKETNAME="${{ env.S3BUCKETNAME }}" \
+          --build-arg KAKAO_CLIENT_ID="${{ env.KAKAO_CLIENT_ID }}" \
           -t ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }} .
 
       - name: Login to ghcr
@@ -83,4 +85,5 @@ jobs:
             -e AWSSECRETACCESSKEY="${{ secrets.AWSSECRETACCESSKEY }}" \
             -e AWSREGION="${{ secrets.AWSREGION }}" \
             -e S3BUCKETNAME="${{ secrets.S3BUCKETNAME }}" \
+            -e KAKAO_CLIENT_ID="${{ secrets.KAKAO_CLIENT_ID }}" \
             --name nest --restart always ${{ env.DOCKER_IMAGE }}:latest
