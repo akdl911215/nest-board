@@ -24,6 +24,7 @@ import {
 import {
   NO_MATCH_EMAIL,
   NO_MATCH_PASSWORD,
+  NOT_MATCH_REFRESH_TOKEN,
 } from '../_common/constant/errors/400';
 import { TokenService, tokensType } from './infrastructure/token/token.service';
 import { BcryptService } from './infrastructure/bcrypt/bcrypt.service';
@@ -405,10 +406,19 @@ export class UsersRepository implements UsersRepositoryInterface {
     }
   }
 
-  public async kakaoAuth(entity: { readonly profile: any }): Promise<any> {
-    const { profile } = entity;
-    console.log('kakao repository profile : ', profile);
+  public async kakaoAuth(entity: {
+    readonly id: Users['id'];
+    readonly refresh_token: Users['refresh_token'];
+  }): Promise<Users> {
+    const { id, refresh_token } = entity;
 
-    return Promise.resolve(undefined);
+    const userFindByIdAndRefreshToken: Users =
+      await this.prisma.users.findFirst({
+        where: { AND: [{ id }, { refresh_token }] },
+      });
+    if (!userFindByIdAndRefreshToken)
+      throw new NotFoundException(NOT_MATCH_REFRESH_TOKEN);
+
+    return userFindByIdAndRefreshToken;
   }
 }

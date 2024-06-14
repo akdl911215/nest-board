@@ -43,6 +43,11 @@ import {
   UsersLogoutInputDto,
   UsersLogoutOutputDto,
 } from '../dtos/users.logout.dto';
+import { Users } from '@prisma/client';
+import {
+  UsersKakaoAuthInputDto,
+  UsersKakaoAuthOutputDto,
+} from '../dtos/users.kakao.auth.dto';
 
 export interface UsersServiceInterface {
   readonly delete: (dto: UsersDeleteInputDto) => Promise<UsersDeleteOutputDto>;
@@ -83,5 +88,7 @@ export interface UsersServiceInterface {
 
   readonly logout: (dto: UsersLogoutInputDto) => Promise<UsersLogoutOutputDto>;
 
-  readonly kakaoAuth: (dto: { readonly profile: any }) => Promise<any>;
+  readonly kakaoAuth: (
+    dto: UsersKakaoAuthInputDto,
+  ) => Promise<UsersKakaoAuthOutputDto>;
 }

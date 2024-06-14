@@ -72,5 +72,8 @@ export interface UsersRepositoryInterface {
     readonly id: Users['id'];
   }) => Promise<{ readonly logout: boolean }>;
 
-  readonly kakaoAuth: (entity: { readonly profile: any }) => Promise<any>;
+  readonly kakaoAuth: (entity: {
+    readonly id: Users['id'];
+    readonly refresh_token: Users['refresh_token'];
+  }) => Promise<Users>;
 }

@@ -10,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtAccessTokenStrategy } from './infrastructure/token/strategies/jwt.access.token.strategy';
 import { JwtRefreshTokenStrategy } from './infrastructure/token/strategies/jwt.refresh.token.strategy';
 import { TokenModule } from './infrastructure/token/token.module';
+import { KakaoStrategy } from './infrastructure/kakao/strategies/kakao.strategy';
 
 @Module({
   controllers: [UsersController],
@@ -21,6 +22,7 @@ import { TokenModule } from './infrastructure/token/token.module';
     JwtService,
     JwtAccessTokenStrategy,
     JwtRefreshTokenStrategy,
+    KakaoStrategy,
 
     // service
     { provide: 'SERVICE', useClass: UsersService },
