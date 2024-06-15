@@ -32,22 +32,24 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'KAKAO') {
     console.log('ka 1');
   }
 
-  async validate({
-    request,
-    payload,
-  }: {
-    readonly request: Request;
-    readonly payload: RefreshTokenPayloadType;
-  }) {
+  async validate(accessToken: string, refreshToken: string, profile: any) {
     console.log('ka 3s');
-    const token: string = request?.headers?.authorization?.split('Bearer ')[1];
-    console.log('token : ', token);
-    console.log('payload : ', payload);
-    const user: Users = await this.service.kakaoAuth({
-      refreshToken: token,
-      id: payload?.id,
-    });
+    // const token: string = request?.headers?.authorization?.split('Bearer ')[1];
+    // console.log('token : ', token);
+    // console.log('payload : ', payload);
+    // const user: Users = await this.service.kakaoAuth({
+    //   refreshToken: token,
+    //   id: payload?.id,
+    // });
 
-    return user;
+    const obj = {
+      name: profile.displayName,
+      email: profile.email,
+      hashedPassword: '',
+    };
+
+    console.log('obj : ', obj);
+
+    return obj;
   }
 }

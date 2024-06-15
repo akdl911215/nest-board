@@ -10,6 +10,7 @@ import {
   Post,
   Query,
   Req,
+  Res,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -85,8 +86,15 @@ import {
   UsersLogoutInputDto,
   UsersLogoutOutputDto,
 } from './dtos/users.logout.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { KakaoGuard } from './infrastructure/kakao/guards/kakak.guard';
+
+interface IOAuthUser {
+  user: {
+    readonly name: string;
+    readonly email: string;
+    readonly password: string;
+  };
+}
 
 @ApiTags('users')
 @Controller('users')
@@ -98,7 +106,10 @@ export class UsersController {
 
   @Get('/kakao/login/page')
   @Header('Content-Type', 'text/html')
-  private async kakaoRedirect() {
+  private async kakaoRedirect(
+    @Req() req: Request & IOAuthUser,
+    @Res() res: Response,
+  ) {
     const KAKAO_CLIENT_ID: string = process.env.KAKAO_CLIENT_ID;
     console.log('KAKAO_CLIENT_ID : ', KAKAO_CLIENT_ID);
     const REDIRECTION_URI: string = `http://${process.env.HOST}:${Number(process.env.port)}/users/kakao/callback`;
