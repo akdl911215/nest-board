@@ -106,10 +106,7 @@ export class UsersController {
 
   @Get('/kakao/login/page')
   @Header('Content-Type', 'text/html')
-  private async kakaoRedirect(
-    @Req() req: Request & IOAuthUser,
-    @Res() res: Response,
-  ) {
+  private async kakaoRedirect() {
     const KAKAO_CLIENT_ID: string = process.env.KAKAO_CLIENT_ID;
     console.log('KAKAO_CLIENT_ID : ', KAKAO_CLIENT_ID);
     const REDIRECTION_URI: string = `http://${process.env.HOST}:${Number(process.env.port)}/users/kakao/callback`;
@@ -130,8 +127,12 @@ export class UsersController {
 
   @Get('/kakao/callback')
   @UseGuards(KakaoGuard)
-  private async kakaoCallback(@Req() req) {
+  private async kakaoCallback(
+    @Req() req: Request & IOAuthUser, //
+    @Res() res: Response,
+  ) {
     console.log('req : ', req);
+    console.log('res : ', res);
 
     return req.user;
   }

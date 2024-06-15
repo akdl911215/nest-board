@@ -22,6 +22,8 @@ async function bootstrap() {
   console.log('process.env.OS : ', process.env.OS);
   const KAKAO_CLIENT_ID: string = process.env.KAKAO_CLIENT_ID;
   console.log('KAKAO_CLIENT_ID : ', KAKAO_CLIENT_ID);
+  const KAKAO_TEST_CLIENT_ID: string = process.env.KAKAO_TEST_CLIENT_ID;
+  console.log('KAKAO_TEST_CLIENT_ID : ', KAKAO_TEST_CLIENT_ID);
   const KAKAO_HOST: string = process.env.HOST;
   console.log('KAKAO_HOST : ', KAKAO_HOST);
   const KAKAO_PORT: number = Number(process.env.PORT);

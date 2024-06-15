@@ -15,6 +15,8 @@ env:
   AWSREGION: ${{ secrets.AWSREGION }}
   S3BUCKETNAME: ${{ secrets.S3BUCKETNAME }}
   KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+  KAKAO_TEST_CLIENT_ID: ${{ secrets.KAKAO_TEST_CLIENT_ID }}
+  KAKAO_TEST_CLIENT_SECRET: ${{ secrets.KAKAO_TEST_CLIENT_SECRET }}
 
 jobs:
   build:
@@ -43,6 +45,8 @@ jobs:
           --build-arg AWSREGION="${{ env.AWSREGION }}" \
           --build-arg S3BUCKETNAME="${{ env.S3BUCKETNAME }}" \
           --build-arg KAKAO_CLIENT_ID="${{ env.KAKAO_CLIENT_ID }}" \
+          --build-arg KAKAO_TEST_CLIENT_ID="${{ env.KAKAO_TEST_CLIENT_ID }}" \
+          --build-arg KAKAO_TEST_CLIENT_SECRET="${{ env.KAKAO_TEST_CLIENT_SECRET }}" \
           -t ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }} .
 
       - name: Login to ghcr
@@ -86,4 +90,6 @@ jobs:
             -e AWSREGION="${{ secrets.AWSREGION }}" \
             -e S3BUCKETNAME="${{ secrets.S3BUCKETNAME }}" \
             -e KAKAO_CLIENT_ID="${{ secrets.KAKAO_CLIENT_ID }}" \
+            -e KAKAO_TEST_CLIENT_ID="${{ secrets.KAKAO_TEST_CLIENT_ID }}" \
+            -e KAKAO_TEST_CLIENT_SECRET="${{ secrets.KAKAO_TEST_CLIENT_SECRET }}" \
             --name nest --restart always ${{ env.DOCKER_IMAGE }}:latest

@@ -11,7 +11,7 @@ export class KakaoGuard extends AuthGuard('KAKAO') {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('ka 2');
+    console.log('ka 2 context : ', context);
 
     return super.canActivate(context);
   }
