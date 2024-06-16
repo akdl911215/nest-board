@@ -31,14 +31,18 @@ import { BcryptService } from './infrastructure/bcrypt/bcrypt.service';
 import { AccessTokenPayloadType } from './infrastructure/token/type/access.token.payload.type';
 import { RefreshTokenPayloadType } from './infrastructure/token/type/refresh.token.payload.type';
 import { EXISTING_MEMBER } from '../_common/constant/errors/409';
+import { HttpService } from '@nestjs/axios';
+import * as process from 'process';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
-@Dependencies([PrismaService, BcryptService, TokenService])
+@Dependencies([PrismaService, BcryptService, TokenService, HttpService])
 export class UsersRepository implements UsersRepositoryInterface {
   constructor(
     private readonly prisma: PrismaService,
     @Inject('BCRYPT_SERVICE') private readonly bcrypt: BcryptService,
     @Inject('TOKEN_SERVICE') private readonly jwtToken: TokenService,
+    private readonly http: HttpService,
   ) {}
 
   public async delete(entity: { readonly id: Users['id'] }): Promise<Users> {
@@ -406,19 +410,68 @@ export class UsersRepository implements UsersRepositoryInterface {
     }
   }
 
-  public async kakaoAuth(entity: {
-    readonly id: Users['id'];
-    readonly refresh_token: Users['refresh_token'];
-  }): Promise<Users> {
-    const { id, refresh_token } = entity;
+  public async kakaoAuth(entity: { readonly code: string }): Promise<any> {
+    const { code } = entity;
 
-    const userFindByIdAndRefreshToken: Users =
-      await this.prisma.users.findFirst({
-        where: { AND: [{ id }, { refresh_token }] },
-      });
-    if (!userFindByIdAndRefreshToken)
-      throw new NotFoundException(NOT_MATCH_REFRESH_TOKEN);
+    const ADMIN_KEY: string = process.env.KAKAO_TEST_ADMIN_KEY;
+    console.log('ADMIN_KEY : ', ADMIN_KEY);
 
-    return userFindByIdAndRefreshToken;
+    const headers = {
+      Authorization: ADMIN_KEY,
+      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+    };
+    const url = 'https://kauth.kakao.com/oauth/token';
+    // const headers = {
+    //   'Content-Type': 'application/x-www-form-urlencoded',
+    // };
+    const CLIENT_ID: string = process.env.KAKAO_TEST_CLIENT_ID;
+
+    const data = new URLSearchParams({
+      // grant_type: 'refresh_token',
+      client_id: CLIENT_ID,
+      // refresh_token: '',
+      //redirect_uri:`http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`,
+      grant_type: 'authorization_code',
+      code,
+      scope: 'account_email',
+    });
+
+    const response = await firstValueFrom(
+      this.http.post(url, data.toString(), { headers }),
+    );
+
+    console.log('response : ', response);
+
+    const {
+      access_token,
+      token_type,
+      refresh_token,
+      id_token,
+      expires_in,
+      refresh_token_expires_in,
+    } = response.data;
+    console.log('access_token : ', access_token);
+    console.log('refresh_token : ', refresh_token);
+    console.log('id_token : ', id_token);
+
+    // const profileUrl = 'https://kapi.kakao.com/v2/user/me';
+    //
+    // const profileHeaders = {
+    //   Authorization: `Bearer ${access_token}`,
+    //   'Custom-Header': 'CustomHeaderValue',
+    // };
+    //
+    // const profile = await firstValueFrom(
+    //   this.http.get(profileUrl, { headers: profileHeaders }),
+    // );
+    // console.log('profile : ', profile);
+    // const userFindByIdAndRefreshToken: Users =
+    //   await this.prisma.users.findFirst({
+    //     where: { AND: [{ id }, { refresh_token }] },
+    //   });
+    // if (!userFindByIdAndRefreshToken)
+    //   throw new NotFoundException(NOT_MATCH_REFRESH_TOKEN);
+
+    return null;
   }
 }

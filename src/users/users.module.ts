@@ -11,10 +11,11 @@ import { JwtAccessTokenStrategy } from './infrastructure/token/strategies/jwt.ac
 import { JwtRefreshTokenStrategy } from './infrastructure/token/strategies/jwt.refresh.token.strategy';
 import { TokenModule } from './infrastructure/token/token.module';
 import { KakaoStrategy } from './infrastructure/kakao/strategies/kakao.strategy';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   controllers: [UsersController],
-  imports: [TokenModule],
+  imports: [TokenModule, HttpModule],
   providers: [
     // infrastructure
     PrismaService,

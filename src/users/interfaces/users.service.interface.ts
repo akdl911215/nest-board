@@ -88,7 +88,5 @@ export interface UsersServiceInterface {
 
   readonly logout: (dto: UsersLogoutInputDto) => Promise<UsersLogoutOutputDto>;
 
-  readonly kakaoAuth: (
-    dto: UsersKakaoAuthInputDto,
-  ) => Promise<UsersKakaoAuthOutputDto>;
+  readonly kakaoAuth: (dto: { readonly code: string }) => Promise<any>;
 }

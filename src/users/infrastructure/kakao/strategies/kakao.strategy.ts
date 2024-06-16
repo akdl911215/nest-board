@@ -15,7 +15,7 @@ const KAKAO_PORT: number = Number(process.env.PORT);
 console.log('KAKAO_PORT : ', KAKAO_PORT);
 
 @Injectable()
-export class KakaoStrategy extends PassportStrategy(Strategy, 'KAKAO') {
+export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   constructor(
     @Inject('SERVICE') private readonly service: UsersServiceInterface,
     private readonly configService: ConfigService,
@@ -25,7 +25,8 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'KAKAO') {
       clientID: process.env.KAKAO_TEST_CLIENT_ID,
       clientSecret: process.env.KAKAO_TEST_CLIENT_SECRET,
       // clientSecret: process.env.KAKAO_CLIENT_SECRET,
-      callbackURL: `http://${process.env.HOST}:${Number(process.env.port)}/users/kakao/callback`,
+      // callbackURL: `http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`,
+      callbackURL: `http://${process.env.HOST}:3000/kakao/login`,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
@@ -33,15 +34,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'KAKAO') {
     console.log('ka 1');
   }
 
-  async validate({
-    accessToken,
-    refreshToken,
-    profile,
-  }: {
-    readonly accessToken: string;
-    readonly refreshToken: string;
-    readonly profile: any;
-  }) {
+  async validate(accessToken: string, refreshToken: string, profile: any) {
     console.log('ka 3s');
     console.log('accessToken : ', accessToken);
     console.log('refreshToken : ', refreshToken);

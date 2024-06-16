@@ -7,11 +7,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class KakaoGuard extends AuthGuard('KAKAO') {
+export class KakaoGuard extends AuthGuard('kakao') {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('ka 2 context : ', context);
+    console.log('ka 2  : ');
 
     return super.canActivate(context);
   }
