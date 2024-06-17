@@ -46,10 +46,6 @@ import {
   UsersLogoutInputDto,
   UsersLogoutOutputDto,
 } from './dtos/users.logout.dto';
-import {
-  UsersKakaoAuthInputDto,
-  UsersKakaoAuthOutputDto,
-} from './dtos/users.kakao.auth.dto';
 
 @Injectable()
 export class UsersService implements UsersServiceInterface {
@@ -120,9 +116,5 @@ export class UsersService implements UsersServiceInterface {
 
   public async logout(dto: UsersLogoutInputDto): Promise<UsersLogoutOutputDto> {
     return await this.repository.logout(dto);
-  }
-
-  public async kakaoAuth(dto: { readonly code: string }): Promise<any> {
-    return await this.repository.kakaoAuth(dto);
   }
 }

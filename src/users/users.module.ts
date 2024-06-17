@@ -10,12 +10,10 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtAccessTokenStrategy } from './infrastructure/token/strategies/jwt.access.token.strategy';
 import { JwtRefreshTokenStrategy } from './infrastructure/token/strategies/jwt.refresh.token.strategy';
 import { TokenModule } from './infrastructure/token/token.module';
-import { KakaoStrategy } from './infrastructure/kakao/strategies/kakao.strategy';
-import { HttpModule } from '@nestjs/axios';
 
 @Module({
   controllers: [UsersController],
-  imports: [TokenModule, HttpModule],
+  imports: [TokenModule],
   providers: [
     // infrastructure
     PrismaService,
@@ -23,7 +21,6 @@ import { HttpModule } from '@nestjs/axios';
     JwtService,
     JwtAccessTokenStrategy,
     JwtRefreshTokenStrategy,
-    KakaoStrategy,
 
     // service
     { provide: 'SERVICE', useClass: UsersService },

@@ -3,15 +3,11 @@ import {
   Body,
   Controller,
   Get,
-  Header,
   Inject,
   Param,
   Patch,
   Post,
   Query,
-  Redirect,
-  Req,
-  Res,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -35,7 +31,6 @@ import {
 import {
   EMAIL_REQUIRED,
   NICKNAME_REQUIRED,
-  NOT_MATCH_REFRESH_TOKEN,
   PASSWORD_REQUIRED,
   PHONE_REQUIRED,
   UNIQUE_ID_REQUIRED,
@@ -87,16 +82,6 @@ import {
   UsersLogoutInputDto,
   UsersLogoutOutputDto,
 } from './dtos/users.logout.dto';
-import { KakaoGuard } from './infrastructure/kakao/guards/kakak.guard';
-import { AuthGuard } from '@nestjs/passport';
-
-interface IOAuthUser {
-  user: {
-    readonly name: string;
-    readonly email: string;
-    readonly password: string;
-  };
-}
 
 @ApiTags('users')
 @Controller('users')
@@ -105,57 +90,6 @@ export class UsersController {
   constructor(
     @Inject('SERVICE') private readonly service: UsersServiceInterface,
   ) {}
-
-  @Get('/kakao/login/page')
-  @Header('Content-Type', 'text/html')
-  private async kakaoRedirect() {
-    // const KAKAO_CLIENT_ID: string = process.env.KAKAO_CLIENT_ID;
-    // console.log('KAKAO_CLIENT_ID : ', KAKAO_CLIENT_ID);
-    // const REDIRECTION_URI: string = `http://${process.env.HOST}:${Number(process.env.port)}/users/kakao/callback`;
-    //
-    // const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECTION_URI}`;
-
-    const KAKAO_TEST_CLIENT_ID: string = process.env.KAKAO_TEST_CLIENT_ID;
-    console.log('KAKAO_TEST_CLIENT_ID : ', KAKAO_TEST_CLIENT_ID);
-    // const REDIRECTION_URI: string = `http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`;
-    const REDIRECTION_URI: string = `http://${process.env.HOST}:3000/kakao/login`;
-    console.log('REDIRECTION_URI : ', REDIRECTION_URI);
-    const url: string = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_TEST_CLIENT_ID}&redirect_uri=${REDIRECTION_URI}`;
-    console.log('url : ', url);
-
-    return { url };
-  }
-
-  @Get('/kakao')
-  // @UseGuards(KakaoGuard)
-  @ApiResponse({ status: 200, description: `${TWO_HUNDRED_OK}` })
-  @ApiResponse({ status: 404, description: `${NOT_MATCH_REFRESH_TOKEN}` })
-  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
-  private async kakaoLogin() {
-    // Kakao 로그인 페이지로 리디렉션
-  }
-
-  @Get('/kakao/callback/')
-  // @Redirect(
-  //   `http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`,
-  //   301,
-  // )
-  // @UseGuards(KakaoGuard)
-  // @UseGuards(AuthGuard('kakao'))
-  private async kakaoCallback(
-    // @Req() req: Request & IOAuthUser, //
-    // @Res() res: Response,
-    @Query() { code }: { readonly code: string },
-  ) {
-    // console.log('req : ', req);
-    // console.log('res : ', res);
-
-    console.log('code : ', code);
-    // return req.user;
-    await this.service.kakaoAuth({ code });
-
-    return ' call back success';
-  }
 
   @Get('/existing/nickname/:nickname')
   @ApiConsumes('application/x-www-form-urlencoded')

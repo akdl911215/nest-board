@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UsersServiceInterface } from '../../../interfaces/users.service.interface';
+import { UsersServiceInterface } from '../../../users/interfaces/users.service.interface';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { RefreshTokenPayloadType } from '../../token/type/refresh.token.payload.type';
+import { RefreshTokenPayloadType } from '../../../users/infrastructure/token/type/refresh.token.payload.type';
 import { Users } from '@prisma/client';
 
 const KAKAO_TEST_CLIENT_ID: string = process.env.KAKAO_TEST_CLIENT_ID;
@@ -23,13 +23,14 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     super({
       // clientID: process.env.KAKAO_CLIENT_ID,
       clientID: process.env.KAKAO_TEST_CLIENT_ID,
-      clientSecret: process.env.KAKAO_TEST_CLIENT_SECRET,
+      // clientSecret: process.env.KAKAO_TEST_CLIENT_SECRET,
+      clientSecret: '',
       // clientSecret: process.env.KAKAO_CLIENT_SECRET,
       // callbackURL: `http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`,
-      callbackURL: `http://${process.env.HOST}:3000/kakao/login`,
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
+      callbackURL: `http://${process.env.HOST}:9898/users/kakao/`,
+      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // ignoreExpiration: false,
+      // secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
     });
     console.log('ka 1');
   }

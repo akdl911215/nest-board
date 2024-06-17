@@ -13,6 +13,7 @@ import { CommunitiesModule } from './communities/communities.module';
 import { CommunityTagsModule } from './community.tags/community.tags.module';
 import { TagsModule } from './tags/tags.module';
 import { ViewedBoardsModule } from './viewed.boards/viewed.boards.module';
+import { OauthModule } from './oauth/oauth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ViewedBoardsModule } from './viewed.boards/viewed.boards.module';
     CommunityTagsModule,
     TagsModule,
     ViewedBoardsModule,
+    OauthModule,
   ],
   exports: [RedisProvider],
   controllers: [],
