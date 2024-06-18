@@ -6,6 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { RefreshTokenPayloadType } from '../../../users/infrastructure/token/type/refresh.token.payload.type';
 import { Users } from '@prisma/client';
+import { PrismaService } from '../../../_common/infrastructure/prisma.service';
+import { OauthServiceInterface } from '../../interfaces/oauth.service.interface';
 
 const KAKAO_TEST_CLIENT_ID: string = process.env.KAKAO_TEST_CLIENT_ID;
 console.log('KAKAO_TEST_CLIENT_ID : ', KAKAO_TEST_CLIENT_ID);
@@ -14,10 +16,16 @@ console.log('KAKAO_HOST : ', KAKAO_HOST);
 const KAKAO_PORT: number = Number(process.env.PORT);
 console.log('KAKAO_PORT : ', KAKAO_PORT);
 
+type KakaoProfileType = {
+  readonly id: string;
+  readonly email: string;
+};
+
 @Injectable()
 export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   constructor(
-    @Inject('SERVICE') private readonly service: UsersServiceInterface,
+    @Inject('SERVICE') private readonly service: OauthServiceInterface,
+    private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {
     super({
@@ -27,35 +35,24 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       clientSecret: '',
       // clientSecret: process.env.KAKAO_CLIENT_SECRET,
       // callbackURL: `http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`,
-      callbackURL: `http://${process.env.HOST}:9898/users/kakao/`,
-      // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      // ignoreExpiration: false,
-      // secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
+      callbackURL: `http://${process.env.HOST}:9898/oauth/kakao/callback`,
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
     });
     console.log('ka 1');
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any) {
+  async validate(profile: KakaoProfileType, done: Function) {
     console.log('ka 3s');
-    console.log('accessToken : ', accessToken);
-    console.log('refreshToken : ', refreshToken);
     console.log('profile : ', profile);
-    // const token: string = request?.headers?.authorization?.split('Bearer ')[1];
-    // console.log('token : ', token);
-    // console.log('payload : ', payload);
-    // const user: Users = await this.service.kakaoAuth({
-    //   refreshToken: token,
-    //   id: payload?.id,
-    // });
 
-    const obj = {
-      name: profile.displayName,
-      email: profile.email,
-      hashedPassword: '',
-    };
-
-    console.log('obj : ', obj);
-
-    return obj;
+    try {
+      const user: Users = await this.service.kakaoOAuth(profile);
+      console.log('user : ', user);
+      done(null, user);
+    } catch (err) {
+      done(err, false);
+    }
   }
 }
