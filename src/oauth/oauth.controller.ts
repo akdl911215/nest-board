@@ -1,8 +1,36 @@
-import { Controller, Get, Header, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { OAuth } from './infrastructures/decorators/oauth.decorator';
 import { Users } from '@prisma/client';
+import { OauthServiceInterface } from './interfaces/oauth.service.interface';
+import { UsersServiceInterface } from '../users/interfaces/users.service.interface';
+import {
+  EMAIL_REQUIRED,
+  NICKNAME_REQUIRED,
+  PASSWORD_REQUIRED,
+  PHONE_REQUIRED,
+} from '../_common/constant/errors/400';
+import { CREATE_SUCCESS } from '../_common/constant/successes/201';
+import { INTERNAL_SERVER_ERROR } from '../_common/constant/errors/500';
+import {
+  OAuthKakaoRegisterInputDto,
+  OAuthKakaoRegisterOutputDto,
+} from './dtos/oauth.kakao.register.dto';
+import { EXISTING_MEMBER } from '../_common/constant/errors/409';
 
 export type ExportGetFindByEmailType = 'NEW_USER' | 'EXITING_USER';
 export type ReturnOAuthType = {
@@ -12,11 +40,14 @@ export type ReturnOAuthType = {
 @ApiTags('oauth')
 @Controller('oauth')
 export class OauthController {
-  constructor() {}
+  constructor(
+    @Inject('SERVICE') private readonly service: OauthServiceInterface,
+    @Inject('USERS_SERVICE')
+    private readonly usersService: UsersServiceInterface,
+  ) {}
 
   @Get('/kakao')
   @UseGuards(AuthGuard('kakao'))
-  @Header('Content-Type', 'text/html')
   private async kakaoAuth(@OAuth() profile): Promise<ReturnOAuthType> {
     let res: ReturnOAuthType = {
       type: 'NEW_USER',
@@ -32,12 +63,39 @@ export class OauthController {
     return res;
   }
 
-  // @Get('/kakao/callback')
-  // @UseGuards(KakaoGuard) // kakao.strategy를 실행
-  // private async kakaoAuthCallback(@OAuth() req) {
-  //   // 여기서 인증 성공 후의 처리를 합니다.
-  //   console.log('req : ', req);
-  //
-  //   console.log('');
-  // }
+  @Get('/kakao/login')
+  @UseGuards(AuthGuard('kakao'))
+  private async kakaoOAuthLogin(@OAuth() email) {
+    console.log('kakaoOAuthCallback email : ', email);
+
+    const res: Users = await this.service.kakaoLogin({ email });
+
+    console.log('res : ', res);
+
+    return res;
+  }
+
+  @Post('/')
+  @ApiConsumes('application/x-www-form-urlencoded')
+  @ApiOperation({
+    summary: 'KAKAO OAUTH REGISTER API',
+    description: '카카오 OAUTH 회원 가입 절차',
+  })
+  @ApiResponse({ status: 201, description: `${CREATE_SUCCESS}` })
+  @ApiResponse({
+    status: 400,
+    description: `${NICKNAME_REQUIRED}, ${EMAIL_REQUIRED}, ${PASSWORD_REQUIRED}, ${PHONE_REQUIRED}`,
+  })
+  @ApiResponse({ status: 409, description: `${EXISTING_MEMBER}` })
+  @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
+  private async kakaoOauthRegister(
+    @Body() dto: OAuthKakaoRegisterInputDto,
+  ): Promise<OAuthKakaoRegisterOutputDto> {
+    if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
+    if (!dto?.email) throw new BadRequestException(EMAIL_REQUIRED);
+    if (!dto?.password) throw new BadRequestException(PASSWORD_REQUIRED);
+    if (!dto?.phone) throw new BadRequestException(PHONE_REQUIRED);
+
+    return await this.usersService.register(dto);
+  }
 }

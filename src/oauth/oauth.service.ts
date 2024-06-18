@@ -5,6 +5,10 @@ import {
   OAuthKakaoAuthInputDto,
   OAuthKakaoAuthOutputDto,
 } from './dtos/oauth.kakao.auth.dto';
+import {
+  OAuthKakaoLoginInputDto,
+  OAuthKakaoLoginOutputDto,
+} from './dtos/oauth.kakao.login.dto';
 import { Users } from '@prisma/client';
 
 @Injectable()
@@ -16,8 +20,18 @@ export class OauthService implements OauthServiceInterface {
   public async kakaoOAuth(
     dto: OAuthKakaoAuthInputDto,
   ): Promise<OAuthKakaoAuthOutputDto> {
-    const user = await this.repository.getFindByEmail(dto);
+    const user: Users = await this.repository.getFindByEmail(dto);
 
     return user;
+  }
+
+  public async kakaoLogin(
+    dto: OAuthKakaoLoginInputDto,
+  ): Promise<OAuthKakaoLoginOutputDto> {
+    const login: Users = await this.repository.oAuthLogin({
+      email: dto.email,
+    });
+
+    return login;
   }
 }

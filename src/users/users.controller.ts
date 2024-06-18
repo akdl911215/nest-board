@@ -82,6 +82,7 @@ import {
   UsersLogoutInputDto,
   UsersLogoutOutputDto,
 } from './dtos/users.logout.dto';
+import { EXISTING_MEMBER } from '../_common/constant/errors/409';
 
 @ApiTags('users')
 @Controller('users')
@@ -170,6 +171,7 @@ export class UsersController {
     status: 400,
     description: `${NICKNAME_REQUIRED}, ${EMAIL_REQUIRED}, ${PASSWORD_REQUIRED}, ${PHONE_REQUIRED}`,
   })
+  @ApiResponse({ status: 409, description: `${EXISTING_MEMBER}` })
   @ApiResponse({ status: 500, description: `${INTERNAL_SERVER_ERROR}` })
   private async register(
     @Body() dto: UsersRegisterInputDto,

@@ -36,7 +36,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
       clientSecret: '',
       // clientSecret: process.env.KAKAO_CLIENT_SECRET,
       // callbackURL: `http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`,
-      callbackURL: `http://${process.env.HOST}:9898/oauth/kakao/callback`,
+      callbackURL: `http://${process.env.HOST}:9898/oauth/kakao`,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
@@ -49,13 +49,14 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
 
     const obj: KakaoProfileType = {
       ...profile,
-      // email: 'akdl913212@naver.coc',
+      email: 'akdl913212@naver.coc',
     };
 
     try {
       const userProfileCheck = await this.service.kakaoOAuth(obj);
 
       if (userProfileCheck) {
+        delete userProfileCheck['password'];
         return { profile: userProfileCheck };
       } else {
         return { profile: obj.email };
