@@ -8,6 +8,7 @@ import { RefreshTokenPayloadType } from '../../../users/infrastructure/token/typ
 import { Users } from '@prisma/client';
 import { PrismaService } from '../../../_common/infrastructure/prisma.service';
 import { OauthServiceInterface } from '../../interfaces/oauth.service.interface';
+import { errorHandling } from '../../../_common/abstract/error.handling';
 
 const KAKAO_TEST_CLIENT_ID: string = process.env.KAKAO_TEST_CLIENT_ID;
 console.log('KAKAO_TEST_CLIENT_ID : ', KAKAO_TEST_CLIENT_ID);
@@ -43,16 +44,24 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     console.log('ka 1');
   }
 
-  async validate(profile: KakaoProfileType, done: Function) {
+  async validate(profile: KakaoProfileType) {
     console.log('ka 3s');
-    console.log('profile : ', profile);
+
+    const obj: KakaoProfileType = {
+      ...profile,
+      // email: 'akdl913212@naver.coc',
+    };
 
     try {
-      const user: Users = await this.service.kakaoOAuth(profile);
-      console.log('user : ', user);
-      done(null, user);
-    } catch (err) {
-      done(err, false);
+      const userProfileCheck = await this.service.kakaoOAuth(obj);
+
+      if (userProfileCheck) {
+        return { profile: userProfileCheck };
+      } else {
+        return { profile: obj.email };
+      }
+    } catch (e: any) {
+      errorHandling(e);
     }
   }
 }

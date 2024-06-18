@@ -1,62 +1,43 @@
-import {
-  Controller,
-  Get,
-  Header,
-  HttpCode,
-  Inject,
-  Query,
-  Req,
-  Res,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Header, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { TWO_HUNDRED_OK } from '../_common/constant/successes/200';
-import { NOT_MATCH_REFRESH_TOKEN } from '../_common/constant/errors/400';
-import { INTERNAL_SERVER_ERROR } from '../_common/constant/errors/500';
-import { OauthServiceInterface } from './interfaces/oauth.service.interface';
+import { ApiTags } from '@nestjs/swagger';
+import { OAuth } from './infrastructures/decorators/oauth.decorator';
+import { Users } from '@prisma/client';
 
+export type ExportGetFindByEmailType = 'NEW_USER' | 'EXITING_USER';
+export type ReturnOAuthType = {
+  readonly type: ExportGetFindByEmailType;
+  readonly profile: Users | { readonly email: string };
+};
 @ApiTags('oauth')
 @Controller('oauth')
 export class OauthController {
-  constructor(
-    @Inject('SERVICE') private readonly service: OauthServiceInterface,
-  ) {}
+  constructor() {}
 
   @Get('/kakao')
   @UseGuards(AuthGuard('kakao'))
   @Header('Content-Type', 'text/html')
-  private async kakaoAuth(): Promise<void> {
-    // 이 엔드포인트는 카카오 로그인 페이지로 리다이렉트
+  private async kakaoAuth(@OAuth() profile): Promise<ReturnOAuthType> {
+    let res: ReturnOAuthType = {
+      type: 'NEW_USER',
+      profile: { email: profile.email },
+    };
+    if (profile) {
+      res = {
+        type: 'EXITING_USER',
+        profile,
+      };
+    }
+
+    return res;
   }
 
-  @Get('/kakao/callback')
-  @UseGuards(AuthGuard('kakao')) // kakao.strategy를 실행시켜 줍니다.
-  private async kakaoAuthCallback(@Req() req: Request, @Res() res: Response) {
-    // 여기서 인증 성공 후의 처리를 합니다.
-    console.log('req : ', req);
-    console.log('res : ', res);
-  }
-
-  // @Get('/kakao/callback/')
-  // // @Redirect(
-  // //   `http://${process.env.HOST}:${Number(process.env.PORT)}/users/kakao/callback`,
-  // //   301,
-  // // )
-  // // @UseGuards(KakaoGuard)
-  // // @UseGuards(AuthGuard('kakao'))
-  // private async kakaoCallback(
-  //   // @Req() req: Request & IOAuthUser, //
-  //   // @Res() res: Response,
-  //   @Query() { code }: { readonly code: string },
-  // ) {
-  //   // console.log('req : ', req);
-  //   // console.log('res : ', res);
+  // @Get('/kakao/callback')
+  // @UseGuards(KakaoGuard) // kakao.strategy를 실행
+  // private async kakaoAuthCallback(@OAuth() req) {
+  //   // 여기서 인증 성공 후의 처리를 합니다.
+  //   console.log('req : ', req);
   //
-  //   console.log('code : ', code);
-  //   // return req.user;
-  //   await this.service.kakaoOAuth({ code });
-  //
-  //   return ' call back success';
+  //   console.log('');
   // }
 }

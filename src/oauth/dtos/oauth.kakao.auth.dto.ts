@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-
 import { Users } from '@prisma/client';
 import { IsNotEmpty, IsString } from 'class-validator';
 

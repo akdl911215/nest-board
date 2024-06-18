@@ -21,6 +21,7 @@ export class KakaoGuard extends AuthGuard('kakao') {
       throw err || new UnauthorizedException();
     }
     console.log('ka 4');
+    console.log('user : ', user);
 
     return user;
   }

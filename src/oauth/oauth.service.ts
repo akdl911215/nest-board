@@ -16,11 +16,7 @@ export class OauthService implements OauthServiceInterface {
   public async kakaoOAuth(
     dto: OAuthKakaoAuthInputDto,
   ): Promise<OAuthKakaoAuthOutputDto> {
-    const user: Users = await this.repository.getFindByEmail(dto);
-
-    if (!user) {
-      // this.repository.kakaoOAuthSignUp()
-    }
+    const user = await this.repository.getFindByEmail(dto);
 
     return user;
   }
