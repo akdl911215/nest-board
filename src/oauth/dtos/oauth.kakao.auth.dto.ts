@@ -1,25 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { PickType } from '@nestjs/swagger';
 import { Users } from '@prisma/client';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { OauthBaseDto } from './oauth.base.dto';
 
-export class OAuthKakaoAuthInputDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    type: String,
-    default: '',
-    required: true,
-  })
-  public readonly id!: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    type: String,
-    default: '',
-    required: true,
-  })
-  public readonly email!: string;
-}
+export class OAuthKakaoAuthInputDto extends PickType(OauthBaseDto, [
+  'email',
+] as const) {}
 
 export type OAuthKakaoAuthOutputDto = Users;

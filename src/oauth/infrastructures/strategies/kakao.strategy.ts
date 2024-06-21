@@ -49,7 +49,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
 
     const obj: KakaoProfileType = {
       ...profile,
-      email: 'akdl913212@naver.coc',
+      // email: 'akdl913212@naver.ddd',
     };
 
     try {
@@ -59,7 +59,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         delete userProfileCheck['password'];
         return { profile: userProfileCheck };
       } else {
-        return { profile: obj.email };
+        return { profile: { email: obj.email } };
       }
     } catch (e: any) {
       errorHandling(e);

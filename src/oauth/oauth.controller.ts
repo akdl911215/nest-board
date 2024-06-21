@@ -49,14 +49,16 @@ export class OauthController {
   @Get('/kakao')
   @UseGuards(AuthGuard('kakao'))
   private async kakaoAuth(@OAuth() profile): Promise<ReturnOAuthType> {
+    const user: Users = await this.service.kakaoOAuth({ email: profile.email });
+
     let res: ReturnOAuthType = {
-      type: 'NEW_USER',
-      profile: { email: profile.email },
+      type: 'EXITING_USER',
+      profile: user,
     };
-    if (profile) {
+    if (!user) {
       res = {
-        type: 'EXITING_USER',
-        profile,
+        type: 'NEW_USER',
+        profile: { email: profile.email },
       };
     }
 
@@ -65,12 +67,8 @@ export class OauthController {
 
   @Get('/kakao/login')
   @UseGuards(AuthGuard('kakao'))
-  private async kakaoOAuthLogin(@OAuth() email) {
-    console.log('kakaoOAuthCallback email : ', email);
-
-    const res: Users = await this.service.kakaoLogin({ email });
-
-    console.log('res : ', res);
+  private async kakaoOAuthLogin(@OAuth() profile) {
+    const res: Users = await this.service.kakaoLogin({ email: profile.email });
 
     return res;
   }
@@ -91,6 +89,7 @@ export class OauthController {
   private async kakaoOauthRegister(
     @Body() dto: OAuthKakaoRegisterInputDto,
   ): Promise<OAuthKakaoRegisterOutputDto> {
+    console.log('kakaoOauthRegister dto : ', dto);
     if (!dto?.nickname) throw new BadRequestException(NICKNAME_REQUIRED);
     if (!dto?.email) throw new BadRequestException(EMAIL_REQUIRED);
     if (!dto?.password) throw new BadRequestException(PASSWORD_REQUIRED);
