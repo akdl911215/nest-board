@@ -17,6 +17,8 @@ env:
   KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
   KAKAO_TEST_CLIENT_ID: ${{ secrets.KAKAO_TEST_CLIENT_ID }}
   KAKAO_TEST_CLIENT_SECRET: ${{ secrets.KAKAO_TEST_CLIENT_SECRET }}
+  NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+  NAVER_CLIENT_SECRET: ${{ NAVER_CLIENT_SECRET }}
 
 jobs:
   build:
@@ -47,6 +49,8 @@ jobs:
           --build-arg KAKAO_CLIENT_ID="${{ env.KAKAO_CLIENT_ID }}" \
           --build-arg KAKAO_TEST_CLIENT_ID="${{ env.KAKAO_TEST_CLIENT_ID }}" \
           --build-arg KAKAO_TEST_CLIENT_SECRET="${{ env.KAKAO_TEST_CLIENT_SECRET }}" \
+          --build-arg NAVER_CLIENT_ID="${{ env.NAVER_CLIENT_ID }}" \
+          --build-arg NAVER_CLIENT_SECRET="${{ env.NAVER_CLIENT_SECRET }}" \
           -t ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }} .
 
       - name: Login to ghcr
@@ -92,4 +96,6 @@ jobs:
             -e KAKAO_CLIENT_ID="${{ secrets.KAKAO_CLIENT_ID }}" \
             -e KAKAO_TEST_CLIENT_ID="${{ secrets.KAKAO_TEST_CLIENT_ID }}" \
             -e KAKAO_TEST_CLIENT_SECRET="${{ secrets.KAKAO_TEST_CLIENT_SECRET }}" \
+            -e NAVER_CLIENT_ID="{{ secrets.NAVER_CLIENT_ID }}"\
+            -e NAVER_CLIENT_SECRET="{{ secrets.NAVER_CLIENT_SECRET }}"\
             --name nest --restart always ${{ env.DOCKER_IMAGE }}:latest

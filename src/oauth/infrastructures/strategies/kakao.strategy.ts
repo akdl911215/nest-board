@@ -6,7 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { RefreshTokenPayloadType } from '../../../users/infrastructure/token/type/refresh.token.payload.type';
 import { Users } from '@prisma/client';
-import { PrismaService } from '../../../_common/infrastructure/prisma.service';
 import { OauthServiceInterface } from '../../interfaces/oauth.service.interface';
 import { errorHandling } from '../../../_common/abstract/error.handling';
 
@@ -26,7 +25,6 @@ type KakaoProfileType = {
 export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
   constructor(
     @Inject('SERVICE') private readonly service: OauthServiceInterface,
-    private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {
     super({
