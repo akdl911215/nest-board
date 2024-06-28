@@ -14,9 +14,9 @@ RUN npm ci --force
 
 COPY ./ ./
 
-ENV DATABASE_URL=postgresql://postgres:123456@3.35.207.45:5432/postgres
+ENV DATABASE_URL=postgresql://postgres:123456@54.180.207.53:5432/postgres
 ENV PORT=9898
-ENV HOST=3.35.207.45
+ENV HOST=54.180.207.53
 ENV REDIS_PORT=6379
 ENV REDIS_HOST=ljh-redis
 ENV JWT_SECRET=ljhcommunity
