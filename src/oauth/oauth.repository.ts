@@ -11,10 +11,7 @@ import {
   TokenService,
   tokensType,
 } from '../users/infrastructure/token/token.service';
-import {
-  NO_MATCH_EMAIL,
-  NO_MATCH_PASSWORD,
-} from '../_common/constant/errors/400';
+import { NO_MATCH_EMAIL } from '../_common/constant/errors/400';
 import { AccessTokenPayloadType } from '../users/infrastructure/token/type/access.token.payload.type';
 import { RefreshTokenPayloadType } from '../users/infrastructure/token/type/refresh.token.payload.type';
 import { errorHandling } from '../_common/abstract/error.handling';
@@ -77,7 +74,7 @@ export class OauthRepository implements OauthRepositoryInterface {
     }
   }
 
-  public async getFindByEmail({
+  public async oauthUserFindByEmail({
     email,
   }: {
     readonly email: string;

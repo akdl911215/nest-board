@@ -2,9 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OauthServiceInterface } from './interfaces/oauth.service.interface';
 import { OauthRepositoryInterface } from './interfaces/oauth.repository.interface';
 import {
-  OAuthKakaoAuthInputDto,
-  OAuthKakaoAuthOutputDto,
-} from './dtos/oauth.kakao.auth.dto';
+  OauthUserFindByEmailInputDto,
+  OauthUserFindByEmailOutputDto,
+} from './dtos/oauth.user.find.by.email.dto';
 import {
   OAuthKakaoLoginInputDto,
   OAuthKakaoLoginOutputDto,
@@ -17,11 +17,12 @@ export class OauthService implements OauthServiceInterface {
     @Inject('REPOSITORY') private readonly repository: OauthRepositoryInterface,
   ) {}
 
-  public async kakaoOAuth(
-    dto: OAuthKakaoAuthInputDto,
-  ): Promise<OAuthKakaoAuthOutputDto> {
-    const user: Users = await this.repository.getFindByEmail(dto);
-    console.log('kakaoOAuth user : ', user);
+  public async oauthUserFindByEmail(
+    dto: OauthUserFindByEmailInputDto,
+  ): Promise<OauthUserFindByEmailOutputDto> {
+    const user: Users = await this.repository.oauthUserFindByEmail(dto);
+    console.log('oauthUserFindByEmail user : ', user);
+
     return user;
   }
 

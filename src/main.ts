@@ -12,22 +12,17 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 async function bootstrap() {
-  console.log('process.env.AWSACCESSKEYID : ', process.env.AWSACCESSKEYID);
-  console.log(
-    'process.env.AWSSECRETACCESSKEY : ',
-    process.env.AWSSECRETACCESSKEY,
-  );
-  console.log('process.env.S3BUCKETNAME : ', process.env.S3BUCKETNAME);
   console.log('process.env.NODE_ENV : ', process.env.NODE_ENV);
   console.log('process.env.OS : ', process.env.OS);
   const KAKAO_CLIENT_ID: string = process.env.KAKAO_CLIENT_ID;
   console.log('KAKAO_CLIENT_ID : ', KAKAO_CLIENT_ID);
   const KAKAO_TEST_CLIENT_ID: string = process.env.KAKAO_TEST_CLIENT_ID;
   console.log('KAKAO_TEST_CLIENT_ID : ', KAKAO_TEST_CLIENT_ID);
-  const KAKAO_HOST: string = process.env.HOST;
-  console.log('KAKAO_HOST : ', KAKAO_HOST);
-  const KAKAO_PORT: number = Number(process.env.PORT);
-  console.log('KAKAO_PORT : ', KAKAO_PORT);
+  const NAVER_CLIENT_ID: string = process.env.NAVER_CLIENT_ID;
+  console.log('NAVER_CLIENT_ID : ', NAVER_CLIENT_ID);
+  const NAVER_CLIENT_SECRET: string = process.env.NAVER_CLIENT_SECRET;
+  console.log('NAVER_CLIENT_SECRET : ', NAVER_CLIENT_SECRET);
+
   const logger = new Logger();
   const app = await NestFactory.create(AppModule, WINSTON_MODULE);
   app.enableCors();

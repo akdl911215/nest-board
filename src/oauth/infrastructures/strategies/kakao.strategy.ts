@@ -1,11 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UsersServiceInterface } from '../../../users/interfaces/users.service.interface';
 import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
-import { RefreshTokenPayloadType } from '../../../users/infrastructure/token/type/refresh.token.payload.type';
-import { Users } from '@prisma/client';
 import { OauthServiceInterface } from '../../interfaces/oauth.service.interface';
 import { errorHandling } from '../../../_common/abstract/error.handling';
 
@@ -17,7 +13,6 @@ const KAKAO_PORT: number = Number(process.env.PORT);
 console.log('KAKAO_PORT : ', KAKAO_PORT);
 
 type KakaoProfileType = {
-  readonly id: string;
   readonly email: string;
 };
 
@@ -46,12 +41,12 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     console.log('ka 3s');
 
     const obj: KakaoProfileType = {
-      ...profile,
+      email: profile.email,
       // email: 'akdl913212@naver.ddd',
     };
 
     try {
-      const userProfileCheck = await this.service.kakaoOAuth(obj);
+      const userProfileCheck = await this.service.oauthUserFindByEmail(obj);
 
       if (userProfileCheck) {
         delete userProfileCheck['password'];

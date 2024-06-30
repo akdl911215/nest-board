@@ -46,10 +46,33 @@ export class OauthController {
     private readonly usersService: UsersServiceInterface,
   ) {}
 
+  @Get('naver')
+  @UseGuards(AuthGuard('naver'))
+  private async naverAuth(@OAuth() profile): Promise<any> {
+    const user: Users = await this.service.oauthUserFindByEmail({
+      email: profile.email,
+    });
+
+    let res: ReturnOAuthType = {
+      type: 'EXITING_USER',
+      profile: user,
+    };
+    if (!user) {
+      res = {
+        type: 'NEW_USER',
+        profile: { email: profile.email },
+      };
+    }
+
+    return res;
+  }
+
   @Get('/kakao')
   @UseGuards(AuthGuard('kakao'))
   private async kakaoAuth(@OAuth() profile): Promise<ReturnOAuthType> {
-    const user: Users = await this.service.kakaoOAuth({ email: profile.email });
+    const user: Users = await this.service.oauthUserFindByEmail({
+      email: profile.email,
+    });
 
     let res: ReturnOAuthType = {
       type: 'EXITING_USER',
