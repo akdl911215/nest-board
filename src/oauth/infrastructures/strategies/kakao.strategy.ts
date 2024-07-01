@@ -46,11 +46,11 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     };
 
     try {
-      const userProfileCheck = await this.service.oauthUserFindByEmail(obj);
+      const getFindByUser = await this.service.oauthUserFindByEmail(obj);
 
-      if (userProfileCheck) {
-        delete userProfileCheck['password'];
-        return { profile: userProfileCheck };
+      if (getFindByUser) {
+        delete getFindByUser['password'];
+        return { profile: getFindByUser };
       } else {
         return { profile: { email: obj.email } };
       }

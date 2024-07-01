@@ -9,7 +9,7 @@ const NAVER_CLIENT_ID: string = process.env.NAVER_CLIENT_ID;
 console.log('NAVER_CLIENT_ID : ', NAVER_CLIENT_ID);
 const NAVER_CLIENT_SECRET: string = process.env.NAVER_CLIENT_SECRET;
 console.log('NAVER_CLIENT_SECRET : ', NAVER_CLIENT_SECRET);
-const NAVER_CALLBACK_URL: string = `http://${process.env.HOST}:9898/oauth/naver`;
+const NAVER_CALLBACK_URL: string = `http://${process.env.HOST}:${process.env.PORT}/oauth/naver`;
 console.log('NAVER_CALLBACK_URL : ', NAVER_CALLBACK_URL);
 
 type NaverProfileType = {
@@ -39,7 +39,12 @@ export class NaverStrategy extends PassportStrategy(Strategy, 'naver') {
       const getFindByUser = await this.service.oauthUserFindByEmail(obj);
       console.log('getFindByUser : ', getFindByUser);
 
-      return getFindByUser;
+      if (getFindByUser) {
+        delete getFindByUser['password'];
+        return { profile: getFindByUser };
+      } else {
+        return { profile: { email: obj.email } };
+      }
     } catch (e: any) {
       errorHandling(e);
     }
